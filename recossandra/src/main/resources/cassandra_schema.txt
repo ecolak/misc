@@ -1,0 +1,8 @@
+create keyspace Recossandra;
+
+create column family Products
+with key_validation_class = 'LongType'
+and comparator = 'UTF8Type'
+and column_metadata=[{column_name:productName, validation_class:UTF8Type},
+{column_name:color, validation_class:IntegerType},
+{column_name:manufacturer, validation_class:UTF8Type}];
