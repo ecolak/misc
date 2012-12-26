@@ -1,5 +1,7 @@
 create keyspace Recossandra;
 
+use Recossandra;
+
 create column family Products
 with key_validation_class = 'LongType'
 and comparator = 'UTF8Type'

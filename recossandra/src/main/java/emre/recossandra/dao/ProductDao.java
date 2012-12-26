@@ -35,9 +35,9 @@ public class ProductDao {
 		MutationBatch m = Config.getKeyspace().prepareMutationBatch();
 
 		m.withRow(CF_PRODUCT_INFO, product.getProductId())
-				.putColumn(PRODUCT_NAME, product.getProductName())
-				.putColumn(MANUFACTURER, product.getManufacturer())
-				.putColumn(COLOR, product.getColor().ordinal());
+				.putColumn(PRODUCT_NAME, product.getProductName(), null)
+				.putColumn(MANUFACTURER, product.getManufacturer(), null)
+				.putColumn(COLOR, product.getColor().ordinal(), null);
 
 		OperationResult<Void> result = m.execute();
 	}
@@ -85,7 +85,8 @@ public class ProductDao {
 			p.setProductName(columns.getStringValue(PRODUCT_NAME, null));
 			p.setManufacturer(columns.getStringValue(MANUFACTURER, null));
 			int c = columns.getIntegerValue(COLOR, -1);
-			p.setColor(Color.values()[c]);
+			if(c >= 0)
+				p.setColor(Color.values()[c]);
 			result.add(p);
 		}
 		return result;
