@@ -48,6 +48,10 @@ public class ProductDao {
 		m.withRow(CF_PRODUCT_INFO, productId).delete();
 		OperationResult<Void> result = m.execute();
 	}
+	
+	public static void truncate() throws ConnectionException {
+		Config.getKeyspace().truncateColumnFamily(CF_PRODUCT_INFO);
+	}
 
 	public static Product getByProductId(Long productId)
 			throws ConnectionException {
