@@ -3,7 +3,6 @@ package emre.recossandra.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.netflix.astyanax.ExceptionCallback;
 import com.netflix.astyanax.MutationBatch;
 import com.netflix.astyanax.connectionpool.OperationResult;
 import com.netflix.astyanax.connectionpool.exceptions.ConnectionException;
@@ -73,15 +72,19 @@ public class ProductDao {
 
 	public static List<Product> getAll() throws ConnectionException {
 		List<Product> result = new ArrayList<Product>();
-		OperationResult<Rows<Long, String>> rows = Config.getKeyspace()
+		/*OperationResult<Rows<Long, String>> rows = Config.getKeyspace()
 				.prepareQuery(CF_PRODUCT_INFO).getAllRows().setRowLimit(100)
 				.setExceptionCallback(new ExceptionCallback() {
 					public boolean onException(ConnectionException e) {
 						System.err.println(e.getMessage());
 						return false;
 					}
-				}).execute();
+				}).execute();*/
 
+		OperationResult<Rows<Long, String>> rows = Config.getKeyspace()
+				.prepareQuery(CF_PRODUCT_INFO).getAllRows().setRowLimit(100)
+				.execute();
+		
 		for (Row<Long, String> row : rows.getResult()) {
 			Product p = new Product();
 			p.setProductId(row.getKey());
