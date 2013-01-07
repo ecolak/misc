@@ -3,6 +3,7 @@ package emre.recossandra.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.netflix.astyanax.Keyspace;
 import com.netflix.astyanax.MutationBatch;
 import com.netflix.astyanax.connectionpool.OperationResult;
 import com.netflix.astyanax.connectionpool.exceptions.ConnectionException;
@@ -17,21 +18,37 @@ import emre.recossandra.Config;
 import emre.recossandra.model.Product;
 import emre.recossandra.model.Product.Color;
 
-public class ProductDao {
+public class ProductDao implements IProductDao {
 
-	private static final String PRODUCTS = "Products";
-	private static final String PRODUCT_NAME = "productName";
-	private static final String COLOR = "color";
-	private static final String MANUFACTURER = "manufacturer";
-
+	private static final ProductDao instance = new ProductDao();
+	
+	public static final String PRODUCTS = "Products";
+	public static final String PRODUCT_NAME = "productName";
+	public static final String COLOR = "color";
+	public static final String MANUFACTURER = "manufacturer";
+	
 	public static final ColumnFamily<Long, String> CF_PRODUCT_INFO = new ColumnFamily<Long, String>(
 			PRODUCTS, // Column Family Name
 			LongSerializer.get(), // Key Serializer
 			StringSerializer.get()); // Column Serializer
 
-	public static void save(Product product) throws ConnectionException {
+	private Keyspace keyspace;
+	
+	private ProductDao() {
+		this.keyspace = Config.getKeyspace();
+	}
+	
+	public static ProductDao theInstance() {
+		return instance;
+	}
+	
+	public void setKeyspace(Keyspace keyspace) {
+		this.keyspace = keyspace;
+	}
+	
+	public void save(Product product) throws ConnectionException {
 		// Inserting data
-		MutationBatch m = Config.getKeyspace().prepareMutationBatch();
+		MutationBatch m = keyspace.prepareMutationBatch();
 
 		m.withRow(CF_PRODUCT_INFO, product.getProductId())
 				.putColumn(PRODUCT_NAME, product.getProductName(), null)
@@ -41,21 +58,20 @@ public class ProductDao {
 		OperationResult<Void> result = m.execute();
 	}
 	
-	public static void deleteByProductId(Long productId) throws ConnectionException {
+	public void deleteByProductId(Long productId) throws ConnectionException {
 		// Inserting data
-		MutationBatch m = Config.getKeyspace().prepareMutationBatch();
+		MutationBatch m = keyspace.prepareMutationBatch();
 		m.withRow(CF_PRODUCT_INFO, productId).delete();
 		OperationResult<Void> result = m.execute();
 	}
 	
-	public static void truncate() throws ConnectionException {
+	public void truncate() throws ConnectionException {
 		Config.getKeyspace().truncateColumnFamily(CF_PRODUCT_INFO);
 	}
 
-	public static Product getByProductId(Long productId)
-			throws ConnectionException {
+	public Product getByProductId(Long productId) throws ConnectionException {
 		Product result = null;
-		OperationResult<ColumnList<String>> oResult = Config.getKeyspace()
+		OperationResult<ColumnList<String>> oResult = keyspace
 				.prepareQuery(CF_PRODUCT_INFO).getKey(productId).execute();
 		ColumnList<String> columns = oResult.getResult();
 
@@ -70,9 +86,9 @@ public class ProductDao {
 		return result;
 	}
 
-	public static List<Product> getAll() throws ConnectionException {
+	public List<Product> getAll() throws ConnectionException {
 		List<Product> result = new ArrayList<Product>();
-		/*OperationResult<Rows<Long, String>> rows = Config.getKeyspace()
+		/*OperationResult<Rows<Long, String>> rows = keyspace
 				.prepareQuery(CF_PRODUCT_INFO).getAllRows().setRowLimit(100)
 				.setExceptionCallback(new ExceptionCallback() {
 					public boolean onException(ConnectionException e) {
@@ -81,7 +97,7 @@ public class ProductDao {
 					}
 				}).execute();*/
 
-		OperationResult<Rows<Long, String>> rows = Config.getKeyspace()
+		OperationResult<Rows<Long, String>> rows = keyspace
 				.prepareQuery(CF_PRODUCT_INFO).getAllRows().setRowLimit(100)
 				.execute();
 		

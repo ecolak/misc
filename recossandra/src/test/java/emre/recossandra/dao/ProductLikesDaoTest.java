@@ -3,7 +3,6 @@ package emre.recossandra.dao;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class ProductLikesDaoTest extends TestCase {
@@ -28,11 +27,11 @@ public class ProductLikesDaoTest extends TestCase {
 		ProductLikesDao.save(vid3, pid1, true);
 		
 		Map<Long, Map<Long, Boolean>> resultAfter = ProductLikesDao.getAll();
-        Assert.assertNotNull(resultAfter);
-        Assert.assertEquals(3, resultAfter.size());
+        assertNotNull(resultAfter);
+        assertEquals(3, resultAfter.size());
         Map<Long, Boolean> resultVid1 = resultAfter.get(vid1);
-        Assert.assertNotNull(resultVid1);
-        Assert.assertEquals(3, resultVid1.size());
+        assertNotNull(resultVid1);
+        assertEquals(3, resultVid1.size());
         
         ProductLikesDao.truncate();
     }
@@ -50,19 +49,19 @@ public class ProductLikesDaoTest extends TestCase {
 		ProductLikesDao.save(vid, pid3, false);
 		
 		Map<Long, Boolean> resultAfter = ProductLikesDao.getByVisitorId(vid);
-        Assert.assertNotNull(resultAfter);
-        Assert.assertEquals(3, resultAfter.size());
+        assertNotNull(resultAfter);
+        assertEquals(3, resultAfter.size());
         Boolean likeOrNot = resultAfter.get(pid1);
-        Assert.assertNotNull(likeOrNot);
-        Assert.assertTrue(likeOrNot.booleanValue());
+        assertNotNull(likeOrNot);
+        assertTrue(likeOrNot.booleanValue());
         likeOrNot = resultAfter.get(pid2);
-        Assert.assertNotNull(likeOrNot);
-        Assert.assertTrue(likeOrNot.booleanValue());
+        assertNotNull(likeOrNot);
+        assertTrue(likeOrNot.booleanValue());
         likeOrNot = resultAfter.get(pid3);
-        Assert.assertNotNull(likeOrNot);
-        Assert.assertFalse(likeOrNot.booleanValue());
+        assertNotNull(likeOrNot);
+        assertFalse(likeOrNot.booleanValue());
         likeOrNot = resultAfter.get(System.currentTimeMillis());
-        Assert.assertNull(likeOrNot);
+        assertNull(likeOrNot);
         
         ProductLikesDao.truncate();
 	}
