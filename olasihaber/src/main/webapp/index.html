@@ -1,0 +1,54 @@
+<!doctype html>
+<html ng-app="main">
+<head>
+<meta charset="utf-8"></meta>
+<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/main.css">
+<link rel="shortcut icon" href="lib/bootstrap/images/favicon.ico">
+<link rel="apple-touch-icon"
+	href="lib/bootstrap/images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72"
+	href="lib/bootstrap/images/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114"
+	href="lib/bootstrap/images/apple-touch-icon-114x114.png">
+<link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
+<script src="lib/angular/angular.min.js"></script>
+<script src="lib/angular/angular-resource.min.js"></script>
+<script src="lib/angular/angular-sanitize.min.js"></script>
+<script src="lib/jquery/jquery-2.0.2.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
+</head>
+
+<body>
+
+	<div class="navbar navbar-fixed">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="brand" href="#">Olası Haber</a>
+				<ul class="nav">
+					<li class="active"><a href="#">Tüm Haberler</a></li>
+					<li><a href="#politics">Politika</a></li>
+					<li><a href="#economics">Ekonomi</a></li>
+					<li><a href="#world">Dünya</a></li>
+					<li><a href="#sports">Spor</a></li>
+				</ul>
+				<form action="" class="form-search navbar-form pull-right">
+					<input class="input-small" type="text" placeholder="Kullanıcı adı">
+					<input class="input-small" type="password" placeholder="Şifre">
+					<button class="btn" type="submit">Giriş</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div ng-view></div>
+	<!-- /container -->
+
+	<footer class="text-center">
+		<p>&copy; Olası Haber 2013</p>
+	</footer>
+	
+</body>
+
+</html>
