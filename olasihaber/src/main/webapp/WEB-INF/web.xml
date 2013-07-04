@@ -23,16 +23,6 @@
 		<servlet-name>jersey-servlet</servlet-name>
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
-	
-	<filter>
-	  <filter-name>AllowOriginFilter</filter-name>
-	  <filter-class>com.abe.olasihaber.filter.AllowOriginFilter</filter-class>
-	</filter>
-	
-	<filter-mapping>
-	  <filter-name>AllowOriginFilter</filter-name>
-	  <url-pattern>/api/*</url-pattern>
-	</filter-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
