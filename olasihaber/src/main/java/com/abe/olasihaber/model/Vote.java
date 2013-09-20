@@ -1,37 +1,68 @@
 package com.abe.olasihaber.model;
 
-public class Vote {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+@Entity
+@Table(name = "votes", uniqueConstraints=@UniqueConstraint(columnNames = {"visitor_id", "article_id"}))
+
+public class Vote implements java.io.Serializable {
 	
-	private long id;
-	private long article_id;
+	private static final long serialVersionUID = -3843283534105470459L;
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+	private Long id;
+	
+	@Column(name = "visitor_id")
+	private String visitorId;
+	
+	@Column(name = "article_id")
+	private Long articleId;
+	
+	@Column(name = "is_favorable")
+	private boolean isFavorable;
+	
+	@Column(name = "ip")
 	private String ip;
-	private int vote_type;
-	
-	private static long nextId = 0;
 	
 	public Vote(){}
 
-	public Vote(long article_id, String ip, int vote_type) {
-		this.id = nextId++;
-		this.article_id = article_id;
+	public Vote(Long articleId, String visitorId, boolean isFavorable, String ip) {
+		this.articleId = articleId;
+		this.visitorId = visitorId;
+		this.isFavorable = isFavorable;
 		this.ip = ip;
-		this.vote_type = vote_type;		
 	}
 
-	public long getId() {
-		return id;
+	public Long getArticleId() {
+		return articleId;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setArticleId(Long articleId) {
+		this.articleId = articleId;
 	}
 
-	public long getArticle_id() {
-		return article_id;
+	public String getVisitorId() {
+		return visitorId;
 	}
 
-	public void setArticle_id(long article_id) {
-		this.article_id = article_id;
+	public void setVisitorId(String visitorId) {
+		this.visitorId = visitorId;
+	}
+
+	public boolean isFavorable() {
+		return isFavorable;
+	}
+
+	public void setFavorable(boolean isFavorable) {
+		this.isFavorable = isFavorable;
 	}
 
 	public String getIp() {
@@ -42,12 +73,11 @@ public class Vote {
 		this.ip = ip;
 	}
 
-	public int getVote_type() {
-		return vote_type;
+	public Long getId() {
+		return id;
 	}
 
-	public void setVote_type(int vote_type) {
-		this.vote_type = vote_type;
+	public void setId(Long id) {
+		this.id = id;
 	}
-	
 }

@@ -1,41 +1,63 @@
 package com.abe.olasihaber.model;
 
-public class Article {
+import java.util.Date;
 
-	private long id;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+
+@Entity
+@Table(name = "articles")
+public class Article implements java.io.Serializable {
+
+	private static final long serialVersionUID = 5831489499445317577L;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+	private Long id;
+	
+	@Column(name = "title")
 	private String title;
+	
+	@Column(name = "body", columnDefinition = "text")
 	private String body;
-	private String img_url;
-	private long category_id;	
+	
+	@Column(name = "img_url")
+	private String imgUrl;
+	
+	@Column(name = "category_id")
+	private long categoryId;
+	
+	@Column(name = "source")
 	private String source;
+	
+	@Column(name = "location")
 	private String location;
-	private String pub_date;
-	private int pct_true;
-	private int pct_false;
+	
+	@Column(name = "pub_date")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date pubDate;
 	
 	public Article() {}
 
-	public Article(long id, String title, String body, String img_url, long category_id,
-			String source, String location, String pub_date, int pct_true,
-			int pct_false) {
-		this.id = id;
+	public Article(String title, String body, String imgUrl,
+			long categoryId, String source, String location, Date pubDate,
+			int pctTrue, int pctFalse) {
 		this.title = title;
 		this.body = body;
-		this.img_url = img_url;
-		this.category_id = category_id;
+		this.imgUrl = imgUrl;
+		this.categoryId = categoryId;
 		this.source = source;
 		this.location = location;
-		this.pub_date = pub_date;
-		this.pct_true = pct_true;
-		this.pct_false = pct_false;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
+		this.pubDate = pubDate;
 	}
 
 	public String getTitle() {
@@ -54,20 +76,20 @@ public class Article {
 		this.body = body;
 	}
 
-	public String getImg_url() {
-		return img_url;
+	public String getImgUrl() {
+		return imgUrl;
 	}
 
-	public void setImg_url(String img_url) {
-		this.img_url = img_url;
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
 	}
 
-	public long getCategory_id() {
-		return category_id;
+	public long getCategoryId() {
+		return categoryId;
 	}
 
-	public void setCategory_id(long category_id) {
-		this.category_id = category_id;
+	public void setCategoryId(long categoryId) {
+		this.categoryId = categoryId;
 	}
 
 	public String getSource() {
@@ -86,28 +108,19 @@ public class Article {
 		this.location = location;
 	}
 
-	public String getPub_date() {
-		return pub_date;
+	public Date getPubDate() {
+		return pubDate;
 	}
 
-	public void setPub_date(String pub_date) {
-		this.pub_date = pub_date;
+	public void setPubDate(Date pubDate) {
+		this.pubDate = pubDate;
 	}
 
-	public int getPct_true() {
-		return pct_true;
-	}
-
-	public void setPct_true(int pct_true) {
-		this.pct_true = pct_true;
-	}
-
-	public int getPct_false() {
-		return pct_false;
-	}
-
-	public void setPct_false(int pct_false) {
-		this.pct_false = pct_false;
+	public Long getId() {
+		return id;
 	}
 	
+	public void setId(Long id) {
+		this.id = id;
+	}
 }
