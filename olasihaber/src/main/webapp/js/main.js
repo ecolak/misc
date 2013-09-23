@@ -58,13 +58,13 @@ app.factory('ArticleData', function($resource, Constants) {
 		articles: $resource(Constants.dataServiceBaseUrl + '/article/:id', {}, {update: {method: 'PUT'}}),
 		addArticleFromUrl: $resource(Constants.dataServiceBaseUrl + '/add_article'),
 		articleArguments: $resource(Constants.dataServiceBaseUrl + '/article/:id/argument'),
-		articleArgumentsByType: $resource(Constants.dataServiceBaseUrl + '/article/:id/argument/:type'),
-		argumentLikesByVisitorId: $resource(Constants.dataServiceBaseUrl + '/argument/:id/like/:visitorId', {}, {update: {method: 'PUT'}}),
+		articleArgumentsByType: $resource(Constants.dataServiceBaseUrl + '/argument/article/:articleId/type/:type'),
 		arguments: $resource(Constants.dataServiceBaseUrl + '/argument/:id', {}, {update: {method: 'PUT'}}),
 		votes: $resource(Constants.dataServiceBaseUrl + '/vote/:id', {}, {update: {method: 'PUT'}}),
 		voteCounts: $resource(Constants.dataServiceBaseUrl + '/vote/:id/counts'),
 		voteByVisitorId: $resource(Constants.dataServiceBaseUrl + '/vote/article/:articleId/visitor/:visitorId'),
-		likes: $resource(Constants.dataServiceBaseUrl + '/likes/:id', {}, {update: {method: 'PUT'}}),
+		likes: $resource(Constants.dataServiceBaseUrl + '/like/:id', {}, {update: {method: 'PUT'}}),
+		likesByArgumentVisitor: $resource(Constants.dataServiceBaseUrl + '/like/argument/:argumentId/visitor/:visitorId'),
 		likeCounts: $resource(Constants.dataServiceBaseUrl + '/like/:argumentId/counts')
 	};
 });
@@ -251,7 +251,7 @@ app.controller('AdminArgumentCtrl', function($scope, $routeParams, $location, Ar
 			$scope.loading = false;
 		});
 	} else {
-		ArticleData.arguments.get({results_per_page: 100}, function(data) {
+		ArticleData.arguments.get({pageSize: 100}, function(data) {
 			$scope.arguments = data.objects;
 			$scope.loading = false;
 		});
@@ -319,7 +319,7 @@ app.controller('AdminArgumentCtrl', function($scope, $routeParams, $location, Ar
 
 app.controller('AdminArticleCtrl', function ($scope, $routeParams, $location, ArticleData) {
 	var loadPage = function (page) {
-		ArticleData.articles.get({results_per_page: 50, page: page}, function(data) {
+		ArticleData.articles.get({pageSize: 50, page: page}, function(data) {
 			if ($scope.articles == null) {
 				$scope.articles = data.objects; 
 			} else {
@@ -436,7 +436,7 @@ app.controller('ArticleCtrl', function($scope, $routeParams, ArticleData, Common
 	});
 
 	var loadArguments = function (argType) {
-		ArticleData.articleArgumentsByType.get({id : $scope.article.id, 
+		ArticleData.articleArgumentsByType.get({articleId : $scope.article.id, 
 			type: (argType === true ? 'supporting' : 'opposed'), 
 			limit: (argType === true ? $scope.limitForSupporting : $scope.limitForOpposed)}, 
 		function(result) {
@@ -464,8 +464,8 @@ app.controller('ArticleCtrl', function($scope, $routeParams, ArticleData, Common
 					}
 					(function (argument) {
 						$scope.argLikesMap = [];
-						ArticleData.argumentLikesByVisitorId.get({id: arg.id, visitorId: visitorId}, function (result) {
-							$scope.argLikesMap[result.argument_id] = result;
+						ArticleData.likesByArgumentVisitor.get({argumentId: arg.id, visitorId: visitorId}, function (result) {
+							$scope.argLikesMap[result.argumentId] = result;
 						});
 					})(arg);
 				}
@@ -501,10 +501,10 @@ app.controller('ArticleCtrl', function($scope, $routeParams, ArticleData, Common
 	};
 
 	$scope.updateArgLikes = function(isTrueArg, argId, isLike) {
-		var payload = {argument_id: argId, like: isLike, visitor_id: visitorId};
+		var payload = {argumentId: argId, like: isLike, visitorId: visitorId};
 		
 		var updateUi = function (isNew, response) {
-			$scope.argLikesMap[argId] = response;
+			jQuery.extend($scope.argLikesMap[argId], response);
 			
 			var args = isTrueArg == true ? $scope.article.arguments_for : $scope.article.arguments_against;
 			
@@ -563,7 +563,7 @@ app.controller('ArticleCtrl', function($scope, $routeParams, ArticleData, Common
 			// replace new lines with html breaks
 			this.argument.body = this.argument.body.replace(/\n/g, '<br/>');
 			ArticleData.arguments.save({
-				article_id: $scope.article.id,
+				articleId: $scope.article.id,
 				summary: this.argument.summary,
 				body: this.argument.body,
 				affirmative: this.argument.affirmative
@@ -599,7 +599,8 @@ app.controller('ArticleCtrl', function($scope, $routeParams, ArticleData, Common
 		var success = function (isNew) { 
 			return function (response) {
 				$scope.voteMessage = "Oy kullandığınız için teşekkürler";
-				$scope.vote = response;
+				jQuery.extend($scope.vote, response);
+				//$scope.vote = response;
 				updateCount(isNew);
 				$scope.submittingVote = false;
 			};

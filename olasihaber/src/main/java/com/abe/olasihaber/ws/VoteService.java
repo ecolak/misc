@@ -1,7 +1,6 @@
 package com.abe.olasihaber.ws;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,14 +19,16 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import com.abe.olasihaber.dao.GenericDao;
-import com.abe.olasihaber.model.Result;
+import com.abe.olasihaber.model.ResultList;
 import com.abe.olasihaber.model.Vote;
+import com.abe.olasihaber.util.Constants;
+import com.abe.olasihaber.util.NumberUtils;
 
 @Path("/vote")
 @Produces(MediaType.APPLICATION_JSON)
 public class VoteService {
 
-private static final GenericDao<Vote> voteDao = new GenericDao<Vote>(Vote.class);
+	private static final GenericDao<Vote> voteDao = new GenericDao<Vote>(Vote.class);
 	
 	@Context
 	UriInfo uriInfo;
@@ -36,8 +37,10 @@ private static final GenericDao<Vote> voteDao = new GenericDao<Vote>(Vote.class)
 	HttpServletRequest request;
 	
 	@GET
-	public Result getAll() {
-		return new Result(voteDao.findAll(), 1, 1);
+	public ResultList<Vote> getAll() {
+		int page = NumberUtils.toInt(request.getParameter("page"), Constants.DEFAULT_PAGE);
+		int pageSize = NumberUtils.toInt(request.getParameter("pageSize"), Constants.DEFAULT_PAGE_SIZE);
+		return voteDao.listWithTotalPages(page, pageSize);
 	}
 
 	@GET
@@ -56,9 +59,9 @@ private static final GenericDao<Vote> voteDao = new GenericDao<Vote>(Vote.class)
 		Map<String,Object> args = new HashMap<String,Object>();
 		args.put("visitorId", visitorId);
 		args.put("articleId", articleId);
-		List<Vote> list = voteDao.findBy(args);
+		ResultList<Vote> list = voteDao.findByColumnsWithTotalPages(args);
 		
-		return list.isEmpty() ? null : list.get(0);
+		return list.getObjects().isEmpty() ? null : list.getObjects().get(0);
 	}
 	
 	@POST
@@ -66,7 +69,7 @@ private static final GenericDao<Vote> voteDao = new GenericDao<Vote>(Vote.class)
 		Vote existing = getByArticleIdAndVisitorId(vote.getArticleId(), vote.getVisitorId());
 		if (existing != null) {
 			throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
-					.entity(String.format("Visitor id %s has already voted for article %s. Send a PUT request to modify", 
+					.entity(String.format("Visitor id %s has already voted for article %d. Send a PUT request to modify", 
 							vote.getVisitorId(), vote.getArticleId())).build());
 		}
 		return saveVote(vote);

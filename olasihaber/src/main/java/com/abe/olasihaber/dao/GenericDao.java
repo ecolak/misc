@@ -12,188 +12,442 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import com.abe.olasihaber.db.PersistenceManager;
+import com.abe.olasihaber.model.ResultList;
 
 /**
  * Generic class to help create data access objects
  * */
 public class GenericDao<T> {
-  
-  protected Class<T> entityClass;
-  protected String entityName;
-  protected EntityManagerFactory emf;
 
-  /**
-   * Constructor that creates an entity manager
-   * 
-   * @param entityClass - class of the entity
-   * */
-  public GenericDao(Class<T> entityClass) {
-    this(entityClass, null);
-  }
+	protected Class<T> entityClass;
+	protected String entityName;
+	protected EntityManagerFactory emf;
 
-  /**
-   * Constructor
-   * 
-   * @param entityClass - class of the entity
-   * @param em - entity manager, class will create one if em is null
-   * */
-  public GenericDao(Class<T> entityClass, EntityManagerFactory emf) {
-    if (entityClass == null) {
-      throw new IllegalArgumentException("entityClass cannot be null");
-    }
-    
-    this.entityClass = entityClass;
-    this.entityName = entityClass.getSimpleName();
-    this.emf = (emf == null ? PersistenceManager.getEntityManagerFactory() : emf);
-  }
+	/**
+	 * Constructor that creates an entity manager
+	 * 
+	 * @param entityClass - class of the entity
+	 * */
+	public GenericDao(Class<T> entityClass) {
+		this(entityClass, null);
+	}
 
-  /**
-   * Given an id, retrieves a single result matching the id
-   * 
-   * @param id - entity id
-   * @return unique entity
-   * */
-  public T findById(final Object id) {
-    T result = null;
-    final EntityManager em = emf.createEntityManager();
-    result = em.find(entityClass, id);
-    em.close();
-    return result;
-  }
+	/**
+	 * Constructor
+	 * 
+	 * @param entityClass - class of the entity
+	 * @param emf - entity manager factory, this class will create one if this is null
+	 * */
+	public GenericDao(Class<T> entityClass, EntityManagerFactory emf) {
+		if (entityClass == null) {
+			throw new IllegalArgumentException("entityClass cannot be null");
+		}
 
-  /**
-   * Retrieves all entities
-   * 
-   * @return list of entities
-   * */
-  public List<T> findAll() {
-    List<T> result = new ArrayList<T>();
-    final EntityManager em = emf.createEntityManager();
-    final TypedQuery<T> query = em.createQuery("from " + entityName, entityClass);
-    result = query.getResultList();
-    em.close();
-    return result;
-  }
+		this.entityClass = entityClass;
+		this.entityName = entityClass.getSimpleName();
+		this.emf = (emf == null ? PersistenceManager.getEntityManagerFactory() : emf);
+	}
 
-  /**
-   * Given a column name and a value for that column, retrieves the list of matching entities
-   * 
-   * @param columnName
-   * @param columnValue
-   * @return list of entities
-   * */
-  public List<T> findBy(final String columnName, final Object columnValue) {
-    List<T> result = new ArrayList<T>();
-    final EntityManager em = emf.createEntityManager();
-    final TypedQuery<T> query = em.createQuery("from " + entityName + " where " + columnName + " = :" + columnName,
-                                               entityClass);
-    query.setParameter(columnName, columnValue);
-    result = query.getResultList();
-    em.close();
-    return result;
-  }
+	/**
+	 * Given an id, retrieves a single result matching the id
+	 * 
+	 * @param id
+	 *            - entity id
+	 * @return unique entity
+	 * */
+	public T findById(final Object id) {
+		T result = null;
+		EntityManager em = null;
+		try {
+			em = emf.createEntityManager();
+			result = em.find(entityClass, id);
+		} finally {
+			if (em != null) em.close();
+		}
+		return result;
+	}
 
-  /**
-   * Given a map of column name to column values, retrieves the list of matching entities for all
-   * entries in the map
-   * 
-   * @param columnMap - map of column keys to values e.g. {"id": 3, "name": "abc"}
-   * */
-  public List<T> findBy(final Map<String, Object> columnMap) {
-    List<T> result = new ArrayList<T>();
-    final EntityManager em = emf.createEntityManager();
-    StringBuilder qb = new StringBuilder("from " + entityName + " where ");
-    int i = 0;
-    for (Entry<String, Object> entry : columnMap.entrySet()) {
-      if (i > 0) {
-        qb.append(" and ");
-      }
-      String columnName = entry.getKey();
-      qb.append(columnName).append(" = :").append(columnName);
-      i++;
-    }
+	/**
+	 * Retrieves all entities
+	 *
+	 * @return list of entities plus total pages
+	 * */
+	public ResultList<T> listWithTotalPages() {
+		return listWithTotalPages(0, 0);
+	}
+	
+	/**
+	 * Retrieves all entities
+	 * 
+	 * @param pageSize
+	 * @return list of entities plus total pages
+	 * */
+	public ResultList<T> listWithTotalPages(final int pageSize) {
+		return listWithTotalPages(0, pageSize);
+	}
+	
+	/**
+	 * Retrieves all entities
+	 * 
+	 * @param page
+	 * @param pageSize
+	 * @return list of entities plus total pages
+	 * */
+	public ResultList<T> listWithTotalPages(final int page, final int pageSize) {
+		return listInternal(page, pageSize, true);
+	}
+	
+	public List<T> list() {
+		return listInternal(0, 0, false).getObjects();
+	}
+	
+	public List<T> list(final int pageSize) {
+		return listInternal(0, pageSize, false).getObjects();
+	}
+	
+	public List<T> list(final int page, final int pageSize) {
+		return listInternal(page, pageSize, false).getObjects();
+	}
+	
+	private ResultList<T> listInternal(final int page, final int pageSize, boolean countTotalPages) {
+		List<T> rows = new ArrayList<T>();
+		EntityManager em = null;
+		long totalRows = 0;
+		try {
+			em = emf.createEntityManager();
+			if (countTotalPages) {
+				final Query countQuery = em.createQuery("select count(*) as cnt from " + entityName);
+				totalRows = (Long) countQuery.getSingleResult();
+			}
+			
+			final TypedQuery<T> query = getQuery(em, "from " + entityName, page, pageSize);
+			rows = query.getResultList();
+		} finally {
+			if (em != null) em.close();
+		}
+		
+		ResultList<T> result = new ResultList<T>();
+		result.setObjects(rows);
+		
+		if (countTotalPages) {
+			result.setPage(page);
+			result.setPageSize(pageSize);
+			result.setTotal(totalRows);
+		}
+		
+		return result;
+	}
 
-    final TypedQuery<T> query = em.createQuery(qb.toString(), entityClass);
-    for (Entry<String, Object> entry : columnMap.entrySet()) {
-      query.setParameter(entry.getKey(), entry.getValue());
-    }
+	/**
+	 * Given a column name and a value for that column, retrieves the list of
+	 * matching entities
+	 * 
+	 * @param columnName
+	 * @param columnValue
+	 * @return list of entities plus total pages
+	 * */
+	public ResultList<T> findByColumnWithTotalPages(final String columnName, final Object columnValue) {
+		return findByColumnWithTotalPages(columnName, columnValue, 0, 0);
+	}
+	
+	public ResultList<T> findByColumnWithTotalPages(final String columnName, final Object columnValue, final int pageSize) {
+		return findByColumnWithTotalPages(columnName, columnValue, 0, pageSize);
+	}
+	
+	/**
+	 * Given a column name and a value for that column, retrieves the list of
+	 * matching entities
+	 * 
+	 * @param columnName
+	 * @param columnValue
+	 * @param pageSize
+	 * @return list of entities plus total pages
+	 * */
+	public ResultList<T> findByColumnWithTotalPages(final String columnName, final Object columnValue, final int page, final int pageSize) {
+		return findByInternal(columnName, columnValue, page, pageSize, true);
+	}
+	
+	public List<T> findBy(final String columnName, final Object columnValue) {
+		return findByInternal(columnName, columnValue, 0, 0, false).getObjects();
+	}
+	
+	public List<T> findBy(final String columnName, final Object columnValue, final int pageSize) {
+		return findByInternal(columnName, columnValue, 0, pageSize, false).getObjects();
+	}
+	
+	public List<T> findBy(final String columnName, final Object columnValue, final int page, final int pageSize) {
+		return findByInternal(columnName, columnValue, page, pageSize, false).getObjects();
+	}
+	
+	/**
+	 * Given a column name and a value for that column, retrieves the list of
+	 * matching entities
+	 * 
+	 * @param columnName
+	 * @param columnValue
+	 * @param page
+	 * @param pageSize
+	 * @return list of entities plus total pages
+	 * */
+	private ResultList<T> findByInternal(final String columnName, final Object columnValue, final int page, final int pageSize, boolean countTotalPages) {
+		List<T> rows = new ArrayList<T>();
+		EntityManager em = null;
+		long totalRows = 0;
+		try {
+			em = emf.createEntityManager();
+			if (countTotalPages) {
+				final Query countQuery = em.createQuery("select count(*) as cnt from " + entityName);
+				totalRows = (Long) countQuery.getSingleResult(); 
+			}
+			
+			final TypedQuery<T> query = getQuery(em, 
+					("from " + entityName + " where " + columnName + " = :" + columnName), 
+					page, pageSize);
+			query.setParameter(columnName, columnValue);
+			rows = query.getResultList();
+		} finally {
+			if (em != null) em.close();
+		}
+		
+		ResultList<T> result = new ResultList<T>();
+		result.setObjects(rows);
+		
+		if (countTotalPages) {
+			result.setPage(page);
+			result.setPageSize(pageSize);
+			result.setTotal(totalRows);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Given a map of column name to column values, retrieves the list of
+	 * matching entities for all entries in the map
+	 * 
+	 * @param columnMap - map of column keys to values e.g. {"id": 3, "name": "abc"}
+	 * @return List of entities plus total pages
+	 * */
+	public ResultList<T> findByColumnsWithTotalPages(final Map<String, Object> columnMap) {
+		return findByColumnsWithTotalPages(columnMap, 0, 0);
+	}
+	
+	public ResultList<T> findByColumnsWithTotalPages(final Map<String, Object> columnMap, final int pageSize) {
+		return findByColumnsWithTotalPages(columnMap, 0, pageSize);
+	}
+	
+	public ResultList<T> findByColumnsWithTotalPages(final Map<String, Object> columnMap, final int page, final int pageSize) {
+		return findByColumnsInternal(columnMap, page, pageSize, true);
+	}
+	
+	public List<T> findByColumns(final Map<String, Object> columnMap) {
+		return findByColumns(columnMap, 0, 0);
+	}
 
-    result = query.getResultList();
-    em.close();
-    return result;
-  }
+	public List<T> findByColumns(final Map<String, Object> columnMap, final int pageSize) {
+		return findByColumns(columnMap, 0, pageSize);
+	}
+	
+	public List<T> findByColumns(final Map<String, Object> columnMap, final int page, final int pageSize) {
+		return findByColumnsInternal(columnMap, page, pageSize, false).getObjects();
+	}
+	
+	/**
+	 * Given a map of column name to column values, retrieves the list of
+	 * matching entities for all entries in the map
+	 * 
+	 * @param columnMap - map of column keys to values e.g. {"id": 3, "name": "abc"}
+	 * @param page
+	 * @param pageSize
+	 * @return List of entities plus total pages
+	 * */
+	private ResultList<T> findByColumnsInternal(final Map<String, Object> columnMap, final int page, final int pageSize, final boolean countTotalPages) {
+		List<T> rows = new ArrayList<T>();
+		EntityManager em = null;
+		long totalRows = 0;
+		try {
+			em = emf.createEntityManager();
+			if (countTotalPages) {
+				final Query countQuery = em.createQuery("select count(*) as cnt from " + entityName);
+				totalRows = (Long) countQuery.getSingleResult(); 
+			}
+			
+			StringBuilder qb = new StringBuilder("from " + entityName + " where ");
+			int i = 0;
+			for (Entry<String, Object> entry : columnMap.entrySet()) {
+				if (i > 0) {
+					qb.append(" and ");
+				}
+				String columnName = entry.getKey();
+				qb.append(columnName).append(" = :").append(columnName);
+				i++;
+			}
 
-  /**
-   * Persists a given entity (model)
-   * 
-   * @param t - model
-   * @return T - saved model
-   * */
-  public T save(final T model) {
-    T result = null;
-    final EntityManager em = emf.createEntityManager();
-    EntityTransaction transaction = null;
-    try {
-      transaction = em.getTransaction();
-      transaction.begin();
-      result = em.merge(model);
-      transaction.commit();
-    } catch (RuntimeException e) {
-      if (transaction != null && transaction.isActive()) {
-        transaction.rollback();
-      }
-      throw e;
-    }
-    em.close(); 
-    return result;
-  }
+			final TypedQuery<T> query = getQuery(em, qb.toString(), page, pageSize);
+			for (Entry<String, Object> entry : columnMap.entrySet()) {
+				query.setParameter(entry.getKey(), entry.getValue());
+			}
 
-  /**
-   * Deletes a given entity (model)
-   * 
-   * @param t - model
-   * */
-  public void delete(final T model) {
-    final EntityManager em = emf.createEntityManager();
-    EntityTransaction transaction = null;
-    
-    try {
-      transaction = em.getTransaction();
-      transaction.begin();
-      em.remove(model);
-      transaction.commit();
-    } catch (RuntimeException e) {
-      if (transaction != null && transaction.isActive()) {
-        transaction.rollback();
-      }
-      throw e;
-    }
-    
-    em.close(); 
-  }
+			rows = query.getResultList();
+		} finally {
+			if (em != null) em.close();
+		}
+		
+		ResultList<T> result = new ResultList<T>();
+		result.setObjects(rows);
+		
+		if (countTotalPages) {
+			result.setPage(page);
+			result.setPageSize(pageSize);
+			result.setTotal(totalRows);
+		}
+		
+		return result;
+	}
+	
+	public long count(final String columnName, final Object columnValue) {
+		long result = 0;
+		EntityManager em = null;
+		try {
+			em = emf.createEntityManager();			
+			String q = "select count(*) as cnt from " + entityName;
+			boolean hasColumns = (columnName != null && columnValue != null);
+			if (hasColumns) {
+				q += " where " + columnName + " = :" + columnName;
+			}
+			final Query query = em.createQuery(q);
+			
+			if (hasColumns) {
+				query.setParameter(columnName, columnValue);
+			}
+			result = (Long) query.getSingleResult();
+		} finally {
+			if (em != null) em.close();
+		}
+		
+		return result;
+	}
+	
+	public long count(final Map<String, Object> columnMap) {
+		long result = 0;
+		EntityManager em = null;
+		try {
+			em = emf.createEntityManager();			
+			StringBuilder qb = new StringBuilder("select count(*) as cnt from " + entityName + " where ");
+			int i = 0;
+			for (Entry<String, Object> entry : columnMap.entrySet()) {
+				if (i > 0) {
+					qb.append(" and ");
+				}
+				String columnName = entry.getKey();
+				qb.append(columnName).append(" = :").append(columnName);
+				i++;
+			}
 
-  /**
-   * Given a column name and a column value, deletes all matching entities
-   * */
-  public int deleteBy(final String columnName, final Object columnValue) {
-    int result = 0;
-    final EntityManager em = emf.createEntityManager();
-    EntityTransaction transaction = null;
-    try {
-      transaction = em.getTransaction();
-      transaction.begin();
-      Query query = em.createQuery("delete from " + entityName + " where " + columnName + " = :" + columnName);
-      query.setParameter(columnName, columnValue);
-      result = query.executeUpdate();
-      transaction.commit();
-    } catch (RuntimeException e) {
-      if (transaction != null && transaction.isActive()) {
-        transaction.rollback();
-      }
-      throw e;
-    }
-    em.close();
-    return result;
-  }
+			final Query query = em.createQuery(qb.toString());
+			for (Entry<String, Object> entry : columnMap.entrySet()) {
+				query.setParameter(entry.getKey(), entry.getValue());
+			}
+			
+			result = (Long) query.getSingleResult();
+		} finally {
+			if (em != null) em.close();
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Persists a given entity (model)
+	 * 
+	 * @param model - entity to persist
+	 * @return T - saved model
+	 * */
+	public T save(final T model) {
+		T result = null;
+		EntityManager em = null;
+		EntityTransaction transaction = null;
+		try {
+			em = emf.createEntityManager();
+			transaction = em.getTransaction();
+			transaction.begin();
+			result = em.merge(model);
+			transaction.commit();
+		} catch (RuntimeException e) {
+			if (transaction != null && transaction.isActive()) {
+				transaction.rollback();
+			}
+			throw e;
+		} finally {
+			if (em != null) em.close();
+		}
+		return result;
+	}
+
+	/**
+	 * Deletes a given entity (model)
+	 * 
+	 * @param model - entity to persist
+	 * */
+	public void delete(final T model) {
+		EntityManager em = null;
+		EntityTransaction transaction = null;
+
+		try {
+			em = emf.createEntityManager();
+			transaction = em.getTransaction();
+			transaction.begin();
+			em.remove(model);
+			transaction.commit();
+		} catch (RuntimeException e) {
+			if (transaction != null && transaction.isActive()) {
+				transaction.rollback();
+			}
+			throw e;
+		} finally {
+			if (em != null) em.close();
+		}
+	}
+
+	/**
+	 * Given a column name and a column value, deletes all matching entities
+	 * @param columnName - name of column to delete by
+	 * @param columnValue - value for columnName to delete by
+	 * @return - number of row deleted
+	 * */
+	public int deleteBy(final String columnName, final Object columnValue) {
+		int result = 0;
+		EntityManager em = null;
+		EntityTransaction transaction = null;
+		try {
+			em = emf.createEntityManager();
+			transaction = em.getTransaction();
+			transaction.begin();
+			Query query = em.createQuery("delete from " + entityName + " where " + columnName + " = :" + columnName);
+			query.setParameter(columnName, columnValue);
+			result = query.executeUpdate();
+			transaction.commit();
+		} catch (RuntimeException e) {
+			if (transaction != null && transaction.isActive()) {
+				transaction.rollback();
+			}
+			throw e;
+		} finally {
+			if (em != null) em.close();
+		}
+		return result;
+	}
+	
+	private TypedQuery<T> getQuery(final EntityManager em, final String query, 
+			final int page, final int pageSize) {
+		TypedQuery<T> result = em.createQuery(query, entityClass);
+		if (page > 0) {
+			result.setFirstResult((page - 1) * pageSize);
+		}
+		if (pageSize > 0) {
+			result.setMaxResults(pageSize);
+		}
+		return result;
+	}
 
 }

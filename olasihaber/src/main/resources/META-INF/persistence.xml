@@ -6,8 +6,6 @@
     http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
     version="1.0">
     <persistence-unit name="postgres">
-        <class>com.abe.olasihaber.model.Article</class>
-        
         <properties>
             <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/argume_db" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"></property>
@@ -16,12 +14,11 @@
             <property name="hibernate.connection.password" value="argume" />   
             <property name="hibernate.hbm2ddl.auto" value="update" />     
             <property name="hibernate.connection.autocommit" value="false" />
+            <property name="hibernate.show_sql" value="true" />
         </properties>
     </persistence-unit>
     
      <persistence-unit name="h2">
-        <class>com.abe.olasihaber.model.Article</class>
-        
         <properties>
             <property name="hibernate.connection.url" value="jdbc:h2:build/mem" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"></property>

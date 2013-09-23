@@ -27,17 +27,17 @@ public class Vote implements java.io.Serializable {
 	private Long articleId;
 	
 	@Column(name = "is_favorable")
-	private boolean isFavorable;
+	private boolean favorable;
 	
 	@Column(name = "ip")
 	private String ip;
 	
 	public Vote(){}
 
-	public Vote(Long articleId, String visitorId, boolean isFavorable, String ip) {
+	public Vote(Long articleId, String visitorId, boolean favorable, String ip) {
 		this.articleId = articleId;
 		this.visitorId = visitorId;
-		this.isFavorable = isFavorable;
+		this.favorable = favorable;
 		this.ip = ip;
 	}
 
@@ -58,11 +58,11 @@ public class Vote implements java.io.Serializable {
 	}
 
 	public boolean isFavorable() {
-		return isFavorable;
+		return favorable;
 	}
 
-	public void setFavorable(boolean isFavorable) {
-		this.isFavorable = isFavorable;
+	public void setFavorable(boolean favorable) {
+		this.favorable = favorable;
 	}
 
 	public String getIp() {
