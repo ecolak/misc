@@ -5,5 +5,5 @@ public class Constants {
 	private Constants() {}
 	
 	public static int DEFAULT_PAGE = 1;
-	public static int DEFAULT_PAGE_SIZE = 10;
+	public static int DEFAULT_PAGE_SIZE = 5;
 }

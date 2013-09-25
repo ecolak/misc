@@ -68,8 +68,8 @@ public class ArticleService {
 	}
 
 	private Response saveArticle(final Article article) {
-		articleDao.save(article);
-		return Response.ok().build();
+		Article result = articleDao.save(article);
+		return Response.ok(result).build();
 	}
 
 	@DELETE

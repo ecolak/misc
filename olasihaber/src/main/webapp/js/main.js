@@ -61,7 +61,7 @@ app.factory('ArticleData', function($resource, Constants) {
 		articleArgumentsByType: $resource(Constants.dataServiceBaseUrl + '/argument/article/:articleId/type/:type'),
 		arguments: $resource(Constants.dataServiceBaseUrl + '/argument/:id', {}, {update: {method: 'PUT'}}),
 		votes: $resource(Constants.dataServiceBaseUrl + '/vote/:id', {}, {update: {method: 'PUT'}}),
-		voteCounts: $resource(Constants.dataServiceBaseUrl + '/vote/:id/counts'),
+		voteCounts: $resource(Constants.dataServiceBaseUrl + '/vote/:articleId/counts'),
 		voteByVisitorId: $resource(Constants.dataServiceBaseUrl + '/vote/article/:articleId/visitor/:visitorId'),
 		likes: $resource(Constants.dataServiceBaseUrl + '/like/:id', {}, {update: {method: 'PUT'}}),
 		likesByArgumentVisitor: $resource(Constants.dataServiceBaseUrl + '/like/argument/:argumentId/visitor/:visitorId'),
@@ -217,7 +217,7 @@ app.controller('NewsCtrl', function($scope, ArticleData, CommonFunc, Constants) 
 			for (var i in articles) {
 				var article = articles[i];
 				(function (art) {
-					ArticleData.voteCounts.get({id: art.id}, function (result) {
+					ArticleData.voteCounts.get({articleId: art.id}, function (result) {
 						var counts = CommonFunc.calculateVotePct(result);
 						art.pct_true = counts.pct_true;
 						art.pct_false = counts.pct_false;
@@ -425,7 +425,7 @@ app.controller('ArticleCtrl', function($scope, $routeParams, ArticleData, Common
 		loadArguments(true);
 		loadArguments(false);
 		
-		ArticleData.voteCounts.get({id: dbArticle.id}, function (result) {
+		ArticleData.voteCounts.get({articleId: dbArticle.id}, function (result) {
 			dbArticle.favorableCnt = result.favorable;
 			dbArticle.againstCnt = result.against;
 		});
@@ -500,18 +500,18 @@ app.controller('ArticleCtrl', function($scope, $routeParams, ArticleData, Common
 		jQuery("#" + divId).slideToggle();
 	};
 
-	$scope.updateArgLikes = function(isTrueArg, argId, isLike) {
-		var payload = {argumentId: argId, like: isLike, visitorId: visitorId};
+	$scope.updateArgLikes = function(isTrueArg, argId, isFavorable) {
+		var payload = {argumentId: argId, favorable: isFavorable, visitorId: visitorId};
 		
 		var updateUi = function (isNew, response) {
-			jQuery.extend($scope.argLikesMap[argId], response);
+			$scope.argLikesMap[argId] = response;
 			
 			var args = isTrueArg == true ? $scope.article.arguments_for : $scope.article.arguments_against;
 			
 			for (var i in args) {
 				var arg = args[i];
 				if (arg.id == argId) {
-					if (isLike) {
+					if (isFavorable) {
 						arg.likes += 1;
 						if (!isNew) {
 							arg.dislikes -= 1;
@@ -534,7 +534,7 @@ app.controller('ArticleCtrl', function($scope, $routeParams, ArticleData, Common
 			}, function (response) {
 				console.log(response);
 			});
-		} else if (visitorLike.like !== payload.like) {
+		} else if (visitorLike.favorable !== payload.favorable) {
 			ArticleData.likes.update({id: visitorLike.id}, payload, function (response) {
 				updateUi(false, response);
 			}, function (response) {
@@ -599,8 +599,7 @@ app.controller('ArticleCtrl', function($scope, $routeParams, ArticleData, Common
 		var success = function (isNew) { 
 			return function (response) {
 				$scope.voteMessage = "Oy kullandığınız için teşekkürler";
-				jQuery.extend($scope.vote, response);
-				//$scope.vote = response;
+				$scope.vote = response;
 				updateCount(isNew);
 				$scope.submittingVote = false;
 			};

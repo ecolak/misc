@@ -25,18 +25,18 @@ public class Like implements java.io.Serializable {
 	@Column(name = "visitor_id")
 	private String visitorId;
 	
-	@Column(name = "is_like")
-	private boolean like;
+	@Column(name = "is_favorable")
+	private boolean favorable;
 	
 	@Column(name = "ip")
 	private String ip;
 	
 	public Like() {}
 	
-	public Like(Long argumentId, String visitorId, boolean like, String ip) {
+	public Like(Long argumentId, String visitorId, boolean favorable, String ip) {
 		this.argumentId = argumentId;
 		this.visitorId = visitorId;
-		this.like = like;
+		this.favorable = favorable;
 		this.ip = ip;
 	}
 
@@ -64,12 +64,12 @@ public class Like implements java.io.Serializable {
 		this.visitorId = visitorId;
 	}
 
-	public boolean isLike() {
-		return like;
+	public boolean isFavorable() {
+		return favorable;
 	}
 
-	public void setLike(boolean like) {
-		this.like = like;
+	public void setFavorable(boolean favorable) {
+		this.favorable = favorable;
 	}
 
 	public String getIp() {

@@ -95,8 +95,8 @@ private static final GenericDao<Like> likeDao = new GenericDao<Like>(Like.class)
 	
 	private Response saveLike(final Like like) {
 		like.setIp(request.getRemoteAddr());
-		likeDao.save(like);
-		return Response.ok().build();
+		Like result = likeDao.save(like);
+		return Response.ok(result).build();
 	}
 	
 	@DELETE

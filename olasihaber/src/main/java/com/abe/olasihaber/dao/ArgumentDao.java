@@ -52,17 +52,17 @@ public class ArgumentDao extends GenericDao<Argument> {
 		
 		Map<Long, Argument> result = new HashMap<Long, Argument>();
 		
-		String q1 = "select a.id, a.articleid, a.summary, a.body, a.is_affirmative, a.status, count(*) as likes, 0 as dislikes "
-					+ "from arguments a left outer join likes l on a.id = l.argument_id where l.is_like = true"
-					+ " and a.articleid = (?1) and a.is_affirmative = (?2) group by a.id";
+		String q1 = "select a.id, a.article_id, a.summary, a.body, a.is_affirmative, a.status, count(*) as likes, 0 as dislikes "
+					+ "from arguments a left outer join likes l on a.id = l.argument_id where l.is_favorable = true"
+					+ " and a.article_id = (?1) and a.is_affirmative = (?2) group by a.id";
 		
-		String q2 = "select a.id, a.articleid, a.summary, a.body, a.is_affirmative, a.status, 0 as likes, count(*) as dislikes "
-					+ "from arguments a left outer join likes l on a.id = l.argument_id where l.is_like = false "
-					+ "and a.articleid = (?1) and a.is_affirmative = (?2) group by a.id";
+		String q2 = "select a.id, a.article_id, a.summary, a.body, a.is_affirmative, a.status, 0 as likes, count(*) as dislikes "
+					+ "from arguments a left outer join likes l on a.id = l.argument_id where l.is_favorable = false "
+					+ "and a.article_id = (?1) and a.is_affirmative = (?2) group by a.id";
 		
-		String q3 = "select a.id, a.articleid, a.summary, a.body, a.is_affirmative, a.status, 0 as likes, 0 as dislikes "
+		String q3 = "select a.id, a.article_id, a.summary, a.body, a.is_affirmative, a.status, 0 as likes, 0 as dislikes "
 					+ "from arguments a left outer join likes l on a.id = l.argument_id where "
-					+ " a.articleid = (?1) and a.is_affirmative = (?2)";
+					+ " a.article_id = (?1) and a.is_affirmative = (?2)";
 		
 		EntityManager em = null;
 		

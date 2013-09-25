@@ -1,5 +1,12 @@
 package com.abe.olasihaber.ws;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,8 +22,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import com.abe.olasihaber.dao.ArgumentDao;
+import com.abe.olasihaber.dao.GenericDao;
 import com.abe.olasihaber.model.Argument;
+import com.abe.olasihaber.model.Like;
 import com.abe.olasihaber.model.ResultList;
 import com.abe.olasihaber.util.Constants;
 import com.abe.olasihaber.util.NumberUtils;
@@ -26,7 +34,8 @@ import com.abe.olasihaber.util.NumberUtils;
 public class ArgumentService {
 
 	private static final int DEFAULT_LIMIT = 5;
-	private static final ArgumentDao argumentDao = new ArgumentDao();
+	private static final GenericDao<Argument> argumentDao = new GenericDao<Argument>(Argument.class);
+	private static final GenericDao<Like> likeDao = new GenericDao<Like>(Like.class);
 	
 	@Context
 	UriInfo uriInfo;
@@ -50,7 +59,57 @@ public class ArgumentService {
 	@GET
 	@Path("article/{articleId}/type/{type}")
 	public ResultList<Argument> getArgumentsByType(@PathParam("articleId") long articleId, @PathParam("type") String type) {
-		return argumentDao.getArgumentsByType(articleId, type, NumberUtils.toInt(request.getParameter("limit"), DEFAULT_LIMIT));
+		Map<String,Object> columnMap = new HashMap<String,Object>();
+		columnMap.put("articleId", articleId);
+		Boolean aff = null;
+		if ("supporting".equals(type)) {
+			aff = true;
+		} else if ("opposed".equals(type)) {
+			aff = false;
+		}
+		if (aff != null) columnMap.put("affirmative", aff);
+		
+		// Cannot select by limit because we have to sort by score first
+		// TODO: This might become a bottleneck when an article has too many arguments (> 50)
+		//		 Make some reasonable assumption for limit here
+		List<Argument> arguments = argumentDao.findByColumns(columnMap);
+		
+		for (Argument arg : arguments) {
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("argumentId", arg.getId());
+			map.put("favorable", true);
+			arg.setLikes((int)likeDao.count(map));
+			
+			map = new HashMap<String,Object>();
+			map.put("argumentId", arg.getId());
+			map.put("favorable", false);
+			arg.setDislikes((int)likeDao.count(map));
+		}
+		
+		Collections.sort(arguments, new Comparator<Argument>() {
+			private static final float MAGIC_NUMBER_LAMBDA = 100f;
+			private static final float MU = 0.1f;
+			
+			private float getScore(Argument arg) {
+				return (arg.getLikes() - arg.getDislikes()) + (2 * arg.getLikes()  / MAGIC_NUMBER_LAMBDA) - (arg.getDislikes() * MU);
+			}
+			
+			public int compare(Argument arg1, Argument arg2) {
+				return -(new Float(getScore(arg1)).compareTo(new Float(getScore(arg2))));
+			}			
+		});
+		
+		int limit = NumberUtils.toInt(request.getParameter("limit"), DEFAULT_LIMIT);
+		int totalRows = arguments.size();
+		if (arguments.size() > limit) {
+			List<Argument> trimmed = new ArrayList<Argument>(limit);
+			for (int i = 0; i < limit; i++) {
+				trimmed.add(arguments.get(i));
+			}
+			arguments = trimmed;
+		}
+	
+		return new ResultList<Argument>(arguments, 1, limit, totalRows);
 	}
 	
 	@POST
@@ -71,8 +130,8 @@ public class ArgumentService {
 	}
 	
 	private Response saveArgument(final Argument argument) {
-		argumentDao.save(argument);
-		return Response.ok().build();
+		Argument result = argumentDao.save(argument);
+		return Response.ok(result).build();
 	}
 	
 	@DELETE

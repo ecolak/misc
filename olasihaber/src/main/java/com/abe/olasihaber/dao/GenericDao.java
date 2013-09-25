@@ -116,7 +116,7 @@ public class GenericDao<T> {
 		try {
 			em = emf.createEntityManager();
 			if (countTotalPages) {
-				final Query countQuery = em.createQuery("select count(*) as cnt from " + entityName);
+				final Query countQuery = em.createQuery("select count(*) from " + entityName);
 				totalRows = (Long) countQuery.getSingleResult();
 			}
 			

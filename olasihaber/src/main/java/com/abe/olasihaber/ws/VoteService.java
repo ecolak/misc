@@ -30,6 +30,31 @@ public class VoteService {
 
 	private static final GenericDao<Vote> voteDao = new GenericDao<Vote>(Vote.class);
 	
+	private static class VoteCounts {
+		private int favorable;
+		private int against;
+		
+		public VoteCounts() {}
+		
+		public VoteCounts(int favorable, int against) {
+			this.favorable = favorable;
+			this.against = against;
+		}
+
+		public int getFavorable() {
+			return favorable;
+		}
+		public void setFavorable(int favorable) {
+			this.favorable = favorable;
+		}
+		public int getAgainst() {
+			return against;
+		}
+		public void setAgainst(int against) {
+			this.against = against;
+		}
+	}
+	
 	@Context
 	UriInfo uriInfo;
 
@@ -47,6 +72,22 @@ public class VoteService {
 	@Path("{id}")
 	public Vote getById(@PathParam("id") long id) {
 		return voteDao.findById(id);
+	}
+	
+	@GET
+	@Path("{articleId}/counts")
+	public VoteCounts getVoteCount(@PathParam("articleId") long articleId) {
+		Map<String,Object> args = new HashMap<String,Object>();
+		args.put("articleId", articleId);
+		args.put("favorable", true);
+		int favorableCount = (int)voteDao.count(args);
+		
+		args = new HashMap<String,Object>();
+		args.put("articleId", articleId);
+		args.put("favorable", false);
+		int againstCount = (int)voteDao.count(args);
+		
+		return new VoteCounts(favorableCount, againstCount);
 	}
 	
 	@GET
@@ -89,8 +130,8 @@ public class VoteService {
 	
 	private Response saveVote(final Vote vote) {
 		vote.setIp(request.getRemoteAddr());
-		voteDao.save(vote);
-		return Response.ok().build();
+		Vote result = voteDao.save(vote);
+		return Response.ok(result).build();
 	}
 	
 	@DELETE
