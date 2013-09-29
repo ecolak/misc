@@ -15,9 +15,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import com.abe.olasihaber.dao.DaoFactory;
 import com.abe.olasihaber.dao.GenericDao;
 import com.abe.olasihaber.model.Article;
 import com.abe.olasihaber.model.ResultList;
+import com.abe.olasihaber.util.AuthUtils;
 import com.abe.olasihaber.util.Constants;
 import com.abe.olasihaber.util.NumberUtils;
 
@@ -25,8 +27,7 @@ import com.abe.olasihaber.util.NumberUtils;
 @Produces(MediaType.APPLICATION_JSON)
 public class ArticleService {
 
-	private static final GenericDao<Article> articleDao = new GenericDao<Article>(
-			Article.class);
+	private static final GenericDao<Article> articleDao = DaoFactory.getArticleDao();
 
 	@Context
 	UriInfo uriInfo;
@@ -49,13 +50,20 @@ public class ArticleService {
 
 	@POST
 	public Response createArticle(final Article article) {
+		if (!AuthUtils.isUserInSessionAdmin(request)) {
+			throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+		}
+		
 		return saveArticle(article);
 	}
 
 	@PUT
 	@Path("{id}")
-	public Response updateArticle(@PathParam("id") long id,
-			final Article article) {
+	public Response updateArticle(@PathParam("id") long id, final Article article) {
+		if (!AuthUtils.isUserInSessionAdmin(request)) {
+			throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+		}
+		
 		Article existing = articleDao.findById(id);
 		if (existing == null) {
 			throw new WebApplicationException(Response.status(Status.NOT_FOUND)

@@ -22,10 +22,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import com.abe.olasihaber.dao.DaoFactory;
 import com.abe.olasihaber.dao.GenericDao;
 import com.abe.olasihaber.model.Argument;
 import com.abe.olasihaber.model.Like;
 import com.abe.olasihaber.model.ResultList;
+import com.abe.olasihaber.util.AuthUtils;
 import com.abe.olasihaber.util.Constants;
 import com.abe.olasihaber.util.NumberUtils;
 
@@ -34,8 +36,8 @@ import com.abe.olasihaber.util.NumberUtils;
 public class ArgumentService {
 
 	private static final int DEFAULT_LIMIT = 5;
-	private static final GenericDao<Argument> argumentDao = new GenericDao<Argument>(Argument.class);
-	private static final GenericDao<Like> likeDao = new GenericDao<Like>(Like.class);
+	private static final GenericDao<Argument> argumentDao = DaoFactory.getArgumentDao();
+	private static final GenericDao<Like> likeDao = DaoFactory.getLikeDao();
 	
 	@Context
 	UriInfo uriInfo;
@@ -120,6 +122,10 @@ public class ArgumentService {
 	@PUT
 	@Path("{id}")
 	public Response updateArgument(@PathParam("id") long id, final Argument argument) {
+		if (!AuthUtils.isUserInSessionAdmin(request)) {
+			throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+		}
+		
 		Argument existing = argumentDao.findById(id);
 		if (existing == null) {
 			throw new WebApplicationException(Response.status(Status.NOT_FOUND).entity("Argument does not exist").build());

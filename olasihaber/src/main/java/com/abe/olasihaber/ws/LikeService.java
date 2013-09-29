@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
+import com.abe.olasihaber.dao.DaoFactory;
 import com.abe.olasihaber.dao.GenericDao;
 import com.abe.olasihaber.model.ResultList;
 import com.abe.olasihaber.model.Like;
@@ -28,7 +29,7 @@ import com.abe.olasihaber.util.NumberUtils;
 @Produces(MediaType.APPLICATION_JSON)
 public class LikeService {
 
-private static final GenericDao<Like> likeDao = new GenericDao<Like>(Like.class);
+private static final GenericDao<Like> likeDao = DaoFactory.getLikeDao();
 	
 	@Context
 	UriInfo uriInfo;

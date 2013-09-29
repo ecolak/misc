@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import com.abe.olasihaber.dao.DaoFactory;
 import com.abe.olasihaber.dao.GenericDao;
 import com.abe.olasihaber.model.ResultList;
 import com.abe.olasihaber.model.Vote;
@@ -28,7 +29,7 @@ import com.abe.olasihaber.util.NumberUtils;
 @Produces(MediaType.APPLICATION_JSON)
 public class VoteService {
 
-	private static final GenericDao<Vote> voteDao = new GenericDao<Vote>(Vote.class);
+	private static final GenericDao<Vote> voteDao = DaoFactory.getVoteDao();
 	
 	private static class VoteCounts {
 		private int favorable;

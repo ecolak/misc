@@ -22,6 +22,9 @@ app.config(function($routeProvider) {
 	}).when('/admin/argument', {
 		controller: 'AdminArgumentCtrl',
 		templateUrl: 'admin/list_arguments.html'
+	}).when('/login', {
+		controller: 'LoginCtrl',
+		templateUrl: 'login.html'
 	}).otherwise({
 		redirectTo : '/'
 	});
@@ -29,10 +32,8 @@ app.config(function($routeProvider) {
 	$rootScope.$location = $location;
 });
 
-app.factory('Constants', function() {
+app.factory('Constants', function () {
 	return {
-		//dataServiceBaseUrl : 'http://localhost\\:9000/proxy-servlet/api/v1',
-		//dataServiceBaseUrl: 'http://shrouded-basin-5617.herokuapp.com/api/v1',
 		dataServiceBaseUrl : 'http://localhost\\:8080/olasihaber/api',
 		maxCharsInArgumentSummary: 140,
 		maxCharsInArgumentBody: 500,
@@ -67,6 +68,29 @@ app.factory('ArticleData', function($resource, Constants) {
 		likesByArgumentVisitor: $resource(Constants.dataServiceBaseUrl + '/like/argument/:argumentId/visitor/:visitorId'),
 		likeCounts: $resource(Constants.dataServiceBaseUrl + '/like/:argumentId/counts')
 	};
+});
+
+app.factory('AuthData', function ($resource, Constants) {
+	return {
+		login: $resource(Constants.dataServiceBaseUrl + '/auth/login'),
+		sessionUser: $resource(Constants.dataServiceBaseUrl + '/auth/session_user')
+	};
+});
+
+app.factory('AuthService', function ($location, $rootScope, AuthData) {
+	return {
+		authenticateAdmin: function () {
+			var currentLocation = $location.path();
+			AuthData.sessionUser.get({}, function (response) {
+				if (!response || !response.admin) {
+					$rootScope.redirectUrl = currentLocation;
+					$location.path('/login');
+				}
+			}, function (error) {
+				$location.path('/login');
+			});			
+		}
+	}
 });
 
 app.factory('CommonFunc', function () {
@@ -240,7 +264,9 @@ app.controller('NewsCtrl', function($scope, ArticleData, CommonFunc, Constants) 
 	loadPage(1);
 });
 
-app.controller('AdminArgumentCtrl', function($scope, $routeParams, $location, ArticleData) {
+app.controller('AdminArgumentCtrl', function($scope, $routeParams, $location, ArticleData, AuthService) {
+	AuthService.authenticateAdmin();
+	
 	$scope.loading = true;
 	
 	if ('id' in $routeParams) {
@@ -317,7 +343,9 @@ app.controller('AdminArgumentCtrl', function($scope, $routeParams, $location, Ar
 	};
 });
 
-app.controller('AdminArticleCtrl', function ($scope, $routeParams, $location, ArticleData) {
+app.controller('AdminArticleCtrl', function ($scope, $routeParams, $location, ArticleData, AuthService) {
+	AuthService.authenticateAdmin();
+	
 	var loadPage = function (page) {
 		ArticleData.articles.get({pageSize: 50, page: page}, function(data) {
 			if ($scope.articles == null) {
@@ -652,4 +680,29 @@ app.controller('ArticleCtrl', function($scope, $routeParams, ArticleData, Common
 		return $scope.article &&  ($scope.article.favorableCnt + $scope.article.againstCnt) > Constants.minVotesToDisplay;
 	};
 	
+});
+
+app.controller('LoginCtrl', function($scope, $rootScope, $location, AuthData) {
+	$scope.login = function () {
+		$scope.submitting = true;
+		
+		var success = function (response) {
+			if ('redirectUrl' in $rootScope) {
+				$location.path($rootScope.redirectUrl); 
+			} else {
+				$location.path('/'); 
+			}
+		}; 
+		
+		var error = function (response) {
+			$scope.loginMessage = "Hata";
+			if (response.status == 401) {
+				$scope.loginMessage = "Hatalı kullanıcı adı veya şifre";
+			}
+			$scope.success = false;
+			$scope.submitting = false;
+		};		
+		
+		AuthData.login.save({username: this.user.username, password: this.user.password}, success, error);
+	}
 });
