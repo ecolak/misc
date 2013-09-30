@@ -19,6 +19,17 @@ import com.abe.olasihaber.model.ResultList;
  * */
 public class GenericDao<T> {
 
+	public static enum Operand {
+		EQ("="), NEQ("!="), GT(">"), GTE(">="), LT("<"), LTE("<=");
+		
+		private final String symbol;
+		Operand(String symbol) {
+			this.symbol = symbol;
+		}
+		
+		public String getSymbol() { return symbol; }
+	}
+	
 	protected Class<T> entityClass;
 	protected String entityName;
 	protected EntityManagerFactory emf;
@@ -138,20 +149,16 @@ public class GenericDao<T> {
 		return result;
 	}
 
-	/**
-	 * Given a column name and a value for that column, retrieves the list of
-	 * matching entities
-	 * 
-	 * @param columnName
-	 * @param columnValue
-	 * @return list of entities plus total pages
-	 * */
 	public ResultList<T> findByColumnWithTotalPages(final String columnName, final Object columnValue) {
-		return findByColumnWithTotalPages(columnName, columnValue, 0, 0);
+		return findByColumnWithTotalPages(columnName, columnValue, Operand.EQ, 0, 0);
 	}
 	
-	public ResultList<T> findByColumnWithTotalPages(final String columnName, final Object columnValue, final int pageSize) {
-		return findByColumnWithTotalPages(columnName, columnValue, 0, pageSize);
+	public ResultList<T> findByColumnWithTotalPages(final String columnName, final Object columnValue, final Operand operand) {
+		return findByColumnWithTotalPages(columnName, columnValue, operand, 0, 0);
+	}
+	
+	public ResultList<T> findByColumnWithTotalPages(final String columnName, final Object columnValue, final Operand operand, final int pageSize) {
+		return findByColumnWithTotalPages(columnName, columnValue, operand, 0, pageSize);
 	}
 	
 	/**
@@ -163,20 +170,24 @@ public class GenericDao<T> {
 	 * @param pageSize
 	 * @return list of entities plus total pages
 	 * */
-	public ResultList<T> findByColumnWithTotalPages(final String columnName, final Object columnValue, final int page, final int pageSize) {
-		return findByInternal(columnName, columnValue, page, pageSize, true);
+	public ResultList<T> findByColumnWithTotalPages(final String columnName, final Object columnValue, final Operand operand, final int page, final int pageSize) {
+		return findByInternal(columnName, columnValue, operand, page, pageSize, true);
 	}
 	
 	public List<T> findBy(final String columnName, final Object columnValue) {
-		return findByInternal(columnName, columnValue, 0, 0, false).getObjects();
+		return findByInternal(columnName, columnValue, Operand.EQ, 0, 0, false).getObjects();
 	}
 	
-	public List<T> findBy(final String columnName, final Object columnValue, final int pageSize) {
-		return findByInternal(columnName, columnValue, 0, pageSize, false).getObjects();
+	public List<T> findBy(final String columnName, final Object columnValue, final Operand operand) {
+		return findByInternal(columnName, columnValue, operand, 0, 0, false).getObjects();
 	}
 	
-	public List<T> findBy(final String columnName, final Object columnValue, final int page, final int pageSize) {
-		return findByInternal(columnName, columnValue, page, pageSize, false).getObjects();
+	public List<T> findBy(final String columnName, final Object columnValue, final Operand operand, final int pageSize) {
+		return findByInternal(columnName, columnValue, operand, 0, pageSize, false).getObjects();
+	}
+	
+	public List<T> findBy(final String columnName, final Object columnValue, final Operand operand, final int page, final int pageSize) {
+		return findByInternal(columnName, columnValue, operand, page, pageSize, false).getObjects();
 	}
 	
 	/**
@@ -189,20 +200,20 @@ public class GenericDao<T> {
 	 * @param pageSize
 	 * @return list of entities plus total pages
 	 * */
-	private ResultList<T> findByInternal(final String columnName, final Object columnValue, final int page, final int pageSize, boolean countTotalPages) {
+	private ResultList<T> findByInternal(final String columnName, final Object columnValue, final Operand operand, final int page, final int pageSize, boolean countTotalPages) {
 		List<T> rows = new ArrayList<T>();
 		EntityManager em = null;
 		long totalRows = 0;
 		try {
 			em = emf.createEntityManager();
+			String queryWoProjection = "from " + entityName + " where " + columnName + " " + operand.getSymbol() + " :" + columnName;
 			if (countTotalPages) {
-				final Query countQuery = em.createQuery("select count(*) as cnt from " + entityName);
+				final Query countQuery = em.createQuery("select count(*) as cnt " + queryWoProjection);
+				countQuery.setParameter(columnName, columnValue);
 				totalRows = (Long) countQuery.getSingleResult(); 
 			}
 			
-			final TypedQuery<T> query = getQuery(em, 
-					("from " + entityName + " where " + columnName + " = :" + columnName), 
-					page, pageSize);
+			final TypedQuery<T> query = getQuery(em, queryWoProjection, page, pageSize);
 			query.setParameter(columnName, columnValue);
 			rows = query.getResultList();
 		} finally {

@@ -58,6 +58,8 @@ public class ResultList<T> {
 	}
 	
 	private void setTotalPages() {
-		this.totalPages = (int) Math.ceil(total / (float) pageSize);
+		if (pageSize > 0) {
+			this.totalPages = (int) Math.ceil(total / (float) pageSize); 
+		}
 	}
 }

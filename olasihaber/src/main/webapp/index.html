@@ -36,9 +36,9 @@
 							<img src="img/argume_transparent.gif">
 						</a>
 					</li>
-					<li class="active"><a href="#">Tüm Haberler</a></li>
-					<li><a href="#politics">Bugün</a></li>
-					<li><a href="#economics">En ilginç</a></li>
+					<li class="{{(('/' == $location.path() || '/news' == $location.path()) && ('active') || (''))}}"><a href="#">Tüm Haberler</a></li>
+					<li class="{{(('/news_today' == $location.path()) && ('active') || (''))}}"><a href="#news_today">Bugün</a></li>
+					<li class="{{(('/news_interesting' == $location.path()) && ('active') || (''))}}"><a href="#news_interesting">En ilginç</a></li>
 				</ul>
 			</div>
 		</div>

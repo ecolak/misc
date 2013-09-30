@@ -1,5 +1,8 @@
 package com.abe.olasihaber.ws;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,8 +18,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.commons.lang.time.DateUtils;
+
 import com.abe.olasihaber.dao.DaoFactory;
 import com.abe.olasihaber.dao.GenericDao;
+import com.abe.olasihaber.dao.GenericDao.Operand;
 import com.abe.olasihaber.model.Article;
 import com.abe.olasihaber.model.ResultList;
 import com.abe.olasihaber.util.AuthUtils;
@@ -39,7 +45,12 @@ public class ArticleService {
 	public ResultList<Article> list() {
 		int page = NumberUtils.toInt(request.getParameter("page"), Constants.DEFAULT_PAGE);
 		int pageSize = NumberUtils.toInt(request.getParameter("pageSize"), Constants.DEFAULT_PAGE_SIZE);
-		return articleDao.listWithTotalPages(page, pageSize);
+		String search = request.getParameter("search");
+		if (search == null) {
+			return articleDao.listWithTotalPages(page, pageSize); 
+		} else  {
+			return articleDao.findByColumnWithTotalPages("pubDate", DateUtils.truncate(new Date(), Calendar.DATE), Operand.GTE); 
+		}
 	}
 
 	@GET
@@ -76,6 +87,7 @@ public class ArticleService {
 	}
 
 	private Response saveArticle(final Article article) {
+		article.setPubDate(new Date());
 		Article result = articleDao.save(article);
 		return Response.ok(result).build();
 	}

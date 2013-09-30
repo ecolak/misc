@@ -4,6 +4,9 @@ app.config(function($routeProvider) {
 	$routeProvider.when('/', {
 		controller : 'NewsCtrl',
 		templateUrl : 'news.html'
+	}).when('/news_today', {
+		controller : 'NewsCtrl',
+		templateUrl : 'news.html'
 	}).when('/news/:id', {
 		controller : 'ArticleCtrl',
 		templateUrl : 'article.html'
@@ -189,7 +192,7 @@ app.filter('toPct', function() {
 
 app.filter('formatDate', function () {
 	return function(dateStr) {
-		return dateStr != null ? moment(dateStr, 'YYYY-MM-DDTHH:mm:ss.SSS Z').fromNow() : "";
+		return dateStr != null ? moment(dateStr).fromNow() : "";
 	};
 });
 
@@ -221,10 +224,14 @@ app.filter('shorten', function($location) {
 	};
 });
 
-app.controller('NewsCtrl', function($scope, ArticleData, CommonFunc, Constants) {
+app.controller('NewsCtrl', function($scope, $location, ArticleData, CommonFunc, Constants) {
 	var loadPage = function (page) {
 		$scope.loading = true;
-		ArticleData.articles.get({page: page}, function(data) {
+		var params = {page: page};
+		if ('/news_today' === $location.path()) {
+			params.search = 'today';
+		}
+		ArticleData.articles.get(params, function(data) {
 			if ($scope.articles == null) {
 				$scope.articles = data.objects; 
 			} else {
