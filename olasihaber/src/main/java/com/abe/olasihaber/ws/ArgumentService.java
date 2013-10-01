@@ -36,7 +36,7 @@ import com.abe.olasihaber.util.NumberUtils;
 public class ArgumentService {
 
 	private static final int DEFAULT_LIMIT = 5;
-	private static final int DEFAULT_MAX_ARG_COUNT = 10;
+	private static final int DEFAULT_MAX_ARG_COUNT = 50;
 	private static final GenericDao<Argument> argumentDao = DaoFactory.getArgumentDao();
 	private static final GenericDao<Like> likeDao = DaoFactory.getLikeDao();
 	
