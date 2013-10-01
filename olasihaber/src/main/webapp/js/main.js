@@ -268,6 +268,12 @@ app.controller('NewsCtrl', function($scope, $location, ArticleData, CommonFunc, 
 		loadPage($scope.page + 1);
 	};
 	
+	if ('/news_today' === $location.path()) {
+		$scope.title = 'Bugünkü Haberler';
+	} else {
+		$scope.title = 'Tüm Haberler';
+	}
+	
 	loadPage(1);
 });
 
@@ -610,8 +616,12 @@ app.controller('ArticleCtrl', function($scope, $routeParams, ArticleData, Common
 					jQuery("#writeNewModal").modal('hide');
 					$scope.submitArgumentMessage = null;
 				}, 750);
-			}, function (response) {
-				$scope.submitArgumentMessage = "Hata";
+			}, function (error) {
+				var errMsg = "Hata";
+				if (error.status == 403) {
+					errMsg = "Bu habere daha fazla argüman eklenemez";
+				}
+				$scope.submitArgumentMessage = errMsg;
 				$scope.success = false;
 				$scope.submitting = false;
 			}); 

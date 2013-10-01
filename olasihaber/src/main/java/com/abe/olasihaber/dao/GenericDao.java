@@ -84,7 +84,19 @@ public class GenericDao<T> {
 	 * @return list of entities plus total pages
 	 * */
 	public ResultList<T> listWithTotalPages() {
-		return listWithTotalPages(0, 0);
+		return listWithTotalPages(0, 0, null);
+	}
+	
+	public ResultList<T> listWithTotalPages(final String orderByStmt) {
+		return listWithTotalPages(0, 0, orderByStmt);
+	}
+	
+	public ResultList<T> listWithTotalPages(final int pageSize) {
+		return listWithTotalPages(0, pageSize);
+	}
+	
+	public ResultList<T> listWithTotalPages(final int page, final int pageSize) {
+		return listInternal(page, pageSize, true, null);
 	}
 	
 	/**
@@ -93,8 +105,8 @@ public class GenericDao<T> {
 	 * @param pageSize
 	 * @return list of entities plus total pages
 	 * */
-	public ResultList<T> listWithTotalPages(final int pageSize) {
-		return listWithTotalPages(0, pageSize);
+	public ResultList<T> listWithTotalPages(final int pageSize, final String orderByStmt) {
+		return listWithTotalPages(0, pageSize, orderByStmt);
 	}
 	
 	/**
@@ -104,23 +116,35 @@ public class GenericDao<T> {
 	 * @param pageSize
 	 * @return list of entities plus total pages
 	 * */
-	public ResultList<T> listWithTotalPages(final int page, final int pageSize) {
-		return listInternal(page, pageSize, true);
+	public ResultList<T> listWithTotalPages(final int page, final int pageSize, final String orderByStmt) {
+		return listInternal(page, pageSize, true, orderByStmt);
 	}
 	
 	public List<T> list() {
-		return listInternal(0, 0, false).getObjects();
+		return listInternal(0, 0, false, null).getObjects();
+	}
+	
+	public List<T> list(final String orderByStmt) {
+		return listInternal(0, 0, false, orderByStmt).getObjects();
 	}
 	
 	public List<T> list(final int pageSize) {
-		return listInternal(0, pageSize, false).getObjects();
+		return listInternal(0, pageSize, false, null).getObjects();
+	}
+	
+	public List<T> list(final int pageSize, final String orderByStmt) {
+		return listInternal(0, pageSize, false, orderByStmt).getObjects();
 	}
 	
 	public List<T> list(final int page, final int pageSize) {
-		return listInternal(page, pageSize, false).getObjects();
+		return listInternal(page, pageSize, false, null).getObjects();
 	}
 	
-	private ResultList<T> listInternal(final int page, final int pageSize, boolean countTotalPages) {
+	public List<T> list(final int page, final int pageSize, final String orderByStmt) {
+		return listInternal(page, pageSize, false, orderByStmt).getObjects();
+	}
+	
+	private ResultList<T> listInternal(final int page, final int pageSize, final boolean countTotalPages, final String orderByStmt) {
 		List<T> rows = new ArrayList<T>();
 		EntityManager em = null;
 		long totalRows = 0;
@@ -131,7 +155,11 @@ public class GenericDao<T> {
 				totalRows = (Long) countQuery.getSingleResult();
 			}
 			
-			final TypedQuery<T> query = getQuery(em, "from " + entityName, page, pageSize);
+			String q = "from " + entityName;
+			if (orderByStmt != null) {
+				q += " " + orderByStmt;
+			}
+			final TypedQuery<T> query = getQuery(em, q, page, pageSize);
 			rows = query.getResultList();
 		} finally {
 			if (em != null) em.close();

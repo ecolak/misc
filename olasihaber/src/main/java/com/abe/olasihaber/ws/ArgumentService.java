@@ -36,6 +36,7 @@ import com.abe.olasihaber.util.NumberUtils;
 public class ArgumentService {
 
 	private static final int DEFAULT_LIMIT = 5;
+	private static final int DEFAULT_MAX_ARG_COUNT = 10;
 	private static final GenericDao<Argument> argumentDao = DaoFactory.getArgumentDao();
 	private static final GenericDao<Like> likeDao = DaoFactory.getLikeDao();
 	
@@ -116,6 +117,18 @@ public class ArgumentService {
 	
 	@POST
 	public Response createArgument(final Argument argument) {
+		Map<String,Object> colMap = new HashMap<String,Object>();
+		colMap.put("articleId", argument.getArticleId());
+		colMap.put("affirmative", argument.isAffirmative());
+		colMap.put("status", Argument.Status.approved);
+		
+		int count = (int)argumentDao.count(colMap);
+		if (count >= DEFAULT_MAX_ARG_COUNT) {
+			throw new WebApplicationException(Response.status(Status.FORBIDDEN)
+						.entity("Max number of arguments for this article and side have already been reached")
+						.build());
+		}
+		
 		return saveArgument(argument);
 	}
 	

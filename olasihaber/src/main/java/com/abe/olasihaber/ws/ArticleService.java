@@ -46,10 +46,10 @@ public class ArticleService {
 		int page = NumberUtils.toInt(request.getParameter("page"), Constants.DEFAULT_PAGE);
 		int pageSize = NumberUtils.toInt(request.getParameter("pageSize"), Constants.DEFAULT_PAGE_SIZE);
 		String search = request.getParameter("search");
-		if (search == null) {
-			return articleDao.listWithTotalPages(page, pageSize); 
-		} else  {
+		if ("today".equals(search)) {
 			return articleDao.findByColumnWithTotalPages("pubDate", DateUtils.truncate(new Date(), Calendar.DATE), Operand.GTE); 
+		} else {
+			return articleDao.listWithTotalPages(page, pageSize, "order by pubDate desc"); 
 		}
 	}
 
