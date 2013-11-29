@@ -1,4 +1,4 @@
-var app = angular.module('main', [ 'ngSanitize', 'ngResource' ]);
+var app = angular.module('main', [ 'ngSanitize', 'ngResource', 'ngRoute' ]);
 
 app.config(function($routeProvider) {
 	$routeProvider.when('/', {
@@ -46,7 +46,7 @@ app.config(function($routeProvider) {
 
 app.factory('Constants', function () {
 	return {
-		dataServiceBaseUrl : 'http://localhost\\:8080/api',
+		dataServiceBaseUrl : 'http://localhost:8080/api',
 		maxCharsInArgumentSummary: 140,
 		maxCharsInArgumentBody: 500,
 		minVotesToDisplay: 10
@@ -582,7 +582,7 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, ArticleData,
 		 		
 		// angular's $resource.save does not return the correct response status for some reason
 		// using $http instead
-		$http.post([Constants.dataServiceBaseUrl.replace('\\', ''), 'arguments', argId, 'like'].join('/'), payload).
+		$http.post([Constants.dataServiceBaseUrl, 'arguments', argId, 'like'].join('/'), payload).
 		success(function(data, status) {
 			updateUi(status);
 	    }).error(function(data, status) {
@@ -775,7 +775,7 @@ app.controller('ForgotPwdCtrl', function($scope, $http, Constants) {
 	$scope.resetPwd = function () {
 		$scope.submitting = true;	
 		
-		$http.post([Constants.dataServiceBaseUrl.replace('\\', ''), 'users' , 'reset_pwd'].join('/'), this.user.email).
+		$http.post([Constants.dataServiceBaseUrl, 'users' , 'reset_pwd'].join('/'), this.user.email).
 		success(function(data, status) {
 			$scope.forgotPwdMessage = 'Şifre talimatları email adresinize gönderilmiştir'
 			$scope.success = true;
