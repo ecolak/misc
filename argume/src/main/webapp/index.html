@@ -1,0 +1,108 @@
+<!doctype html>
+<html ng-app="main">
+<head>
+<meta charset="utf-8"></meta>
+<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/main.css">
+<link rel="shortcut icon" href="lib/bootstrap/images/favicon.ico">
+<link rel="apple-touch-icon"
+	href="lib/bootstrap/images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72"
+	href="lib/bootstrap/images/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114"
+	href="lib/bootstrap/images/apple-touch-icon-114x114.png">
+<link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
+<script src="lib/jquery/jquery-2.0.2.min.js"></script>
+<script src="lib/jquery/jquery-cookie.js"></script>
+<script src="lib/angular/angular.min.js"></script>
+<script src="lib/angular/angular-resource.min.js"></script>
+<script src="lib/angular/angular-sanitize.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="lib/moment/moment.min.js"></script>
+<script src="lib/moment/lang/tr.js"></script>
+<script src="lib/fingerprintjs/fingerprint.min.js"></script>
+<script src="js/main.js"></script>
+</head>
+
+<body>
+
+	<div class="navbar navbar-fixed">
+		<div class="navbar-inner">
+			<div class="container">
+				<ul class="nav">
+					<li>
+						<a href="#" style="padding: 0 0 0 0">
+							<img src="img/argume_transparent.gif">
+						</a>
+					</li>
+					<li class="{{(('/' == $location.path() || '/news' == $location.path()) && ('active') || (''))}}"><a href="#">Tüm Haberler</a></li>
+					<li class="{{(('/news_today' == $location.path()) && ('active') || (''))}}"><a href="#news_today">Bugün</a></li>
+				</ul>
+				
+				<!-- 
+				<li>
+					<a href="https://twitter.com/argume" class="twitter-follow-button" 
+						data-show-count="false" data-lang="tr" data-size="large">Takip et: @argume</a>
+				</li>
+				-->
+				
+				<div ng-controller="LoginCtrl">
+					<div ng-switch on="userInSession.id > 0">
+						<div ng-switch-when="true">
+							<ul class="nav pull-right">	
+								<li class="divider-vertical"></li>				
+								<li class="dropdown">
+									<a href="#login" class="dropdown-toggle" data-toggle="dropdown">Menü <b class="caret"></b></a>
+									<ul class="dropdown-menu">
+									    <li><a href="#dashboard">Aktivite</a></li>
+									    <li class="divider"></li>
+									    <li><a href="" ng-click="logout()">Çıkış</a></li>
+									  </ul>
+								</li>										
+							</ul>
+						</div>
+						<div ng-switch-default>
+							<ul class="nav pull-right">					
+								<li class="divider-vertical"></li>				
+								<li class="dropdown">
+									<a href="#login" class="dropdown-toggle" data-toggle="dropdown">Giriş <b class="caret"></b></a>
+									<ul class="dropdown-menu">
+									    <li>
+									    	<a href="#">Facebook ile bağlan</a>
+									    </li>
+									    <li>
+									    	<a href="#">Twitter ile bağlan</a>
+									    </li>
+									    <li><a href="#login">Argume girişi</a></li>
+									  </ul>
+								</li>										
+							</ul>
+						</div>
+					</div>
+					
+				</div>	
+				
+			</div>
+		</div>
+	</div>
+
+	<div ng-view></div>
+	<!-- /container -->
+
+	<footer class="text-center">
+		<p>&copy; Argume 2013</p>
+	</footer>
+	
+</body>
+
+<script>
+	!function(d,s,id){
+		var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';
+		if(!d.getElementById(id)){
+			js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';
+			fjs.parentNode.insertBefore(js,fjs);
+		}
+	}(document, 'script', 'twitter-wjs');
+</script>
+
+</html>

@@ -1,0 +1,33 @@
+<div class="container">
+	<div class="content">
+		<div class="page-header">
+			<h1>Argüman Listesi</h1>
+		</div>
+		<div class="text-center" ng-show="loading"><i class="icon-spinner icon-spin icon-4x"></i></div>
+		<div ng-show="!loading">
+			<div class="text-right">
+				<select ng-model="argument.status">
+					<option disabled="disabled">Statü seç</option>
+					<option value="">All</option>
+					<option value="pending">Pending</option>
+				</select>
+			</div>
+			<table class="table table-striped">
+				<tr>
+					<th></th><th>Özet</th><th>Haber</th><th>Taraf</th><th>Statü</th>
+				</tr>
+				
+				<tr ng-repeat="a in arguments | orderBy:'-id' | filter:argument.status">
+					<td>{{a.id}}</td>
+					<td><a href="{{$location.absUrl()}}/{{a.id}}">{{a.summary}}</a></td>
+					<td>
+						<a href="" ng-click="$location.path('admin/article/{{a.articleId}}')">{{a.articleId}}</a>
+					</td>
+					<td>{{a.affirmative | toTurkish}}</td>
+					<td>{{a.status}}</td>
+				</tr>
+						
+			</table>
+		</div>
+	</div>	
+</div>

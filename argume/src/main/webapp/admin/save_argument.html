@@ -1,0 +1,47 @@
+<div class="container">
+	<div class="content">
+		<div class="page-header">
+			<h1>Arguman</h1>
+		</div>
+		<div>
+			<form class="form-horizontal" ng-submit="saveArgument()">
+			  <div class="control-group">
+			    <label class="control-label">Başlık</label>
+			    <div class="controls">
+			    	<textarea rows="3" class="input-block-level" ng-model="argument.summary" required></textarea>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Detay</label>
+			    <div class="controls">
+			      <textarea rows="10" class="input-block-level" ng-model="argument.body" required></textarea>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Statü</label>
+			    <div class="controls">
+			      <select id="status" ng-model="argument.status">
+			      	<option value="PENDING">PENDING</option>
+			      	<option value="APPROVED">APPROVED</option>
+			      </select>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Doğru?</label>
+			    <div class="controls">
+			      <input type="checkbox" id="affirmative" ng-model="argument.affirmative">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			  	<div class="controls">
+			    	<button class="btn btn-primary" ng-class="{'disabled': submitting}" id="submit-button">Kaydet</button>
+			    	<button class="btn" id="delete-button" ng-class="{disabled: submitting}" ng-click="deleteArgument()">Sil</button>
+			    </div>
+			  </div>
+			</form>
+		</div>
+		<div class="alert text-center" ng-class="{'alert-success': success, 'alert-error': !success}" 
+			 ng-show="saveArgumentMessage != null">{{saveArgumentMessage}}</div>	
+		
+	</div>	
+</div>
