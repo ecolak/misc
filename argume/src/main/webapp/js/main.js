@@ -163,12 +163,6 @@ app.directive('argumentsPane', function() {
 	};
 });
 
-app.filter('cleanse', function($sanitize) {
-	return function(text) {
-		return $sanitize(text);
-	};
-});
-
 app.filter('addIndex', function() {
 	return function(text, index) {
 		return index + ". " + text;

@@ -34,7 +34,7 @@
 				</div>
 				<div class="span8">
 					<legend><a href="#news/{{a.id}}">{{a.title}}</a></legend>
-					<span ng-bind-html-unsafe="a.body | cleanse | shorten:400:a.id"></span>
+					<span ng-bind-html="a.body | shorten:400:a.id"></span>
 				</div>
 			</div>
 		</div>

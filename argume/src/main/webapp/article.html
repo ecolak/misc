@@ -51,7 +51,7 @@
 		</div>
 		<br />
 		<div class="row-fluid">
-			<div ng-bind-html-unsafe="article.body | cleanse"></div>
+			<div ng-bind-html="article.body"></div>
 		</div>
 		
 		<div ng-include src="'partials/social_plugins.html'"></div>

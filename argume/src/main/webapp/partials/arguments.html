@@ -3,7 +3,7 @@
 	<div class="text-left">
 		<div ng-repeat="t in arguments">
 			<div class="arg-summary-box" ng-click="toggleExpand(type, $index)">
-				<span ng-bind-html-unsafe="t.summary | cleanse | addIndex:$index+1" class="span9"></span> 
+				<span ng-bind-html="t.summary | addIndex:$index+1" class="span9"></span> 
 				<span class="span3">
 					<div class="row-fluid">
 						<div class="span6">
@@ -30,7 +30,7 @@
 				</span>
 			</div>
 			<div class="arg-desc-box" id="{{type}}_{{$index}}">
-				<span ng-bind-html-unsafe="t.body | cleanse"></span>
+				<span ng-bind-html="t.body"></span>
 			</div>
 		</div>
 	</div>
