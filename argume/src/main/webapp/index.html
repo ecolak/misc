@@ -56,6 +56,7 @@
 									<a href="" class="dropdown-toggle" data-toggle="dropdown">Menü <b class="caret"></b></a>
 									<ul class="dropdown-menu">
 									    <li><a href="#dashboard">Aktivite</a></li>
+									    <li ng-if="userInSession.role == 'ADMIN'"><a href="#admin/article">Admin panel</a></li>
 									    <li class="divider"></li>
 									    <li><a href="" ng-click="logout()">Çıkış</a></li>
 									  </ul>

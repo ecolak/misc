@@ -12,6 +12,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import self.ec.argume.dao.Criteria;
 import self.ec.argume.dao.DaoFactory;
 import self.ec.argume.dao.GenericDao;
 import self.ec.argume.model.ResultList;
@@ -30,7 +31,7 @@ public class VoteResource {
 	@GET
 	public ResultList<Vote> getAll(@DefaultValue(Constants.DEFAULT_PAGE) @QueryParam("page") int page, 
 			   					   @DefaultValue(Constants.DEFAULT_PAGE_SIZE) @QueryParam("pagesize") int pageSize) {
-		return voteDao.listWithTotalPages(page, pageSize);
+		return voteDao.query(new Criteria().setPagination(page, pageSize));
 	}
 
 	@GET

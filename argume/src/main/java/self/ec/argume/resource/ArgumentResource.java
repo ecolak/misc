@@ -1,8 +1,6 @@
 package self.ec.argume.resource;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -21,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import self.ec.argume.dao.Criteria;
 import self.ec.argume.dao.DaoFactory;
 import self.ec.argume.dao.GenericDao;
 import self.ec.argume.model.Argument;
@@ -45,7 +44,7 @@ public class ArgumentResource {
 	@GET
 	public ResultList<Argument> getAll(@DefaultValue(Constants.DEFAULT_PAGE) @QueryParam("page") int page, 
 									   @DefaultValue(Constants.DEFAULT_PAGE_SIZE) @QueryParam("pagesize") int pageSize) {
-		return argumentDao.listWithTotalPages(page, pageSize);
+		return argumentDao.query(new Criteria().setPagination(page, pageSize));
 	}
 
 	@GET
@@ -61,12 +60,9 @@ public class ArgumentResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createArgument(final Argument argument) {
-		Map<String,Object> colMap = new HashMap<String,Object>();
-		colMap.put("articleId", argument.getArticleId());
-		colMap.put("affirmative", argument.isAffirmative());
-		colMap.put("status", Argument.Status.APPROVED);
-		
-		int count = (int)argumentDao.count(colMap);
+		int count = (int)argumentDao.count(new Criteria().addColumn("articleId", argument.getArticleId())
+								.addColumn("affirmative", argument.isAffirmative())
+								.addColumn("status", Argument.Status.APPROVED));
 		if (count >= DEFAULT_MAX_ARG_COUNT) {
 			throw new WebApplicationException(Response.status(Status.CONFLICT)
 						.entity(Messages.getMessage("errors.arguments.maxReached")).build());
@@ -150,17 +146,17 @@ public class ArgumentResource {
 	private Like getLikeForArgumentAndVisitor(long argumentId) {
 		Like result = null;
 		
-		Map<String,Object> args = new HashMap<String,Object>();
+		Criteria criteria = new Criteria().addColumn("argumentId", argumentId);
+		
 		User userInSession = AuthUtils.getUserInSession(request);
 		String visitorId = AuthUtils.getVisitorIdFromCookies(request);
 		if (userInSession != null) {
-			args.put("userId", userInSession.getId()); 
+			criteria.addColumn("userId", userInSession.getId());
 		} else if (visitorId != null) {
-			args.put("visitorId", visitorId); 
+			criteria.addColumn("visitorId", visitorId);
 		}
 		
-		args.put("argumentId", argumentId);
-		List<Like> list = likeDao.findByColumns(args);
+		List<Like> list = likeDao.query(criteria).getObjects();
 		result = list.isEmpty() ? null : list.get(0);
 		
 		return result;

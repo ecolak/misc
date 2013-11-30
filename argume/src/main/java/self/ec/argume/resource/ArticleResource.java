@@ -5,9 +5,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -26,11 +24,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.time.DateUtils;
 
+import self.ec.argume.dao.Criteria;
+import self.ec.argume.dao.Criteria.Operator;
 import self.ec.argume.dao.DaoFactory;
 import self.ec.argume.dao.GenericDao;
-import self.ec.argume.dao.GenericDao.Operand;
 import self.ec.argume.model.Argument;
 import self.ec.argume.model.Article;
 import self.ec.argume.model.Like;
@@ -40,7 +40,6 @@ import self.ec.argume.model.Vote;
 import self.ec.argume.model.VoteCounts;
 import self.ec.argume.util.AuthUtils;
 import self.ec.argume.util.Constants;
-import self.ec.argume.util.NumberUtils;
 
 @Path("/articles")
 @Produces(MediaType.APPLICATION_JSON)
@@ -60,9 +59,9 @@ public class ArticleResource {
 			   						@DefaultValue(Constants.DEFAULT_PAGE_SIZE) @QueryParam("pagesize") int pageSize) {
 		String search = request.getParameter("search");
 		if ("today".equals(search)) {
-			return articleDao.findByColumnWithTotalPages("pubDate", DateUtils.truncate(new Date(), Calendar.DATE), Operand.GTE); 
+			return articleDao.query(new Criteria().addColumn("pubDate", DateUtils.truncate(new Date(), Calendar.DATE), Operator.GTE));
 		} else {
-			return articleDao.listWithTotalPages(page, pageSize, "order by pubDate desc"); 
+			return articleDao.query(new Criteria().setPagination(page, pageSize).setOrderBy("pubDate desc"));
 		}
 	}
 
@@ -114,33 +113,23 @@ public class ArticleResource {
 	@GET
 	@Path("{id}/arguments")
 	public ResultList<Argument> getArgumentsByType(@PathParam("id") long articleId, @QueryParam("type") String type) {
-		Map<String,Object> columnMap = new HashMap<String,Object>();
-		columnMap.put("articleId", articleId);
+		Criteria criteria = new Criteria().addColumn("articleId", articleId).addColumn("status", Argument.Status.APPROVED);
 		Boolean aff = null;
 		if ("supporting".equals(type)) {
 			aff = true;
 		} else if ("opposed".equals(type)) {
 			aff = false;
 		}
-		if (aff != null) columnMap.put("affirmative", aff);
-		
-		columnMap.put("status", Argument.Status.APPROVED);
+		if (aff != null) criteria.addColumn("affirmative", aff);
 		
 		// Cannot select by limit because we have to sort by score first
 		// TODO: This might become a bottleneck when an article has too many arguments (> 50)
 		//		 Make some reasonable assumption for limit here
-		List<Argument> arguments = argumentDao.findByColumns(columnMap);
+		List<Argument> arguments = argumentDao.query(criteria).getObjects();
 		
 		for (Argument arg : arguments) {
-			Map<String,Object> map = new HashMap<String,Object>();
-			map.put("argumentId", arg.getId());
-			map.put("favorable", true);
-			arg.setLikes((int)likeDao.count(map));
-			
-			map = new HashMap<String,Object>();
-			map.put("argumentId", arg.getId());
-			map.put("favorable", false);
-			arg.setDislikes((int)likeDao.count(map));
+			arg.setLikes((int)likeDao.count(new Criteria().addColumn("argumentId", arg.getId()).addColumn("favorable", true)));
+			arg.setDislikes((int)likeDao.count(new Criteria().addColumn("argumentId", arg.getId()).addColumn("favorable", false)));
 		}
 		
 		Collections.sort(arguments, new Comparator<Argument>() {
@@ -167,15 +156,8 @@ public class ArticleResource {
 	@GET
 	@Path("{id}/vote_counts")
 	public VoteCounts getVoteCount(@PathParam("id") long articleId) {
-		Map<String,Object> args = new HashMap<String,Object>();
-		args.put("articleId", articleId);
-		args.put("favorable", true);
-		int favorableCount = (int)voteDao.count(args);
-		
-		args = new HashMap<String,Object>();
-		args.put("articleId", articleId);
-		args.put("favorable", false);
-		int againstCount = (int)voteDao.count(args);
+		int favorableCount = (int)voteDao.count(new Criteria().addColumn("articleId", articleId).addColumn("favorable", true));
+		int againstCount = (int)voteDao.count(new Criteria().addColumn("articleId", articleId).addColumn("favorable", false));
 		
 		return new VoteCounts(favorableCount, againstCount);
 	}
@@ -228,17 +210,17 @@ public class ArticleResource {
 	private Vote getVoteForArticleAndVisitor(long articleId) {
 		Vote result = null;
 		
-		Map<String,Object> args = new HashMap<String,Object>();
+		Criteria criteria = new Criteria().addColumn("articleId", articleId);
+
 		User userInSession = AuthUtils.getUserInSession(request);
 		String visitorId = AuthUtils.getVisitorIdFromCookies(request);
 		if (userInSession != null) {
-			args.put("userId", userInSession.getId()); 
+			criteria.addColumn("userId", userInSession.getId());
 		} else if (visitorId != null) {
-			args.put("visitorId", visitorId); 
+			criteria.addColumn("visitorId", visitorId);
 		}
 		
-		args.put("articleId", articleId);
-		List<Vote> list = voteDao.findByColumns(args);
+		List<Vote> list = voteDao.query(criteria).getObjects();
 		result = list.isEmpty() ? null : list.get(0);
 		
 		return result;

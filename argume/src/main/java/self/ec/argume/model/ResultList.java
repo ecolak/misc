@@ -15,6 +15,7 @@ public class ResultList<T> {
 	public ResultList(List<T> objects, int page, int pageSize, long total) {
 		this.objects = objects;
 		this.page = page;
+		this.pageSize = pageSize;
 		this.total = total;
 		setTotalPages();
 	}

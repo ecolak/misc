@@ -47,6 +47,32 @@ public class ArgumentDao extends GenericDao<Argument> {
 		return arg;
 	}
 	
+	public int getArgumeScoreForUser(long userId) {
+		int result = 0;
+		String q = "select x.likes_count, y.dislikes_count from (select count(*) as likes_count from arguments a, "
+				+ "likes l where a.id = l.argument_id and l.is_favorable = true and a.user_id = (?1)) x, "
+				+ "(select count(*) as dislikes_count from arguments a, likes l where a.id = l.argument_id and "
+				+ "l.is_favorable = false and a.user_id = (?2)) y";
+		
+		EntityManager em = null;
+		
+		try {
+			em = emf.createEntityManager();
+			Query query = em.createNativeQuery(q);
+			query.setParameter(1, userId);
+			query.setParameter(2, userId);
+			Object[] row = (Object[])query.getSingleResult();
+			if (row != null) {
+				result = (int)Math.round(Argument.magicScore(getIntegerFromColumnValue(row[0]), getIntegerFromColumnValue(row[1])));
+			}
+			
+		} finally {
+			if (em != null) em.close();
+		}
+		
+		return result > 0 ? result : 0;
+	}
+	
 	public ResultList<Argument> getArgumentsForUser(long userId, int limit) {
 		Map<Long, Argument> argMap = new HashMap<Long, Argument>();
 		String q1 = "select a.id, a.article_id, a.user_id, a.summary, a.body, a.is_affirmative, a.status, "
@@ -81,7 +107,12 @@ public class ArgumentDao extends GenericDao<Argument> {
 			rows = query.getResultList();
 			for (Object data : rows) {
 				Argument arg = getArgumentFromRow((Object[])data);
-				argMap.put(arg.getId(), arg);
+				Argument argInMap = argMap.get(arg.getId());
+				if (argInMap != null) {
+					argInMap.setDislikes(arg.getDislikes());
+				} else {
+					argMap.put(arg.getId(), arg); 
+				}
 			}
 			
 			query = em.createNativeQuery(q3);

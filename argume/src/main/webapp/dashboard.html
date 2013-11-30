@@ -3,15 +3,30 @@
 		<div class="page-header">
 			<h3>Argume aktiviteniz</h3>
 		</div>
-		<p><strong>Argume skoru:</strong> <span class="badge badge-info">{{dashboard.argumeScore}}</span></p>
-		
+		<p><strong>Argume skoru:</strong> <span class="badge badge-info">{{argumeScore}}</span></p>
+		 
 		<table class="table table-hover">
-			<tr ng-repeat="argument in dashboard.arguments">
-				<td>{{argument.summary}}</td>
+			<tr ng-repeat="argument in arguments" ng-init="expanded = false">
+				<!-- <td><a href="" ng-click="expanded = true"><i class="icon-plus"></i></a></td> -->
+				<td>
+					<a href="" ng-click="expanded = !expanded">{{argument.summary}}</a> <br/> 
+					<div ng-show="expanded"><small>{{argument.body}}</small></div>
+				</td>
 				<td><span class="badge badge-success">{{argument.likes}}</span></td>
 				<td><span class="badge badge-important">{{argument.dislikes}}</span></td>
 				<td>{{argument.dateCreated | formatDate}}</td>
 			</tr>
 		</table>
+		<div class="text-center" ng-show="total_pages > page">
+			<div ng-switch on="loading">
+				<div ng-switch-when="true">
+					<i class="icon-spinner icon-spin icon-2x"></i>
+				</div>
+				<div ng-switch-when="false">
+					<a class="btn btn-info btn-mini" ng-click="loadMoreArguments()">Öncekiler</a>
+				</div>
+			</div>
+		</div>
+		
 	</div>	
 </div>

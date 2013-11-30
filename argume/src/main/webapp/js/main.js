@@ -719,15 +719,14 @@ app.controller('LoginCtrl', function($scope, $rootScope, $location, AuthData) {
 	};
 	
 	$scope.logout = function () {
-		console.log("log out");
 		AuthData.session.remove(function (response, status) {
 			$rootScope.userInSession = null;
+			$location.path('/'); 
 		}, function (response, status) {
-			
+			console.log(response);
 		});
 	};
 
-	console.log('check for logged in user');
 	AuthData.sessionUser.get({}, function (response) {
 		$rootScope.userInSession = response;
 	}, function (error) {
@@ -782,12 +781,36 @@ app.controller('ForgotPwdCtrl', function($scope, $http, Constants) {
 	}
 });
 
-app.controller('DashboardCtrl', function($scope, ArticleData, AuthService) {
+app.controller('DashboardCtrl', function($scope, $http, AuthService, Constants) {
 	AuthService.authenticateUser();
 	
-	ArticleData.dashboard.get({}, function (response, status) {
-		$scope.dashboard = response;
-	}, function (response, status) {
+	var pageSize = 10;
+	var loadArguments = function (page) {
+		$http.get([Constants.dataServiceBaseUrl, 'dashboard' , 'arguments'].join('/'), {params: {limit: (page * pageSize)}})
+		.success(function (response, status) {
+			$scope.arguments = response.objects;
+			$scope.page = response.page;
+			$scope.total_pages = response.totalPages;
+			$scope.loading = false;
+		}).error(function (response, status) {
+			console.log(response);
+		});
+	};
+	
+	$scope.loadMoreArguments = function () {
+		loadArguments($scope.page + 1);
+	};
+	
+	$scope.loading = true;
+	
+	// load arguments
+	loadArguments(1);
+	
+	// load argume score
+	$http.get([Constants.dataServiceBaseUrl, 'dashboard' , 'argume_score'].join('/'))
+	.success(function (response, status) {
+		$scope.argumeScore = response;
+	}).error(function (response, status) {
 		console.log(response);
 	});
 });

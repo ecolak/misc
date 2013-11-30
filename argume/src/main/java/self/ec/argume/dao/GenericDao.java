@@ -2,8 +2,6 @@ package self.ec.argume.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -19,17 +17,6 @@ import self.ec.argume.model.ResultList;
  * */
 public class GenericDao<T> {
 
-	public static enum Operand {
-		EQ("="), NEQ("!="), GT(">"), GTE(">="), LT("<"), LTE("<=");
-		
-		private final String symbol;
-		Operand(String symbol) {
-			this.symbol = symbol;
-		}
-		
-		public String getSymbol() { return symbol; }
-	}
-	
 	protected Class<T> entityClass;
 	protected String entityName;
 	protected EntityManagerFactory emf;
@@ -77,323 +64,97 @@ public class GenericDao<T> {
 		}
 		return result;
 	}
-
-	/**
-	 * Retrieves all entities
-	 *
-	 * @return list of entities plus total pages
-	 * */
-	public ResultList<T> listWithTotalPages() {
-		return listWithTotalPages(0, 0, null);
-	}
 	
-	public ResultList<T> listWithTotalPages(final String orderByStmt) {
-		return listWithTotalPages(0, 0, orderByStmt);
-	}
-	
-	public ResultList<T> listWithTotalPages(final int pageSize) {
-		return listWithTotalPages(0, pageSize);
-	}
-	
-	public ResultList<T> listWithTotalPages(final int page, final int pageSize) {
-		return listInternal(page, pageSize, true, null);
-	}
-	
-	/**
-	 * Retrieves all entities
-	 * 
-	 * @param pageSize
-	 * @return list of entities plus total pages
-	 * */
-	public ResultList<T> listWithTotalPages(final int pageSize, final String orderByStmt) {
-		return listWithTotalPages(0, pageSize, orderByStmt);
-	}
-	
-	/**
-	 * Retrieves all entities
-	 * 
-	 * @param page
-	 * @param pageSize
-	 * @return list of entities plus total pages
-	 * */
-	public ResultList<T> listWithTotalPages(final int page, final int pageSize, final String orderByStmt) {
-		return listInternal(page, pageSize, true, orderByStmt);
-	}
-	
-	public List<T> list() {
-		return listInternal(0, 0, false, null).getObjects();
-	}
-	
-	public List<T> list(final String orderByStmt) {
-		return listInternal(0, 0, false, orderByStmt).getObjects();
-	}
-	
-	public List<T> list(final int pageSize) {
-		return listInternal(0, pageSize, false, null).getObjects();
-	}
-	
-	public List<T> list(final int pageSize, final String orderByStmt) {
-		return listInternal(0, pageSize, false, orderByStmt).getObjects();
-	}
-	
-	public List<T> list(final int page, final int pageSize) {
-		return listInternal(page, pageSize, false, null).getObjects();
-	}
-	
-	public List<T> list(final int page, final int pageSize, final String orderByStmt) {
-		return listInternal(page, pageSize, false, orderByStmt).getObjects();
-	}
-	
-	private ResultList<T> listInternal(final int page, final int pageSize, final boolean countTotalPages, final String orderByStmt) {
-		List<T> rows = new ArrayList<T>();
+	public long count(Criteria criteria) {
 		EntityManager em = null;
-		long totalRows = 0;
+		long count = 0;
 		try {
 			em = emf.createEntityManager();
-			if (countTotalPages) {
-				final Query countQuery = em.createQuery("select count(*) from " + entityName);
-				totalRows = (Long) countQuery.getSingleResult();
-			}
 			
-			String q = "from " + entityName;
-			if (orderByStmt != null) {
-				q += " " + orderByStmt;
-			}
-			final TypedQuery<T> query = getQuery(em, q, page, pageSize);
-			rows = query.getResultList();
-		} finally {
-			if (em != null) em.close();
-		}
-		
-		ResultList<T> result = new ResultList<T>();
-		result.setObjects(rows);
-		
-		if (countTotalPages) {
-			result.setPage(page);
-			result.setPageSize(pageSize);
-			result.setTotal(totalRows);
-		}
-		
-		return result;
-	}
-
-	public ResultList<T> findByColumnWithTotalPages(final String columnName, final Object columnValue) {
-		return findByColumnWithTotalPages(columnName, columnValue, Operand.EQ, 0, 0);
-	}
-	
-	public ResultList<T> findByColumnWithTotalPages(final String columnName, final Object columnValue, final Operand operand) {
-		return findByColumnWithTotalPages(columnName, columnValue, operand, 0, 0);
-	}
-	
-	public ResultList<T> findByColumnWithTotalPages(final String columnName, final Object columnValue, final Operand operand, final int pageSize) {
-		return findByColumnWithTotalPages(columnName, columnValue, operand, 0, pageSize);
-	}
-	
-	/**
-	 * Given a column name and a value for that column, retrieves the list of
-	 * matching entities
-	 * 
-	 * @param columnName
-	 * @param columnValue
-	 * @param pageSize
-	 * @return list of entities plus total pages
-	 * */
-	public ResultList<T> findByColumnWithTotalPages(final String columnName, final Object columnValue, final Operand operand, final int page, final int pageSize) {
-		return findByInternal(columnName, columnValue, operand, page, pageSize, true);
-	}
-	
-	public List<T> findBy(final String columnName, final Object columnValue) {
-		return findByInternal(columnName, columnValue, Operand.EQ, 0, 0, false).getObjects();
-	}
-	
-	public List<T> findBy(final String columnName, final Object columnValue, final Operand operand) {
-		return findByInternal(columnName, columnValue, operand, 0, 0, false).getObjects();
-	}
-	
-	public List<T> findBy(final String columnName, final Object columnValue, final Operand operand, final int pageSize) {
-		return findByInternal(columnName, columnValue, operand, 0, pageSize, false).getObjects();
-	}
-	
-	public List<T> findBy(final String columnName, final Object columnValue, final Operand operand, final int page, final int pageSize) {
-		return findByInternal(columnName, columnValue, operand, page, pageSize, false).getObjects();
-	}
-	
-	/**
-	 * Given a column name and a value for that column, retrieves the list of
-	 * matching entities
-	 * 
-	 * @param columnName
-	 * @param columnValue
-	 * @param page
-	 * @param pageSize
-	 * @return list of entities plus total pages
-	 * */
-	private ResultList<T> findByInternal(final String columnName, final Object columnValue, final Operand operand, final int page, final int pageSize, boolean countTotalPages) {
-		List<T> rows = new ArrayList<T>();
-		EntityManager em = null;
-		long totalRows = 0;
-		try {
-			em = emf.createEntityManager();
-			String queryWoProjection = "from " + entityName + " where " + columnName + " " + operand.getSymbol() + " :" + columnName;
-			if (countTotalPages) {
-				final Query countQuery = em.createQuery("select count(*) as cnt " + queryWoProjection);
-				countQuery.setParameter(columnName, columnValue);
-				totalRows = (Long) countQuery.getSingleResult(); 
-			}
-			
-			final TypedQuery<T> query = getQuery(em, queryWoProjection, page, pageSize);
-			query.setParameter(columnName, columnValue);
-			rows = query.getResultList();
-		} finally {
-			if (em != null) em.close();
-		}
-		
-		ResultList<T> result = new ResultList<T>();
-		result.setObjects(rows);
-		
-		if (countTotalPages) {
-			result.setPage(page);
-			result.setPageSize(pageSize);
-			result.setTotal(totalRows);
-		}
-		
-		return result;
-	}
-	
-	/**
-	 * Given a map of column name to column values, retrieves the list of
-	 * matching entities for all entries in the map
-	 * 
-	 * @param columnMap - map of column keys to values e.g. {"id": 3, "name": "abc"}
-	 * @return List of entities plus total pages
-	 * */
-	public ResultList<T> findByColumnsWithTotalPages(final Map<String, Object> columnMap) {
-		return findByColumnsWithTotalPages(columnMap, 0, 0);
-	}
-	
-	public ResultList<T> findByColumnsWithTotalPages(final Map<String, Object> columnMap, final int pageSize) {
-		return findByColumnsWithTotalPages(columnMap, 0, pageSize);
-	}
-	
-	public ResultList<T> findByColumnsWithTotalPages(final Map<String, Object> columnMap, final int page, final int pageSize) {
-		return findByColumnsInternal(columnMap, page, pageSize, true);
-	}
-	
-	public List<T> findByColumns(final Map<String, Object> columnMap) {
-		return findByColumns(columnMap, 0, 0);
-	}
-
-	public List<T> findByColumns(final Map<String, Object> columnMap, final int pageSize) {
-		return findByColumns(columnMap, 0, pageSize);
-	}
-	
-	public List<T> findByColumns(final Map<String, Object> columnMap, final int page, final int pageSize) {
-		return findByColumnsInternal(columnMap, page, pageSize, false).getObjects();
-	}
-	
-	/**
-	 * Given a map of column name to column values, retrieves the list of
-	 * matching entities for all entries in the map
-	 * 
-	 * @param columnMap - map of column keys to values e.g. {"id": 3, "name": "abc"}
-	 * @param page
-	 * @param pageSize
-	 * @return List of entities plus total pages
-	 * */
-	private ResultList<T> findByColumnsInternal(final Map<String, Object> columnMap, final int page, final int pageSize, final boolean countTotalPages) {
-		List<T> rows = new ArrayList<T>();
-		EntityManager em = null;
-		long totalRows = 0;
-		try {
-			em = emf.createEntityManager();
-			if (countTotalPages) {
-				final Query countQuery = em.createQuery("select count(*) as cnt from " + entityName);
-				totalRows = (Long) countQuery.getSingleResult(); 
-			}
-			
-			StringBuilder qb = new StringBuilder("from " + entityName + " where ");
+			StringBuilder qb = new StringBuilder("select count(*) as cnt from " + entityName);
 			int i = 0;
-			for (Entry<String, Object> entry : columnMap.entrySet()) {
+			for (Criteria.Condition condition : criteria.getCriteria()) {
 				if (i > 0) {
 					qb.append(" and ");
+				} else {
+					qb.append(" where ");
 				}
-				String columnName = entry.getKey();
-				qb.append(columnName).append(" = :").append(columnName);
-				i++;
-			}
-
-			final TypedQuery<T> query = getQuery(em, qb.toString(), page, pageSize);
-			for (Entry<String, Object> entry : columnMap.entrySet()) {
-				query.setParameter(entry.getKey(), entry.getValue());
-			}
-
-			rows = query.getResultList();
-		} finally {
-			if (em != null) em.close();
-		}
 		
-		ResultList<T> result = new ResultList<T>();
-		result.setObjects(rows);
-		
-		if (countTotalPages) {
-			result.setPage(page);
-			result.setPageSize(pageSize);
-			result.setTotal(totalRows);
-		}
-		
-		return result;
-	}
-	
-	public long count(final String columnName, final Object columnValue) {
-		long result = 0;
-		EntityManager em = null;
-		try {
-			em = emf.createEntityManager();			
-			String q = "select count(*) as cnt from " + entityName;
-			boolean hasColumns = (columnName != null && columnValue != null);
-			if (hasColumns) {
-				q += " where " + columnName + " = :" + columnName;
-			}
-			final Query query = em.createQuery(q);
-			
-			if (hasColumns) {
-				query.setParameter(columnName, columnValue);
-			}
-			result = (Long) query.getSingleResult();
-		} finally {
-			if (em != null) em.close();
-		}
-		
-		return result;
-	}
-	
-	public long count(final Map<String, Object> columnMap) {
-		long result = 0;
-		EntityManager em = null;
-		try {
-			em = emf.createEntityManager();			
-			StringBuilder qb = new StringBuilder("select count(*) as cnt from " + entityName + " where ");
-			int i = 0;
-			for (Entry<String, Object> entry : columnMap.entrySet()) {
-				if (i > 0) {
-					qb.append(" and ");
-				}
-				String columnName = entry.getKey();
-				qb.append(columnName).append(" = :").append(columnName);
+				qb.append(condition.getColumnName()).append(" ").append(condition.getOperator().getSymbol())
+				  .append(" :").append(condition.getColumnName());
 				i++;
 			}
 
 			final Query query = em.createQuery(qb.toString());
-			for (Entry<String, Object> entry : columnMap.entrySet()) {
-				query.setParameter(entry.getKey(), entry.getValue());
+			for (Criteria.Condition condition : criteria.getCriteria()) {
+				query.setParameter(condition.getColumnName(), condition.getColumnValue());
 			}
 			
-			result = (Long) query.getSingleResult();
+			count = (Long) query.getSingleResult();
 		} finally {
 			if (em != null) em.close();
 		}
 		
+		return count;
+	}
+	
+	public ResultList<T> query(Criteria criteria) {
+		List<T> rows = new ArrayList<T>();
+		EntityManager em = null;
+		long totalRows = 0;
+		try {
+			em = emf.createEntityManager();
+			
+			if (criteria.isPaged()) {
+				final Query countQuery = em.createQuery("select count(*) as cnt from " + entityName);
+				totalRows = (Long) countQuery.getSingleResult(); 
+			}
+			
+			StringBuilder qb = new StringBuilder("from " + entityName);
+			int i = 0;
+			for (Criteria.Condition condition : criteria.getCriteria()) {
+				if (i > 0) {
+					qb.append(" and ");
+				} else {
+					qb.append(" where ");
+				}
+		
+				qb.append(condition.getColumnName()).append(" ").append(condition.getOperator().getSymbol())
+				  .append(" :").append(condition.getColumnName());
+				i++;
+			}
+			
+			if (criteria.getOrderBy() != null) {
+				qb.append(" order by ").append(criteria.getOrderBy());
+			}
+
+			final TypedQuery<T> query = criteria.isPaged() 
+					? getQuery(em, qb.toString(), criteria.getPage(), criteria.getPageSize()) 
+					: getQuery(em, qb.toString(), 0, 0);
+			
+			for (Criteria.Condition condition : criteria.getCriteria()) {
+				query.setParameter(condition.getColumnName(), condition.getColumnValue());
+			}
+			
+			rows = query.getResultList();
+		} finally {
+			if (em != null) em.close();
+		}
+		
+		ResultList<T> result = new ResultList<T>();
+		result.setObjects(rows);
+		
+		if (criteria.isPaged()) {
+			result.setPage(criteria.getPage());
+			result.setPageSize(criteria.getPageSize());
+			result.setTotal(totalRows);
+		}
+		
 		return result;
+	}
+	
+	public List<T> findBy(String columnName, Object columnValue) {
+		return query(new Criteria().addColumn(columnName, columnValue)).getObjects();
 	}
 
 	/**
