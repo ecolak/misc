@@ -18,6 +18,19 @@
         </properties>
     </persistence-unit>
     
+    <persistence-unit name="rds-postgres">
+        <properties>
+            <property name="hibernate.connection.url" value="jdbc:postgresql://argume-db.ca8wypo0igei.us-west-2.rds.amazonaws.com:5432/argume_db" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"></property>
+            <property name="hibernate.connection.driver_class" value="org.postgresql.Driver" />
+            <property name="hibernate.connection.username" value="argume" />
+            <property name="hibernate.connection.password" value="argumeadmin" />   
+            <property name="hibernate.hbm2ddl.auto" value="update" />     
+            <property name="hibernate.connection.autocommit" value="false" />
+            <property name="hibernate.show_sql" value="false" />
+        </properties>
+    </persistence-unit>
+    
      <persistence-unit name="h2">
         <properties>
             <property name="hibernate.connection.url" value="jdbc:h2:build/mem" />
