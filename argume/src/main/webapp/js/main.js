@@ -50,7 +50,7 @@ app.factory('Constants', function () {
 		dataServiceBaseUrl: 'http://ec2-54-201-110-193.us-west-2.compute.amazonaws.com:8080/api',
 		maxCharsInArgumentSummary: 140,
 		maxCharsInArgumentBody: 500,
-		minVotesToDisplay: 10
+		minVotesToDisplay: 0
 	};
 });
 
@@ -102,6 +102,7 @@ app.factory('AuthService', function ($location, $rootScope, AuthData) {
 		},
 		
 		authenticateUser: function () {
+			// check Facebook login too
 			$rootScope.redirectUrl = $location.path();
 			AuthData.sessionUser.get({}, function (response) {
 				if (!response) {
@@ -131,7 +132,7 @@ app.factory('CommonFunc', function () {
 		
 		calculateVotePct: function (counts) {
 			var total = counts.favorable + counts.against;
-			var pct_true = pct_false = 0;
+			var pct_true = pct_false = 50;
 			if (total > 0) {
 				pct_true = Math.round(counts.favorable / (counts.favorable + counts.against) * 100);
 				pct_false = Math.round(counts.against / (counts.favorable + counts.against) * 100); 
@@ -193,11 +194,10 @@ app.filter('toPct', function() {
 	return function(article, favorable) {
 		if (article != null) {
 			var total = article.favorableCnt + article.againstCnt;
-			if (total > 0) {
-				if (favorable)
-					return Math.round(article.favorableCnt / total * 100);
-				else
-					return Math.round(article.againstCnt / total * 100); 
+			if (favorable) {
+				return total > 0 ? Math.round(article.favorableCnt / total * 100) : 50;
+			} else {
+				return total > 0 ? Math.round(article.againstCnt / total * 100) : 50;
 			}
 		}
 		return "";
@@ -663,7 +663,8 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, ArticleData,
 		
 		$scope.voteMessage = null;
 		$scope.submittingVote = true;
-		ArticleData.votes.save({id: $scope.article.id}, vote, success($scope.vote == null), error); 
+		var isNew = $scope.vote == null || !('id' in $scope.vote);
+		ArticleData.votes.save({id: $scope.article.id}, vote, success(isNew), error); 
 	};
 	
 	$scope.undecide = function () {
