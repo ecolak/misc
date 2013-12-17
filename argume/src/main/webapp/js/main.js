@@ -304,7 +304,7 @@ app.controller('AdminArgumentCtrl', function($scope, $routeParams, $location, Ar
 			$scope.loading = false;
 		});
 	} else {
-		ArticleData.arguments.get({pageSize: 100}, function(data) {
+		ArticleData.arguments.get({pagesize: 100}, function(data) {
 			$scope.arguments = data.objects;
 			$scope.loading = false;
 		});
@@ -374,7 +374,7 @@ app.controller('AdminArticleCtrl', function ($scope, $routeParams, $location, Ar
 	AuthService.authenticateAdmin();
 	
 	var loadPage = function (page) {
-		ArticleData.articles.get({pageSize: 50, page: page}, function(data) {
+		ArticleData.articles.get({pagesize: 50, page: page}, function(data) {
 			if ($scope.articles == null) {
 				$scope.articles = data.objects; 
 			} else {
