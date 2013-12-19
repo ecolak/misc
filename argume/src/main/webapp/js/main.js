@@ -1,4 +1,4 @@
-var app = angular.module('main', [ 'ngSanitize', 'ngResource', 'ngRoute' ]);
+var app = angular.module('main', [ 'ngSanitize', 'ngResource', 'ngRoute', 'analytics' ]);
 
 app.config(function($routeProvider) {
 	$routeProvider.when('/', {
