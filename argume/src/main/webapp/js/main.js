@@ -47,7 +47,7 @@ app.config(function($routeProvider) {
 app.factory('Constants', function () {
 	return {
 		//dataServiceBaseUrl : 'http://localhost:8080/api',
-		dataServiceBaseUrl: 'http://ec2-54-201-110-193.us-west-2.compute.amazonaws.com:8080/api',
+		dataServiceBaseUrl: 'http://54.201.207.235:8080/api',
 		maxCharsInArgumentSummary: 140,
 		maxCharsInArgumentBody: 500,
 		minVotesToDisplay: 0
