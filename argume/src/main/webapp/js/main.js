@@ -47,7 +47,7 @@ app.config(function($routeProvider) {
 app.factory('Constants', function () {
 	return {
 		//dataServiceBaseUrl : 'http://localhost:8080/api',
-		dataServiceBaseUrl: 'http://54.201.207.235/api',
+		dataServiceBaseUrl: 'http://www.argume.com/api',
 		maxCharsInArgumentSummary: 140,
 		maxCharsInArgumentBody: 500,
 		minVotesToDisplay: 0
