@@ -9,11 +9,9 @@
 				    return false;">
 			Facebook'ta paylaş </a>
 	</div>
+	
 	<div class="span2" style="margin-left: 0px; width: 100px;">
-		<a href="https://twitter.com/share" class="twitter-share-button"
-			data-via="ArgumeHaber" data-text="{{article.title}} - Doğru mu? Yalan mı?" 
-			data-url="{{$location.absUrl()}}"
-			data-lang="tr">Tweet</a>
+		<a twitter-share data-text="{{article.title}}" data-url="{{$location.absUrl()}}"></a>
 	</div>
 
 	<!-- Comment this out for now. Unstable

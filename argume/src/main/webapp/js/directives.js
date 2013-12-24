@@ -1,0 +1,40 @@
+app.directive('argumentsPane', function() {
+	return {
+		restrict : 'E',
+		scope : {
+			title : '=',
+			type : '=',
+			arguments : '='
+		},
+		link : function(scope, element, attrs) {
+			scope.toggleExpand = scope.$parent.toggleExpand;
+			scope.updateArgLikes = scope.$parent.updateArgLikes;
+			scope.openWriteNewModal = scope.$parent.openWriteNewModal;
+			scope.showNextPageButton = scope.$parent.showNextPageButton;
+			scope.loadMoreArguments = scope.$parent.loadMoreArguments;
+		},
+		templateUrl : 'partials/arguments.html'
+	};
+});
+
+app.directive('twitterShare', function() {
+	return {
+		link : function(scope, element, attr) {					
+			var createShareButton = function (articleTitle) {
+				twttr.widgets.createShareButton(attr.url, element[0], function(el) {}, {
+					count : 'horizontal',
+					text : articleTitle + ' - Doğru mu? Yalan mı?',
+					url: attr.url,
+					lang: 'tr',
+					via: 'ArgumeHaber'
+				});
+			};
+			
+			attr.$observe('text', function(value) {
+				if (value) {
+					createShareButton(value); 
+				}
+			});
+		}
+	}
+});

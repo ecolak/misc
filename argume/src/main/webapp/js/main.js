@@ -146,25 +146,6 @@ app.factory('CommonFunc', function () {
 	};
 });
 
-app.directive('argumentsPane', function() {
-	return {
-		restrict : 'E',
-		scope : {
-			title : '=',
-			type : '=',
-			arguments : '='
-		},
-		link : function(scope, element, attrs) {
-			scope.toggleExpand = scope.$parent.toggleExpand;
-			scope.updateArgLikes = scope.$parent.updateArgLikes;
-			scope.openWriteNewModal = scope.$parent.openWriteNewModal;
-			scope.showNextPageButton = scope.$parent.showNextPageButton;
-			scope.loadMoreArguments = scope.$parent.loadMoreArguments;
-		},
-		templateUrl : 'partials/arguments.html'
-	};
-});
-
 app.filter('addIndex', function() {
 	return function(text, index) {
 		return index + ". " + text;
@@ -488,7 +469,7 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, ArticleData,
 			$scope.voteChecked = true;
 		});
 	});
-
+	
 	var loadArguments = function (argType) {
 		ArticleData.articleArguments.get({id : $scope.article.id, 
 			type: (argType === true ? 'supporting' : 'opposed'), 
