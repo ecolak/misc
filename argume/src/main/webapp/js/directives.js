@@ -38,3 +38,40 @@ app.directive('twitterShare', function() {
 		}
 	}
 });
+
+app.directive('facebookShare', function() {
+	return {
+		link : function(scope, element, attr) {					
+			var createShareButton = function (title, imageUrl) {
+				element[0].innerHTML = '<a class="btn btn-info btn-mini" href="#" onclick="' + 
+					    'window.open(\'https://www.facebook.com/sharer/sharer.php?s=100&p[url]=' + 
+					    encodeURIComponent(location.href) + '&p[title]=' + encodeURIComponent(title).replace("'", "\\'") + 
+					    '&p[images][0]=' + encodeURIComponent(imageUrl) + 
+					    '\', \'facebook-share-dialog\', \'width=626,height=436\'); return false;"> Facebook\'ta paylaş </a>';
+			};
+			
+			var articleTitle = '';
+			var imageUrl = '';
+			
+			var callCreateShareButton = function () {
+				if (articleTitle && imageUrl) {
+					createShareButton(articleTitle, imageUrl); 
+				}
+			};
+			
+			attr.$observe('title', function(title) {
+				if (title) {
+					articleTitle = title;
+					callCreateShareButton(); 
+				}
+			});
+			
+			attr.$observe('image', function(image) {
+				if (image) {
+					imageUrl = image;
+					callCreateShareButton(); 
+				}
+			});
+		}
+	}
+});
