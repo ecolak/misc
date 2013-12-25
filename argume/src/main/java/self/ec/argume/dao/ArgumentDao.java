@@ -32,18 +32,39 @@ public class ArgumentDao extends GenericDao<Argument> {
 	
 	private Argument getArgumentFromRow(Object[] row) {
 		Argument arg = new Argument();
-		arg.setId(((BigInteger)row[0]).longValue());
-		arg.setArticleId(((BigInteger)row[1]).longValue());
-		arg.setUserId(((BigInteger)row[2]).longValue());
-		arg.setSummary((String)row[3]);
-		arg.setBody((String)row[4]);
-		arg.setAffirmative((Boolean)row[5]);
-		arg.setStatus(Argument.Status.valueOf((String)row[6]));	
-		arg.setDateCreated(((BigInteger)row[7]).longValue());
-		arg.setDateModified(((BigInteger)row[8]).longValue());
-		arg.setLikes(getIntegerFromColumnValue(row[9]));
-		arg.setDislikes(getIntegerFromColumnValue(row[10]));
-		
+		if (row.length > 0 && row[0] != null) {
+			arg.setId(((BigInteger)row[0]).longValue());
+		}
+		if (row.length > 1 && row[1] != null) {
+			arg.setArticleId(((BigInteger)row[1]).longValue()); 
+		}
+		if (row.length > 2 && row[2] != null) {
+			arg.setUserId(((BigInteger)row[2]).longValue()); 
+		}
+		if (row.length > 3 && row[3] != null) {
+			arg.setSummary((String)row[3]); 
+		}
+		if (row.length > 4 && row[4] != null) {
+			arg.setBody((String)row[4]); 
+		}
+		if (row.length > 5 && row[5] != null) {
+			arg.setAffirmative((Boolean)row[5]); 
+		}
+		if (row.length > 6 && row[6] != null) {
+			arg.setStatus(Argument.Status.valueOf((String)row[6]));	
+		}
+		if (row.length > 7 && row[7] != null) {
+			arg.setDateCreated(((BigInteger)row[7]).longValue()); 
+		}
+		if (row.length > 8 && row[8] != null) {
+			arg.setDateModified(((BigInteger)row[8]).longValue()); 
+		}
+		if (row.length > 9 && row[9] != null) {
+			arg.setLikes(getIntegerFromColumnValue(row[9])); 
+		}
+		if (row.length > 10 && row[10] != null) {
+			arg.setDislikes(getIntegerFromColumnValue(row[10]));
+		}
 		return arg;
 	}
 	

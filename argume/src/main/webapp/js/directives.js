@@ -39,14 +39,16 @@ app.directive('twitterShare', function() {
 	}
 });
 
-app.directive('facebookShare', function() {
+app.directive('fbShare', function() {
 	return {
-		link : function(scope, element, attr) {					
+		link : function(scope, element, attr) {	
 			var createShareButton = function (title, imageUrl) {
 				element[0].innerHTML = '<a class="btn btn-info btn-mini" href="#" onclick="' + 
-					    'window.open(\'https://www.facebook.com/sharer/sharer.php?s=100&p[url]=' + 
-					    encodeURIComponent(location.href) + '&p[title]=' + encodeURIComponent(title).replace(/'/g, "\\'") + 
-					    '&p[images][0]=' + encodeURIComponent(imageUrl) + 
+					    'window.open(\'https://www.facebook.com/dialog/feed?app_id=677061055671921&display=popup&caption=' +  
+					    encodeURIComponent(title + " - Doğru mu? Yalan mı?").replace(/'/g, "\\'") + 
+					    '&link=' + encodeURIComponent(location.href) + 
+					    '&redirect_uri=' + encodeURIComponent(location.protocol + '//' + location.hostname + '/popup_close.html') + 
+					    '&picture=' + encodeURIComponent(imageUrl) + 
 					    '\', \'facebook-share-dialog\', \'width=626,height=436\'); return false;"> Facebook\'ta paylaş </a>';
 			};
 			

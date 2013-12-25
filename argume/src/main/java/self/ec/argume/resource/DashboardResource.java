@@ -28,7 +28,8 @@ public class DashboardResource {
 	@GET
 	@Path("arguments")
 	public ResultList<Argument> getArguments() {
-		return argumentDao.getArgumentsForUser(AuthUtils.getUserInSession(request).getId(), NumberUtils.toInt(request.getParameter("limit"), DEFAULT_LIMIT));
+		return argumentDao.getArgumentsForUser(AuthUtils.getUserInSession(request).getId(), 
+				NumberUtils.toInt(request.getParameter("limit"), DEFAULT_LIMIT));
 	}
 	
 	@GET
