@@ -1,12 +1,8 @@
 package self.ec.argume.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 
 @Entity
@@ -33,16 +29,15 @@ public class Article extends BaseEntity implements java.io.Serializable {
 	@Column(name = "location")
 	private String location;
 	
-	@Column(name = "pub_date")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date pubDate;
+	@Column(name = "is_verified")
+	private Boolean verified = false;
 	
 	public Article() {
 		super(null, null);
 	}
 
 	public Article(String title, String body, String imgUrl,
-			long categoryId, String source, String location, Date pubDate,
+			long categoryId, String source, String location, boolean verified,
 			int pctTrue, int pctFalse) {
 		super(null, null);
 		this.title = title;
@@ -51,7 +46,7 @@ public class Article extends BaseEntity implements java.io.Serializable {
 		this.categoryId = categoryId;
 		this.source = source;
 		this.location = location;
-		this.pubDate = pubDate;
+		this.verified = verified;
 	}
 
 	public String getTitle() {
@@ -102,12 +97,12 @@ public class Article extends BaseEntity implements java.io.Serializable {
 		this.location = location;
 	}
 
-	public Date getPubDate() {
-		return pubDate;
+	public Boolean isVerified() {
+		return verified;
 	}
 
-	public void setPubDate(Date pubDate) {
-		this.pubDate = pubDate;
+	public void setVerified(Boolean verified) {
+		this.verified = verified;
 	}
 
 }

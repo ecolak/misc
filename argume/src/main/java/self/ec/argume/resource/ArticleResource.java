@@ -59,9 +59,12 @@ public class ArticleResource {
 			   						@DefaultValue(Constants.DEFAULT_PAGE_SIZE) @QueryParam("pagesize") int pageSize) {
 		String search = request.getParameter("search");
 		if ("today".equals(search)) {
-			return articleDao.query(new Criteria().addColumn("pubDate", DateUtils.truncate(new Date(), Calendar.DATE), Operator.GTE));
+			return articleDao.query(new Criteria().addColumn("dateCreated", 
+					DateUtils.truncate(new Date(), Calendar.DATE).getTime(), Operator.GTE)
+					.addColumn("verified", true));
 		} else {
-			return articleDao.query(new Criteria().setPagination(page, pageSize).setOrderBy("pubDate desc"));
+			return articleDao.query(new Criteria().setPagination(page, pageSize).addColumn("verified", true)
+					.setOrderBy("dateCreated desc"));
 		}
 	}
 
@@ -69,31 +72,20 @@ public class ArticleResource {
 	@Path("{id}")
 	public Article getById(@PathParam("id") long id) {
 		Article article = articleDao.findById(id);
-		if (article == null) {
+		if (article == null || !article.isVerified()) {
 			throw new WebApplicationException(Response.status(Status.NOT_FOUND).build());
 		}
 		return article;
 	}
-
+	
 	@POST
-	public Response createArticle(final Article article) {
+	@Path("suggest")
+	public Response suggestArticle(final Article article) {
+		article.setVerified(false);
 		return saveArticle(article, true);
 	}
-
-	@PUT
-	@Path("{id}")
-	public Response updateArticle(@PathParam("id") long id, final Article article) {
-		Article existing = articleDao.findById(id);
-		if (existing == null) {
-			throw new WebApplicationException(Response.status(Status.NOT_FOUND).build());
-		}
-
-		article.setId(id);
-		return saveArticle(article, false);
-	}
-
+	
 	private Response saveArticle(final Article article, boolean isNew) {
-		article.setPubDate(new Date());
 		if (isNew) {
 			article.setDateCreated(System.currentTimeMillis());
 		} else {
@@ -101,13 +93,6 @@ public class ArticleResource {
 		}
 		Article result = articleDao.save(article);
 		return Response.ok(result).build();
-	}
-
-	@DELETE
-	@Path("{id}")
-	public Response deleteArticle(@PathParam("id") long id) {
-		articleDao.deleteBy("id", id);
-		return Response.ok().build();
 	}
 	
 	@GET

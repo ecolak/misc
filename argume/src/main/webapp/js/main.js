@@ -37,6 +37,9 @@ app.config(function($routeProvider) {
 	}).when('/dashboard', {
 		controller: 'DashboardCtrl',
 		templateUrl: 'dashboard.html'
+	}).when('/suggest_article', {
+		controller: 'SuggestArticleCtrl',
+		templateUrl: 'suggest_article.html'
 	}).otherwise({
 		redirectTo : '/'
 	});
@@ -180,7 +183,7 @@ app.controller('AdminArticleCtrl', function ($scope, $routeParams, $location, Ar
 	AuthService.authenticateAdmin();
 	
 	var loadPage = function (page) {
-		ArticleData.articles.get({pagesize: 50, page: page}, function(data) {
+		ArticleData.adminArticles.get({pagesize: 50, page: page}, function(data) {
 			if ($scope.articles == null) {
 				$scope.articles = data.objects; 
 			} else {
@@ -219,7 +222,8 @@ app.controller('AdminArticleCtrl', function ($scope, $routeParams, $location, Ar
 			imgUrl: this.article.imgUrl,
 			location: this.article.location,
 			source: this.article.source,
-			body: this.article.body
+			body: this.article.body,
+			verified: this.article.verified
 		};
 		
 		var success = function (response) {
@@ -233,9 +237,9 @@ app.controller('AdminArticleCtrl', function ($scope, $routeParams, $location, Ar
 		};
 		
 		if ('id' in $scope.article) {
-			ArticleData.articles.update({id: $scope.article.id}, article, success, error);
+			ArticleData.adminArticles.update({id: $scope.article.id}, article, success, error);
 		} else {
-			ArticleData.articles.save($scope.article, success, error);
+			ArticleData.adminArticles.save($scope.article, success, error);
 		}
 	};
 	
@@ -257,7 +261,7 @@ app.controller('AdminArticleCtrl', function ($scope, $routeParams, $location, Ar
 	
 	$scope.loading = true;
 	if ('id' in $routeParams) {
-		ArticleData.articles.get({
+		ArticleData.adminArticles.get({
 			id : $routeParams.id
 		}, function (response) {
 			$scope.article = response;
@@ -620,4 +624,32 @@ app.controller('DashboardCtrl', function($scope, $http, AuthService, Constants) 
 	}).error(function (response, status) {
 		console.log(response);
 	});
+});
+
+app.controller('SuggestArticleCtrl', function($scope,  ArticleData) {
+	$scope.saveArticle = function () {
+		$scope.submitting = true;
+		
+		var article = {
+			title: this.article.title,
+			imgUrl: this.article.imgUrl,
+			location: this.article.location,
+			source: this.article.source,
+			body: this.article.body
+		};
+		
+		var success = function (response) {
+			$scope.suggestArticleMessage = 'Tavsiyeniz moderatörümüze iletilmiştir, teşekkür ederiz.';
+			$scope.success = true;
+			$scope.submitting = false;
+		}; 
+		
+		var error = function (response) {
+			$scope.saveArticleMessage = "Hata";
+			$scope.success = false;
+			$scope.submitting = false;
+		};
+		
+		ArticleData.articleSuggestion.save($scope.article, success, error);
+	};
 });

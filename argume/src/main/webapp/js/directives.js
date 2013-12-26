@@ -44,8 +44,9 @@ app.directive('fbShare', function() {
 		link : function(scope, element, attr) {	
 			var createShareButton = function (title, imageUrl) {
 				element[0].innerHTML = '<a class="btn btn-info btn-mini" href="#" onclick="' + 
-					    'window.open(\'https://www.facebook.com/dialog/feed?app_id=677061055671921&display=popup&caption=' +  
+					    'window.open(\'https://www.facebook.com/dialog/feed?app_id=677061055671921&display=popup&name=' +  
 					    encodeURIComponent(title + " - Doğru mu? Yalan mı?").replace(/'/g, "\\'") + 
+					    '&caption=' + encodeURIComponent('www.argume.com') + 
 					    '&link=' + encodeURIComponent(location.href) + 
 					    '&redirect_uri=' + encodeURIComponent(location.protocol + '//' + location.hostname + '/popup_close.html') + 
 					    '&picture=' + encodeURIComponent(imageUrl) + 

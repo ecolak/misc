@@ -14,7 +14,9 @@ app.factory('ArticlesPromise', function($http) {
 
 app.factory('ArticleData', function($resource, Constants) {
 	return {
-		articles: $resource(Constants.dataServiceBaseUrl + '/articles/:id', {}, {update: {method: 'PUT'}}),
+		articles: $resource(Constants.dataServiceBaseUrl + '/articles/:id'),
+		articleSuggestion: $resource(Constants.dataServiceBaseUrl + '/articles/suggest'),
+		adminArticles: $resource(Constants.dataServiceBaseUrl + '/admin/articles/:id', {}, {update: {method: 'PUT'}}),
 		articleArguments: $resource(Constants.dataServiceBaseUrl + '/articles/:id/arguments'),
 		arguments: $resource(Constants.dataServiceBaseUrl + '/arguments/:id', {}, {update: {method: 'PUT'}}),
 		votes: $resource(Constants.dataServiceBaseUrl + '/articles/:id/vote', {}, {update: {method: 'PUT'}}),

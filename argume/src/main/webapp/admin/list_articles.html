@@ -5,17 +5,25 @@
 		</div>
 		<div class="text-center" ng-show="loading"><i class="icon-spinner icon-spin icon-4x"></i></div>
 		<div ng-show="!loading">
-			<p class="text-right"><a href="{{$location.absUrl()}}/new">Yeni haber gir</a></p>
+			<p class="text-right">
+				<select ng-model="article.verified">
+					<option disabled="disabled">Onay</option>
+					<option value="false">Onay bekliyor</option>
+					<option value="true">Onaylandı</option>
+				</select>
+				<a href="{{$location.absUrl()}}/new">Yeni haber gir</a>
+			</p>
 			<table class="table table-striped">
 				<tr>
-					<th></th><th>Başlık</th><th>Kaynak</th><th>Zaman</th>
+					<th></th><th>Başlık</th><th>Kaynak</th><th>Zaman</th><th>Onay</th>
 				</tr>
 				
-				<tr ng-repeat="a in articles">
+				<tr ng-repeat="a in articles | filter:article.verified"">
 					<td>{{a.id}}</td>
 					<td><a href="{{$location.absUrl()}}/{{a.id}}">{{a.title}}</a></td>
 					<td>{{a.source}}</td>
-					<td>{{a.pubDate | formatDate}}</td>
+					<td>{{a.dateCreated | formatDate}}</td>
+					<td>{{a.verified}}</td>
 				</tr>
 			</table>
 			<div class="text-center" ng-show="total_pages > page" ng-click="loadNextPage()"><a href="">Diğer Haberler</a></div>

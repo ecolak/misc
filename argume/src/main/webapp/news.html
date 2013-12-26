@@ -12,7 +12,7 @@
 						<div class="span7 right-solid-border2">
 							<strong>Kaynak: </strong>{{a.source}}<br/> 
 							<strong>Yer: </strong>{{a.location}}<br/>
-							<strong>Zaman: </strong>{{a.pubDate | formatDate}}<br/>
+							<strong>Zaman: </strong>{{a.dateCreated | formatDate}}<br/>
 						</div>
 						<div class="span5">
 							<div ng-switch on="isTotalVotesGreaterThanMinimum(a)">
