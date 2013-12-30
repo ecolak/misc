@@ -408,13 +408,15 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, ArticleData,
 			$scope.submitArgumentMessage = "Özet " + Constants.maxCharsInArgumentSummary + " karakterden fazla olamaz";
 			$scope.success = false;
 			$scope.submitting = false;
-		} else if (this.argument.body.length > Constants.maxCharsInArgumentBody) {
+		} else if (this.argument.body && this.argument.body.length > Constants.maxCharsInArgumentBody) {
 			$scope.submitArgumentMessage = "Detaylı argüman " + Constants.maxCharsInArgumentBody + " karakterden fazla olamaz";
 			$scope.success = false;
 			$scope.submitting = false;
 		} else {
 			// replace new lines with html breaks
-			this.argument.body = this.argument.body.replace(/\n/g, '<br/>');
+			if (this.argument.body) {
+				this.argument.body = this.argument.body.replace(/\n/g, '<br/>'); 
+			}
 			ArticleData.arguments.save({
 				articleId: $scope.article.id,
 				summary: this.argument.summary,
