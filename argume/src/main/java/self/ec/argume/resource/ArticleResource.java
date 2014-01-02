@@ -1,10 +1,8 @@
 package self.ec.argume.resource;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +11,6 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -25,7 +22,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.commons.lang.time.DateUtils;
 
 import self.ec.argume.dao.Criteria;
 import self.ec.argume.dao.Criteria.Operator;
@@ -46,6 +42,7 @@ import self.ec.argume.util.Constants;
 public class ArticleResource {
 
 	private static final int DEFAULT_LIMIT = 5;
+	private static final long DAY_MILLIS = 24*60*60*1000;
 	private static final GenericDao<Argument> argumentDao = DaoFactory.getArgumentDao();
 	private static final GenericDao<Like> likeDao = DaoFactory.getLikeDao();
 	private static final GenericDao<Article> articleDao = DaoFactory.getArticleDao();
@@ -60,7 +57,7 @@ public class ArticleResource {
 		String search = request.getParameter("search");
 		if ("today".equals(search)) {
 			return articleDao.query(new Criteria().addColumn("dateCreated", 
-					DateUtils.truncate(new Date(), Calendar.DATE).getTime(), Operator.GTE)
+					(System.currentTimeMillis() - DAY_MILLIS), Operator.GTE)
 					.addColumn("verified", true));
 		} else {
 			return articleDao.query(new Criteria().setPagination(page, pageSize).addColumn("verified", true)

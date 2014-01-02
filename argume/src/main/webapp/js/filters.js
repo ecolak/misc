@@ -64,8 +64,8 @@ app.filter('shorten', function($location) {
 			var tail = text.substring(num_chars, text.length);
 			var firstPeriodInTail = tail.indexOf('. ');
 			tail = tail.substring(0, firstPeriodInTail + 1);
-			return head + tail + '<br/><a href="' + $location.absUrl()
-					+ 'news/' + articleId + '">Devamı</a>';
+			var baseUrl = location.protocol + '//'+ location.hostname + (location.port ? ':' + location.port : '');
+			return head + tail + '<br/><a href="' + baseUrl + '#/news/' + articleId + '">Devamı</a>';
 		}
 		return text;
 	};
