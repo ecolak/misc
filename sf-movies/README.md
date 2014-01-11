@@ -15,8 +15,6 @@ SF Movies Notes
 3. Run the front end by adding the 'static' directory to any web server.
     
     e.g. 
-        **cd static**
-    	
-    	**python -m SimpleHTTPServer**
+        **cd static* then **python -m SimpleHTTPServer**
 
 4. Go to http://localhost:8000
