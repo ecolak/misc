@@ -1,6 +1,6 @@
 SF Movies Notes
 ===============
-1. Build it by 'mvn clean package'
+1. Build it by **mvn clean package**
 
 2. Run the back end by dropping target/sf-movies.war to any application server 
    
