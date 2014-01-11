@@ -85,8 +85,8 @@ $(document).ready(function() {
 	
 	$('#movie-search').on('typeahead:selected',
 		function(object, datum) {
-			console.log("Movie selected: " + datum.value);
 			$('#spinner').show();
+			
 			$.ajax({
 				url : apiBaseUrl + '/movies?title=' + datum.value
 			}).done(function(data) {
@@ -116,8 +116,7 @@ $(document).ready(function() {
 							infoWindow.open(map, marker);
 						}
 					})(marker, movie));
-				}				
-						
+				}										
 			}).fail(function(error) {
 				$('#spinner').hide();
 				displayError("Error while searching for movie");
