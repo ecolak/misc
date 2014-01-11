@@ -13,7 +13,7 @@ $(document).ready(function() {
 
 	google.maps.event.addDomListener(window, 'load', initialize);
 
-	function getMovieString(movie) {
+	function getMovieHtml(movie) {
 		var result = '';
 		if (movie.release_year) {
 			result += '<strong>Release year: </strong>' + movie.release_year;
@@ -39,6 +39,12 @@ $(document).ready(function() {
 		return result;		
 	}
 	
+	function getInfoWindowHtml(movie) {
+		return '<strong>' + movie.title + '</strong>' +
+				(movie.locations ? '<br/>' + movie.locations : '') + 
+				(movie.fun_facts ? '<br/><em>' + movie.fun_facts + '</em>': '');
+	}
+	
 	function displayError(message) {
 		var alertMessage = '<div class="alert alert-danger">' +
 			'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + 
@@ -47,7 +53,18 @@ $(document).ready(function() {
 		$('#alert-bar').html(alertMessage);
 	}
 	
+	function displayMovieData(data) {
+		var message = '<div class="alert alert-info">' +
+			'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + 
+			data[0].title + ' was filmed in ' + data.length + ' location' + (data.length > 1 ? "s" : "") + '<br/>' +
+			getMovieHtml(data[0])		
+			'</div>';
+		
+		$('#alert-bar').html(message);
+	}
+	
 	var apiBaseUrl = 'http://localhost:9000/api';
+	
 	$('#movie-search').typeahead({
 		name : 'SF Movies',
 		prefetch : {
@@ -74,12 +91,8 @@ $(document).ready(function() {
 				url : apiBaseUrl + '/movies?title=' + datum.value
 			}).done(function(data) {
 				$('#spinner').hide();
-				var alertMessage = '<div class="alert alert-info">' +
-					'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + 
-  					datum.value + ' was filmed in ' + data.length + ' location' + (data.length > 1 ? "s" : "") + '<br/>' +
-  					getMovieString(data[0])		
-  					'</div>';
-				$('#alert-bar').html(alertMessage);
+				
+				displayMovieData(data);
 				
 				// clear current map
 				for (var i in markers) {
@@ -99,9 +112,7 @@ $(document).ready(function() {
 					
 					google.maps.event.addListener(marker, 'click', (function(marker, movie) {
 						return function() {
-							infoWindow.setContent('<strong>' + movie.title + '</strong>' +
-									(movie.locations ? '<br/>' + movie.locations : '') + 
-									(movie.fun_facts ? '<br/><em>' + movie.fun_facts + '</em>': ''));
+							infoWindow.setContent(getInfoWindowHtml(movie));
 							infoWindow.open(map, marker);
 						}
 					})(marker, movie));
