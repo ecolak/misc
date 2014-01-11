@@ -17,15 +17,22 @@ public class CorsFilter implements Filter {
 	private static final String ALLOWED_METHODS = "POST, GET, OPTIONS, DELETE, PUT";
 	private static final String ACCESS_CONTROL_ALLOW_HEADERS = "Access-Control-Allow-Headers";
 	private static final String ALLOWED_HEADERS = "X-Requested-With, Content-Type";
+	private static final String VAR_ALLOW_ORIGIN = "ALLOW_ORIGIN";
 
 	private static String allowOrigin;
 	static {
-		String s = System.getProperty("ALLOW_ORIGIN");
+		String s = System.getProperty(VAR_ALLOW_ORIGIN);
 		if (s != null) {
 			allowOrigin = s;
 		} else {
-			allowOrigin = "*";
+			s = System.getenv(VAR_ALLOW_ORIGIN);
+			if (s != null) {
+				allowOrigin = s;
+			} else {
+				allowOrigin = "*"; 
+			}
 		}
+		System.out.println("Allow origin " + allowOrigin);
 	}
 	
 	public void destroy() {
