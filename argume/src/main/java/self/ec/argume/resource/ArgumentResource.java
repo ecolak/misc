@@ -119,6 +119,18 @@ public class ArgumentResource {
 	@Path("{id}/like")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createLike(@PathParam("id") long argumentId, final Like like) {
+		like.setIp(request.getRemoteAddr());
+		
+		// Let admin manipulate like counts
+		User userInSession = AuthUtils.getUserInSession(request);
+		if (userInSession != null && userInSession.isAdmin()) {
+			like.setId(null);
+			like.setUserId(userInSession.getId());
+			like.setDateCreated(System.currentTimeMillis());
+			likeDao.save(like);
+			return Response.status(Status.CREATED).build();
+		}
+		
 		Like existing = getLikeForArgumentAndVisitor(argumentId);
 		if (existing != null && existing.isFavorable() == like.isFavorable()) {
 			return Response.status(Status.NOT_MODIFIED).build();
@@ -133,8 +145,7 @@ public class ArgumentResource {
 			like.setDateCreated(System.currentTimeMillis());
 			responseStatus = Status.CREATED;
 		}
-		like.setIp(request.getRemoteAddr());
-		User userInSession = AuthUtils.getUserInSession(request);
+		
 		like.setUserId(userInSession != null ? userInSession.getId() : null);
 		like.setVisitorId(AuthUtils.getVisitorIdFromCookies(request));
 		

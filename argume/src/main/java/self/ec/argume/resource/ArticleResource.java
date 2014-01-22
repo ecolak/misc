@@ -165,6 +165,18 @@ public class ArticleResource {
 	@Path("{id}/vote")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createVote(@PathParam("id") long articleId, final Vote vote) {
+		vote.setIp(request.getRemoteAddr());
+		
+		// Let admin manipulate vote counts
+		User userInSession = AuthUtils.getUserInSession(request);
+		if (userInSession != null && userInSession.isAdmin()) {
+			vote.setId(null);
+			vote.setUserId(userInSession.getId());
+			vote.setDateCreated(System.currentTimeMillis());
+			Vote result = voteDao.save(vote);
+			return Response.status(Status.CREATED).entity(result).build();
+		}
+		
 		Vote existing = getVoteForArticleAndVisitor(articleId);
 		if (existing != null && existing.isFavorable() == vote.isFavorable()) {
 			return Response.status(Status.NOT_MODIFIED).build();
@@ -180,8 +192,6 @@ public class ArticleResource {
 			responseStatus = Status.CREATED;
 		}
 		
-		vote.setIp(request.getRemoteAddr());
-		User userInSession = AuthUtils.getUserInSession(request);
 		vote.setUserId(userInSession != null ? userInSession.getId() : null);
 		vote.setVisitorId(AuthUtils.getVisitorIdFromCookies(request));
 		Vote result = voteDao.save(vote);

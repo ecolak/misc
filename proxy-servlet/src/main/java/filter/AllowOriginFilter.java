@@ -28,12 +28,10 @@ public class AllowOriginFilter implements Filter {
 			FilterChain filterChain) throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest)request;
 		HttpServletResponse resp = (HttpServletResponse)response;
-		
-		//if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {
-			resp.addHeader(ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-			resp.addHeader(ACCESS_CONTROL_ALLOW_METHODS, ALLOWED_METHODS);
-			resp.addHeader(ACCESS_CONTROL_ALLOW_HEADERS, ALLOWED_HEADERS);
-		//}		
+	
+		resp.addHeader(ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+		resp.addHeader(ACCESS_CONTROL_ALLOW_METHODS, ALLOWED_METHODS);
+		resp.addHeader(ACCESS_CONTROL_ALLOW_HEADERS, ALLOWED_HEADERS);	
 		
 		filterChain.doFilter(request, response);
 	}
