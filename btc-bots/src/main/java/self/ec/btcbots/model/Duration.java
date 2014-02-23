@@ -6,11 +6,6 @@ public class Duration {
 	private int interval;
 	private TimeUnit timeUnit;
 	
-	public Duration(int interval, TimeUnit timeUnit) {
-		this.interval = interval;
-		this.timeUnit = timeUnit;
-	}
-
 	public int getInterval() {
 		return interval;
 	}

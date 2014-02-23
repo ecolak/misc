@@ -1,44 +1,51 @@
 package self.ec.btcbots.util;
 
-import org.quartz.JobDataMap;
+import java.util.Map;
 
 public class JobUtil {
 
 	private JobUtil() {}
 	
-	public static Float getFloatFromJobDataMap(JobDataMap map, String key) {
+	public static Float getFloatFromParams(Map<String,Object> map, String key) {
+		return getFloatFromParamsInternal(map, key); 
+	}
+	
+	public static float getFloatFromParams(Map<String,Object> map, String key, float defaultValue) {
+		Float result = getFloatFromParamsInternal(map, key);
+		return result != null ? result.floatValue() : defaultValue;
+	}
+	
+	private static Float getFloatFromParamsInternal(Map<String,Object> map, String key) {
+		Float result = null;
 		if (map.containsKey(key)) {
 			try {
-				return map.getFloat(key); 
+				Object o = map.get(key);
+				if (o instanceof Float) {
+					result = (Float)o; 
+				} else if (o instanceof Double) {
+					result = new Float((Double)o);
+				}
 			} catch (Exception e) {
 				// ignore
 			}
 		}
-		return null;
+		return result;
 	}
 	
-	public static float getFloatFromJobDataMap(JobDataMap map, String key, float defaultValue) {
-		if (map.containsKey(key)) {
-			try {
-				return map.getFloat(key); 
-			} catch (Exception e) {
-				// ignore
-			}
-		}
-		return defaultValue;
+	public static String getStringFromParams(Map<String,Object> map, String key) {
+		return getStringFromParams(map, key, null);
 	}
 	
-	public static String getStringFromJobDataMap(JobDataMap map, String key) {
-		return getStringFromJobDataMap(map, key, null);
-	}
-	
-	public static String getStringFromJobDataMap(JobDataMap map, String key, String defaultValue) {
+	public static String getStringFromParams(Map<String,Object> map, String key, String defaultValue) {
 		String result = null;
-		try {
-			result = map.getString(key);
-		} catch (Exception e) {
-			// ignore
+		if (map.containsKey(key)) {
+			try {
+				result = (String)map.get(key);
+			} catch (Exception e) {
+				// ignore
+			}
 		}
 		return result != null ? result : defaultValue;
 	}
+	
 }

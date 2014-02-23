@@ -4,7 +4,7 @@ package self.ec.btcbots.model;
 public class PointInTime {
 
 	private boolean now;
-	private Duration delay;
+	private Duration delayFromNow;
 	private Long timeInMillis;
 	
 	public boolean isNow() {
@@ -13,11 +13,11 @@ public class PointInTime {
 	public void setNow(boolean now) {
 		this.now = now;
 	}
-	public Duration getDelay() {
-		return delay;
+	public Duration getDelayFromNow() {
+		return delayFromNow;
 	}
-	public void setDelay(Duration delay) {
-		this.delay = delay;
+	public void setDelayFromNow(Duration delayFromNow) {
+		this.delayFromNow = delayFromNow;
 	}
 	public Long getTimeInMillis() {
 		return timeInMillis;

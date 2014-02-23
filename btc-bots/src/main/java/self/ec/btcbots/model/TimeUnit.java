@@ -2,7 +2,7 @@ package self.ec.btcbots.model;
 
 public enum TimeUnit {
 
-	DAYS(86400000), HOURS(3600000), MINUTES(60000), SECONDS(1000);
+	DAY(86400000), HOUR(3600000), MINUTE(60000), SECOND(1000);
 	
 	private long millis;
 	

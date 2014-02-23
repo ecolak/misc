@@ -1,29 +1,31 @@
 package self.ec.btcbots.model;
 
+import java.util.HashMap;
+import java.util.Map;
 
 public class BotConfig {
-
+	
 	public static final String PARAM_BUDGET = "budget";
 	public static final String PARAM_START_PRICE = "start_price";
 	public static final String PARAM_TRADE_DIFF_PCT = "trade_diff_pct";
+	public static final String PARAM_MIN_NUM_BTC = "min_num_btc";
+	
+	public static final float DEFAULT_MIN_NUM_BTC = 0.01f;
+	public static final float DEFAULT_TRADE_DIFF_PCT = 5;
 	
 	private String name;
 	private BotType botType;
 	private Schedule schedule;
-	private float budget;
-	private Float startPrice;
-	private Float tradeDiffPct;
+	private Map<String,Object> params = new HashMap<>();
 	
 	public BotConfig() {}
 	
-	public BotConfig(String name, BotType botType, Schedule schedule, 
-			float budget, Float startPrice, Float tradeDiffPct) {
+	public BotConfig(String name, BotType botType, 
+			Schedule schedule, Map<String,Object> params) {
 		this.name = name;
 		this.botType = botType;
 		this.schedule = schedule;
-		this.budget = budget;
-		this.startPrice = startPrice;
-		this.tradeDiffPct = tradeDiffPct;
+		this.params = params;
 	}
 
 	public String getName() {
@@ -50,28 +52,15 @@ public class BotConfig {
 		this.schedule = schedule;
 	}
 
-	public float getBudget() {
-		return budget;
+	public Map<String, Object> getParams() {
+		return params;
 	}
 
-	public void setBudget(float budget) {
-		this.budget = budget;
+	public void setParams(Map<String, Object> params) {
+		this.params = params;
 	}
 
-	public Float getStartPrice() {
-		return startPrice;
+	public void addParam(String key, Object value) {
+		params.put(key, value);
 	}
-
-	public void setStartPrice(Float startPrice) {
-		this.startPrice = startPrice;
-	}
-
-	public Float getTradeDiffPct() {
-		return tradeDiffPct;
-	}
-
-	public void setTradeDiffPct(Float tradeDiffPct) {
-		this.tradeDiffPct = tradeDiffPct;
-	}
-
 }

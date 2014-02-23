@@ -41,7 +41,6 @@ import self.ec.btcbots.model.BotState;
 import self.ec.btcbots.model.Duration;
 import self.ec.btcbots.model.PointInTime;
 import self.ec.btcbots.model.TimeUnit;
-import self.ec.btcbots.util.JobUtil;
 
 @Path("/bots")
 @Produces(MediaType.APPLICATION_JSON)
@@ -49,6 +48,7 @@ public class BotResource {
 
 	private static final Logger LOG = LoggerFactory
 			.getLogger(BotResource.class);
+	
 	private static final String DEFAULT_JOB_GROUP = "default_job_group";
 	private static final String DEFAULT_TRIGGER_GROUP = "default_trigger_group";
 	private static final String DEFAULT_TRIGGER = "default_trigger";
@@ -65,23 +65,18 @@ public class BotResource {
 			for (JobKey jobKey : jobKeys) {
 				List<Trigger> triggers = (List<Trigger>)sched.getTriggersOfJob(jobKey);			
 				Trigger trigger = triggers.size() > 0 ? triggers.get(0) : null;
-				JobDetail jobDetail = sched.getJobDetail(jobKey);
-				JobDataMap params = jobDetail.getJobDataMap();
 				
+				JobDetail jobDetail = sched.getJobDetail(jobKey);
+				JobDataMap jobData = jobDetail.getJobDataMap();
 				Bot bot = new Bot();
-				BotConfig config = new BotConfig();
-				config.setName(jobDetail.getKey().toString());
-				config.setBudget(JobUtil.getFloatFromJobDataMap(params, BotConfig.PARAM_BUDGET));
-				config.setStartPrice(JobUtil.getFloatFromJobDataMap(params, BotConfig.PARAM_START_PRICE));
-				config.setTradeDiffPct(JobUtil.getFloatFromJobDataMap(params, BotConfig.PARAM_TRADE_DIFF_PCT));
-				bot.setConfig(config);
+				bot.setConfig((BotConfig)jobData.get("config"));
+				BotState botState = (BotState)jobData.get("state");
 				
 				String status = runningJobMap.containsKey(jobKey.toString()) 
 						? BotState.RUNNING : sched.getTriggerState(trigger.getKey()).name();
 				
-				BotState state = new BotState();
-				state.setStatus(status);
-				bot.setState(state);
+				botState.setStatus(status);
+				bot.setState(botState);
 				
 				result.add(bot);
 			} 		
@@ -104,43 +99,47 @@ public class BotResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response startBot(BotConfig config) {
-		JobDetail jd = JobBuilder.newJob(config.getBotType().getClazz())
-				.withIdentity(config.getName(), DEFAULT_JOB_GROUP)
-				.usingJobData(BotConfig.PARAM_BUDGET, config.getBudget())
-				.usingJobData(BotConfig.PARAM_START_PRICE, config.getStartPrice())
-				.usingJobData(BotConfig.PARAM_TRADE_DIFF_PCT, config.getTradeDiffPct())
-				.build();
-
-		Duration period = config.getSchedule().getPeriod();
-		SimpleScheduleBuilder ssb = SimpleScheduleBuilder.simpleSchedule();
-		if (TimeUnit.DAYS == period.getTimeUnit()) {
-			ssb = ssb.withIntervalInHours(period.getInterval()*24);
-		} else if (TimeUnit.HOURS == period.getTimeUnit()) {
-			ssb = ssb.withIntervalInHours(period.getInterval());
-		} else if (TimeUnit.MINUTES == period.getTimeUnit()) {
-			ssb = ssb.withIntervalInMinutes(period.getInterval());
-		} else if (TimeUnit.SECONDS == period.getTimeUnit()) {
-			ssb = ssb.withIntervalInSeconds(period.getInterval());
-		} else {
-			ssb = ssb.withIntervalInMinutes(DEFAULT_TRIGGER_PERIOD_MINS);
-		}
-		
-		PointInTime startTime = config.getSchedule().getStartTime();
-		TriggerBuilder tb = TriggerBuilder
-				.newTrigger()
-				.withIdentity("trigger of " + config.getName(), DEFAULT_TRIGGER_GROUP);
-		if (startTime.isNow()) {
-			tb = tb.startNow();
-		} else if (startTime.getDelay() != null) {
-			tb = tb.startAt(new Date(System.currentTimeMillis() + 
-									 startTime.getDelay().toMillis()));
-		} else if (startTime.getTimeInMillis() != null) {
-			tb = tb.startAt(new Date(startTime.getTimeInMillis()));
-		}
-		
-		Trigger trigger = tb.withSchedule(ssb.repeatForever()).build();
-
 		try {
+			assertBotDoesNotExist(new JobKey(config.getName(), DEFAULT_JOB_GROUP));
+			
+			JobDataMap jobData = new JobDataMap();
+			jobData.put("config", config);
+			jobData.put("state", new BotState());
+			
+			JobDetail jd = JobBuilder.newJob(config.getBotType().getClazz())
+					.withIdentity(config.getName(), DEFAULT_JOB_GROUP)
+					.usingJobData(jobData)
+					.build();
+	
+			Duration period = config.getSchedule().getPeriod();
+			SimpleScheduleBuilder ssb = SimpleScheduleBuilder.simpleSchedule();
+			if (TimeUnit.DAY == period.getTimeUnit()) {
+				ssb = ssb.withIntervalInHours(period.getInterval()*24);
+			} else if (TimeUnit.HOUR == period.getTimeUnit()) {
+				ssb = ssb.withIntervalInHours(period.getInterval());
+			} else if (TimeUnit.MINUTE == period.getTimeUnit()) {
+				ssb = ssb.withIntervalInMinutes(period.getInterval());
+			} else if (TimeUnit.SECOND == period.getTimeUnit()) {
+				ssb = ssb.withIntervalInSeconds(period.getInterval());
+			} else {
+				ssb = ssb.withIntervalInMinutes(DEFAULT_TRIGGER_PERIOD_MINS);
+			}
+			
+			PointInTime startTime = config.getSchedule().getStartTime();
+			TriggerBuilder tb = TriggerBuilder
+					.newTrigger()
+					.withIdentity("trigger of " + config.getName(), DEFAULT_TRIGGER_GROUP);
+			if (startTime.isNow()) {
+				tb = tb.startNow();
+			} else if (startTime.getDelayFromNow() != null) {
+				tb = tb.startAt(new Date(System.currentTimeMillis() + 
+										 startTime.getDelayFromNow().toMillis()));
+			} else if (startTime.getTimeInMillis() != null) {
+				tb = tb.startAt(new Date(startTime.getTimeInMillis()));
+			}
+			
+			Trigger trigger = tb.withSchedule(ssb.repeatForever()).build();
+
 			StdSchedulerFactory.getDefaultScheduler().scheduleJob(jd, trigger);
 		} catch (SchedulerException se) {
 			LOG.error("Error starting bot", se);
@@ -201,6 +200,14 @@ public class BotResource {
 		boolean exists = StdSchedulerFactory.getDefaultScheduler().checkExists(jobKey);
 		if (!exists) {
 			throw new WebApplicationException("Bot does not exist", Response.Status.NOT_FOUND);
+		}
+	}
+	
+	private void assertBotDoesNotExist(JobKey jobKey) throws SchedulerException {
+		boolean exists = StdSchedulerFactory.getDefaultScheduler().checkExists(jobKey);
+		if (exists) {
+			throw new WebApplicationException("Bot with name " + jobKey.getName() + " already exists", 
+											  Response.Status.CONFLICT);
 		}
 	}
 }

@@ -1,5 +1,7 @@
 package self.ec.btcbots.bot;
 
+import java.util.Map;
+
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -18,6 +20,7 @@ import self.ec.btcbots.dao.DaoFactory;
 import self.ec.btcbots.dao.GenericDao;
 import self.ec.btcbots.entity.Transaction;
 import self.ec.btcbots.model.BotConfig;
+import self.ec.btcbots.model.BotState;
 import self.ec.btcbots.simu.Constants;
 import self.ec.btcbots.util.JobUtil;
 
@@ -27,9 +30,6 @@ public class SimpleBot implements Job {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SimpleBot.class);
 	
-	public static final float DEFAULT_MIN_NUM_BTC = 0.01f;
-	public static final float DEFAULT_TRADE_DIFF_PCT = 5;
-	
 	private static enum Mode {
 		BUY, SELL
 	}
@@ -38,26 +38,48 @@ public class SimpleBot implements Job {
 	
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		String jobKey = context.getJobDetail().getKey().toString();
-		JobDataMap params = context.getJobDetail().getJobDataMap();
-		
-		Mode mode = Mode.valueOf(JobUtil.getStringFromJobDataMap(params, "mode", Mode.BUY.name()));
-		LOG.info(jobKey + " started executing. Mode: " + mode.name());
+		JobDataMap jobData = context.getJobDetail().getJobDataMap();
 			
 		// mandatory parameters
-		float budget = JobUtil.getFloatFromJobDataMap(params, BotConfig.PARAM_BUDGET, 0);	
+		BotConfig config = null;
+		if (jobData.containsKey("config")) {
+			config = (BotConfig)jobData.get("config");
+		}
+		
+		if (config == null) {
+			throw new IllegalArgumentException("Job config not found");
+		}
+		
+		Map<String,Object> configParams = (Map<String,Object>)config.getParams();
+		if (configParams == null || configParams.isEmpty()) {
+			throw new IllegalArgumentException("Invalid job configuration: No parameters");
+		}
+		
+		LOG.info("Config params: " + configParams);
+		
+		float budget = JobUtil.getFloatFromParams(configParams, BotConfig.PARAM_BUDGET, 0);	
 		if (budget <= 0) {
 			throw new IllegalArgumentException("Invalid budget. Budget must be positive");
 		}
 		
+		BotState state = null;
+		if (jobData.containsKey("state")) {
+			state = (BotState)jobData.get("state");
+		} else {
+			state = new BotState();
+			jobData.put("state", state);
+		}
+		Map<String,Object> stateParams = (Map<String,Object>)state.getParams();
+		Mode mode = Mode.valueOf(JobUtil.getStringFromParams(stateParams, "mode", Mode.BUY.name()));
+		LOG.info(jobKey + " started executing. Mode: " + mode.name());
+		
 		// optional parameters
-		Float startPrice = JobUtil.getFloatFromJobDataMap(params, BotConfig.PARAM_START_PRICE);
-		
-		float tradeDiffPct = JobUtil.getFloatFromJobDataMap(params, BotConfig.PARAM_TRADE_DIFF_PCT, 
-															  DEFAULT_TRADE_DIFF_PCT);
-		
-		float minNumBtc = JobUtil.getFloatFromJobDataMap(params, "min_num_btc", DEFAULT_MIN_NUM_BTC);
-		
-		float btcBalance = JobUtil.getFloatFromJobDataMap(params, "btc_balance", 0);	
+		Float startPrice = JobUtil.getFloatFromParams(configParams, BotConfig.PARAM_START_PRICE);	
+		float tradeDiffPct = JobUtil.getFloatFromParams(configParams, BotConfig.PARAM_TRADE_DIFF_PCT, 
+														BotConfig.DEFAULT_TRADE_DIFF_PCT);
+		float minNumBtc = JobUtil.getFloatFromParams(configParams, BotConfig.PARAM_MIN_NUM_BTC, 
+													 BotConfig.DEFAULT_MIN_NUM_BTC);
+		float btcBalance = state.getBtcBalance();
 		
 		if (Mode.BUY == mode) {
 			PriceCheckResponse response = CoinbaseRestClient.getBuyPrice(1);
@@ -74,11 +96,11 @@ public class SimpleBot implements Job {
 					TransactionResponse transactionResponse = CoinbaseRestClient.simulateBuy(numBtc, buyPrice);		
 					if (transactionResponse.success) {
 						float btcAmount = saveTransaction(context.getJobDetail().getKey().toString(), transactionResponse);
-						params.put(BotConfig.PARAM_START_PRICE, buyPrice);
-						params.put("btc_balance", btcBalance + btcAmount);
+						configParams.put(BotConfig.PARAM_START_PRICE, buyPrice);
+						state.setBtcBalance(btcBalance + btcAmount);
 					}
 					
-					params.put("mode", Mode.SELL.name());
+					stateParams.put("mode", Mode.SELL.name());
 				} else {
 					LOG.debug(String.format("Do not buy. numBtc=%f, buyPrice=%f", numBtc, buyPrice));
 				}
@@ -95,10 +117,10 @@ public class SimpleBot implements Job {
 					TransactionResponse transactionResponse = CoinbaseRestClient.simulateSell(btcBalance, sellPrice);
 					if (transactionResponse.success) {
 						float btcAmount = saveTransaction(context.getJobDetail().getKey().toString(), transactionResponse);				
-						params.put("btc_balance", btcBalance - btcAmount);
+						state.setBtcBalance(btcBalance - btcAmount);
 					}
 					
-					params.put("mode", Mode.BUY.name());
+					stateParams.put("mode", Mode.BUY.name());
 				} else {
 					LOG.debug(String.format("Do not sell. btcBalance=%f, sellPrice=%f", btcBalance, sellPrice));
 				}
