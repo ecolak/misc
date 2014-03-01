@@ -7,6 +7,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
 @Table(name = "users")
@@ -108,6 +111,12 @@ public class User extends BaseEntity {
 		this.account = account;
 	}
 
+	@Transient
+	@JsonIgnore
+	public boolean isAdmin() {
+		return Role.ADMIN == this.role;
+	}
+	
 	public void clearPassword() {
 		this.passwordHash = null;
 		this.passwordSalt = null;

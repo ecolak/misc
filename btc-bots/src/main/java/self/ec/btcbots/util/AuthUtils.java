@@ -10,9 +10,9 @@ import org.apache.commons.codec.digest.DigestUtils;
 import self.ec.btcbots.dao.DaoFactory;
 import self.ec.btcbots.entity.User;
 
-public class AuthUtil {
+public class AuthUtils {
 
-	private AuthUtil() {}
+	private AuthUtils() {}
 	
 	public static final String PASSWORD_REGEX = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,20})";
 	

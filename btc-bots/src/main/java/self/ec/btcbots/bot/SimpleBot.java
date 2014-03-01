@@ -95,7 +95,7 @@ public class SimpleBot implements Job {
 					// buy
 					TransactionResponse transactionResponse = CoinbaseRestClient.simulateBuy(numBtc, buyPrice);		
 					if (transactionResponse.success) {
-						float btcAmount = saveTransaction(context.getJobDetail().getKey().toString(), transactionResponse);
+						float btcAmount = saveTransaction(context.getJobDetail().getKey().toString(), transactionResponse, Transaction.Type.BUY);
 						configParams.put(BotConfig.PARAM_START_PRICE, buyPrice);
 						state.setBtcBalance(btcBalance + btcAmount);
 					}
@@ -116,7 +116,7 @@ public class SimpleBot implements Job {
 					// sell
 					TransactionResponse transactionResponse = CoinbaseRestClient.simulateSell(btcBalance, sellPrice);
 					if (transactionResponse.success) {
-						float btcAmount = saveTransaction(context.getJobDetail().getKey().toString(), transactionResponse);				
+						float btcAmount = saveTransaction(context.getJobDetail().getKey().toString(), transactionResponse, Transaction.Type.SELL);				
 						state.setBtcBalance(btcBalance - btcAmount);
 					}
 					
@@ -139,7 +139,7 @@ public class SimpleBot implements Job {
 		return (budget - Constants.DEFAULT_BANK_FEE) / ((1+Constants.DEFAULT_TRANSACTION_PCT/100)*btcPrice);
 	}
 	
-	private float saveTransaction(String jobKey, TransactionResponse transactionResponse) {
+	private float saveTransaction(String jobKey, TransactionResponse transactionResponse, Transaction.Type type) {
 		Transfer transfer = transactionResponse.transfer;
 		float btcAmount = Float.parseFloat(transfer.btc.amount);
 		float btcPrice = Float.parseFloat(transfer.subtotal.amount) / btcAmount;
@@ -147,7 +147,7 @@ public class SimpleBot implements Job {
 		for (Fee fee : transfer.fees) {
 			totalFees += Float.parseFloat(fee.bank.amount) + Float.parseFloat(fee.coinbase.amount);
 		}
-		transactionDao.save(new Transaction(jobKey, Transaction.Type.BUY, btcAmount, btcPrice, totalFees, System.currentTimeMillis()));
+		transactionDao.save(new Transaction(jobKey, type, btcAmount, btcPrice, totalFees, System.currentTimeMillis()));
 		
 		return btcAmount;
 	}
