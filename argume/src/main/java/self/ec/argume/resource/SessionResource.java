@@ -11,7 +11,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import self.ec.argume.model.Login;
 import self.ec.argume.model.User;
@@ -49,6 +48,6 @@ public class SessionResource {
 
 		authUser.clearPassword();
 		request.getSession().setAttribute("user", authUser);
-		return Response.status(Status.OK).entity(authUser).build();
+		return Response.ok().build();
 	}
 }
