@@ -2,18 +2,14 @@ package self.ec.btcbots.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "accounts")
 public class Account extends BaseEntity {
 
-	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="user_id")
-	private User user;
+	@Column(name = "user_id")
+	private Long userId;
 	
 	@Column(name = "usd_balance")
 	private Float usdBalance;
@@ -21,12 +17,12 @@ public class Account extends BaseEntity {
 	@Column(name = "btc_balance")
 	private Float btcBalance;
 
-	public User getUser() {
-		return user;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public Float getUsdBalance() {

@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import self.ec.btcbots.dao.DaoFactory;
 import self.ec.btcbots.dao.GenericDao;
 import self.ec.btcbots.entity.User;
+import self.ec.btcbots.model.MapBuilder;
 import self.ec.btcbots.model.Signup;
 import self.ec.btcbots.util.AuthUtils;
 
@@ -40,11 +41,6 @@ public class UserResource {
 					.entity("Email cannot be blank").build());
 		}
 		
-		if (!signup.getPassword().equals(signup.getPasswordConfirmation())) {
-			throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
-					.entity("Password confirmation failed").build());
-		}
-		
 		if (!signup.getPassword().matches(AuthUtils.PASSWORD_REGEX)) {
 			throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
 					.entity("Password is too weak").build());
@@ -62,9 +58,9 @@ public class UserResource {
 		
 		User user = new User(signup.getEmail(), passwordHash, passwordSalt);
 		user.setDateCreated(System.currentTimeMillis());
-		userDao.save(user).getId();
+		Long userId = userDao.save(user).getId();
 		
-		return Response.status(Status.CREATED).build();
+		return Response.status(Status.CREATED).entity(new MapBuilder().entry("id", userId).build()).build();
 	}
 	
 	@POST

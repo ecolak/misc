@@ -2,9 +2,9 @@ package self.ec.btcbots.util;
 
 import java.util.Map;
 
-public class JobUtil {
+public class JobUtils {
 
-	private JobUtil() {}
+	private JobUtils() {}
 	
 	public static Float getFloatFromParams(Map<String,Object> map, String key) {
 		return getFloatFromParamsInternal(map, key); 

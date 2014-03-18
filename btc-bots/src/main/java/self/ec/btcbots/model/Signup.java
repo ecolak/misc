@@ -4,14 +4,21 @@ public class Signup {
 
 	private String email;
 	private String password;
-	private String passwordConfirmation;
+	private String firstName;
+	private String lastName;
 	
 	public Signup() {}
 	
-	public Signup(String email, String password, String passwordConfirmation) {
+	public Signup(String email, String password) {
+		this(email, password, null, null);
+	}
+	
+	public Signup(String email, String password, String firstName,
+			String lastName) {
 		this.email = email;
 		this.password = password;
-		this.passwordConfirmation = passwordConfirmation;
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 
 	public String getEmail() {
@@ -30,12 +37,20 @@ public class Signup {
 		this.password = password;
 	}
 
-	public String getPasswordConfirmation() {
-		return passwordConfirmation;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setPasswordConfirmation(String passwordConfirmation) {
-		this.passwordConfirmation = passwordConfirmation;
-	};
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 	
 }

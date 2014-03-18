@@ -22,7 +22,7 @@ import self.ec.btcbots.entity.Transaction;
 import self.ec.btcbots.model.BotConfig;
 import self.ec.btcbots.model.BotState;
 import self.ec.btcbots.simu.Constants;
-import self.ec.btcbots.util.JobUtil;
+import self.ec.btcbots.util.JobUtils;
 
 @DisallowConcurrentExecution
 @PersistJobDataAfterExecution
@@ -57,7 +57,7 @@ public class SimpleBot implements Job {
 		
 		LOG.info("Config params: " + configParams);
 		
-		float budget = JobUtil.getFloatFromParams(configParams, BotConfig.PARAM_BUDGET, 0);	
+		float budget = JobUtils.getFloatFromParams(configParams, BotConfig.PARAM_BUDGET, 0);	
 		if (budget <= 0) {
 			throw new IllegalArgumentException("Invalid budget. Budget must be positive");
 		}
@@ -70,14 +70,14 @@ public class SimpleBot implements Job {
 			jobData.put("state", state);
 		}
 		Map<String,Object> stateParams = (Map<String,Object>)state.getParams();
-		Mode mode = Mode.valueOf(JobUtil.getStringFromParams(stateParams, "mode", Mode.BUY.name()));
+		Mode mode = Mode.valueOf(JobUtils.getStringFromParams(stateParams, "mode", Mode.BUY.name()));
 		LOG.info(jobKey + " started executing. Mode: " + mode.name());
 		
 		// optional parameters
-		Float startPrice = JobUtil.getFloatFromParams(configParams, BotConfig.PARAM_START_PRICE);	
-		float tradeDiffPct = JobUtil.getFloatFromParams(configParams, BotConfig.PARAM_TRADE_DIFF_PCT, 
+		Float startPrice = JobUtils.getFloatFromParams(configParams, BotConfig.PARAM_START_PRICE);	
+		float tradeDiffPct = JobUtils.getFloatFromParams(configParams, BotConfig.PARAM_TRADE_DIFF_PCT, 
 														BotConfig.DEFAULT_TRADE_DIFF_PCT);
-		float minNumBtc = JobUtil.getFloatFromParams(configParams, BotConfig.PARAM_MIN_NUM_BTC, 
+		float minNumBtc = JobUtils.getFloatFromParams(configParams, BotConfig.PARAM_MIN_NUM_BTC, 
 													 BotConfig.DEFAULT_MIN_NUM_BTC);
 		float btcBalance = state.getBtcBalance();
 		
@@ -127,6 +127,7 @@ public class SimpleBot implements Job {
 			}
 		}
 		
+		// TODO: Used for simulating longer running bots. Remove when done
 		try {
 			Thread.sleep(5000); 
 		} catch (InterruptedException e) {

@@ -4,8 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -38,8 +36,7 @@ public class User extends BaseEntity {
 	@Column(name = "role")
 	private Role role = Role.REGULAR;
 	
-	@OneToOne(fetch=FetchType.LAZY, mappedBy="user")
-	private Account account;
+	public User() {}
 	
 	public User(String email, String passwordHash, String passwordSalt) {
 		this(email, passwordHash, passwordSalt, null, null, Role.REGULAR);
@@ -101,14 +98,6 @@ public class User extends BaseEntity {
 
 	public void setRole(Role role) {
 		this.role = role;
-	}
-	
-	public Account getAccount() {
-		return account;
-	}
-
-	public void setAccount(Account account) {
-		this.account = account;
 	}
 
 	@Transient
