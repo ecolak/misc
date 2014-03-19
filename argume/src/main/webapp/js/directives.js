@@ -78,3 +78,19 @@ app.directive('fbShare', function() {
 		}
 	}
 });
+
+app.directive('fbLike', function($timeout) {
+	return {
+		restrict: 'E',
+		template: '<div class="fb-like" '
+					+ 'data-href="{{$location.absUrl()}}" data-send="false" '
+					+ 'data-layout="button_count" data-action="like" data-share="false" '
+					+ 'data-show-faces="false"></div>',
+		link: function(scope, element, attributes) {
+			$timeout(function() {
+				return typeof FB !== "undefined" && FB !== null ? FB.XFBML
+						.parse(element.parent()[0]) : void 0;
+			});
+		}
+	};
+});
