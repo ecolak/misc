@@ -44,7 +44,7 @@ public class ArgumentResource {
 	@GET
 	public ResultList<Argument> getAll(@DefaultValue(Constants.DEFAULT_PAGE) @QueryParam("page") int page, 
 									   @DefaultValue(Constants.DEFAULT_PAGE_SIZE) @QueryParam("pagesize") int pageSize) {
-		return argumentDao.query(new Criteria().setPagination(page, pageSize));
+		return argumentDao.query(new Criteria().setPagination(page, pageSize).setOrderBy("dateCreated desc"));
 	}
 
 	@GET

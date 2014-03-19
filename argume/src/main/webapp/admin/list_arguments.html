@@ -25,9 +25,9 @@
 					</td>
 					<td>{{a.affirmative | toTurkish}}</td>
 					<td>{{a.status}}</td>
-				</tr>
-						
+				</tr>			
 			</table>
+			<div class="text-center" ng-show="total_pages > page" ng-click="loadNextPage()"><a href="">Diğerleri</a></div>
 		</div>
 	</div>	
 </div>

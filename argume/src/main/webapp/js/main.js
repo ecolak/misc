@@ -103,21 +103,25 @@ app.controller('NewsCtrl', function($scope, $location, ArticleData, CommonFunc, 
 app.controller('AdminArgumentCtrl', function($scope, $routeParams, $location, ArticleData, AuthService) {
 	AuthService.authenticateAdmin();
 	
-	$scope.loading = true;
+	var loadPage = function (page) {
+		ArticleData.arguments.get({pagesize: 50, page: page}, function(data) {
+			if ($scope.arguments == null) {
+				$scope.arguments = data.objects; 
+			} else {
+				for (var i in data.objects) {
+					$scope.arguments.push(data.objects[i]);
+				}
+			}
+			
+			$scope.page = data.page;
+			$scope.total_pages = data.totalPages;
+			$scope.loading = false;
+		});
+	};
 	
-	if ('id' in $routeParams) {
-		ArticleData.arguments.get({
-			id : $routeParams.id
-		}, function (response) {
-			$scope.argument = response;
-			$scope.loading = false;
-		});
-	} else {
-		ArticleData.arguments.get({pagesize: 100}, function(data) {
-			$scope.arguments = data.objects;
-			$scope.loading = false;
-		});
-	}
+	$scope.loadNextPage = function () {
+		loadPage($scope.page + 1);
+	};
 	
 	$scope.saveArgument = function () {
 		$scope.submitting = true;
@@ -177,6 +181,18 @@ app.controller('AdminArgumentCtrl', function($scope, $routeParams, $location, Ar
 			} 
 		}
 	};
+	
+	$scope.loading = true;
+	if ('id' in $routeParams) {
+		ArticleData.arguments.get({
+			id : $routeParams.id
+		}, function (response) {
+			$scope.argument = response;
+			$scope.loading = false;
+		});
+	} else {
+		loadPage(1);
+	}
 });
 
 app.controller('AdminArticleCtrl', function ($scope, $routeParams, $location, ArticleData, AuthService) {

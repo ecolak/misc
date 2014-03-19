@@ -76,7 +76,8 @@
 									<a href="" class="dropdown-toggle" data-toggle="dropdown">Menü <b class="caret"></b></a>
 									<ul class="dropdown-menu">
 									    <li><a href="#dashboard">Aktivite</a></li>
-									    <li ng-if="userInSession.role == 'ADMIN'"><a href="#admin/article">Admin panel</a></li>
+									    <li ng-if="userInSession.role == 'ADMIN'"><a href="#admin/article">Haberler</a></li>
+									    <li ng-if="userInSession.role == 'ADMIN'"><a href="#admin/argument">Argümanlar</a></li>
 									    <li class="divider"></li>
 									    <li><a href="" ng-click="logout()">Çıkış</a></li>
 									  </ul>
@@ -86,7 +87,7 @@
 						<div ng-switch-default>
 							<ul class="nav pull-right">	
 								<li style="margin-top: 10px;">
-									<div class="fb-like" data-href="http://www.argume.com" 
+									<div class="fb-like" data-href="https://www.facebook.com/argumehaber" 
 										 data-layout="button_count" data-action="like" 
 										 data-show-faces="true" data-share="false">
 									</div>
