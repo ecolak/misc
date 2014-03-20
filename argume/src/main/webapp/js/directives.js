@@ -4,7 +4,8 @@ app.directive('argumentsPane', function() {
 		scope : {
 			title : '=',
 			type : '=',
-			arguments : '='
+			arguments : '=',
+			article : "="
 		},
 		link : function(scope, element, attrs) {
 			scope.toggleExpand = scope.$parent.toggleExpand;
@@ -12,6 +13,7 @@ app.directive('argumentsPane', function() {
 			scope.openWriteNewModal = scope.$parent.openWriteNewModal;
 			scope.showNextPageButton = scope.$parent.showNextPageButton;
 			scope.loadMoreArguments = scope.$parent.loadMoreArguments;
+			scope.location = scope.$parent.$location;
 		},
 		templateUrl : 'partials/arguments.html'
 	};
@@ -43,14 +45,15 @@ app.directive('fbShare', function() {
 	return {
 		link : function(scope, element, attr) {	
 			var createShareButton = function (title, imageUrl) {
-				element[0].innerHTML = '<a class="btn btn-info btn-mini" href="#" onclick="' + 
+				element[0].innerHTML = '<a href="#" onclick="' + 
 					    'window.open(\'https://www.facebook.com/dialog/feed?app_id=677061055671921&display=popup&name=' +  
 					    encodeURIComponent(title + " - Doğru mu? Yalan mı?").replace(/'/g, "\\'") + 
 					    '&caption=' + encodeURIComponent('www.argume.com') + 
 					    '&link=' + encodeURIComponent(location.href) + 
 					    '&redirect_uri=' + encodeURIComponent(location.protocol + '//' + location.hostname + '/popup_close.html') + 
 					    '&picture=' + encodeURIComponent(imageUrl) + 
-					    '\', \'facebook-share-dialog\', \'width=626,height=436\'); return false;"> Facebook\'ta paylaş </a>';
+					    '\', \'facebook-share-dialog\', \'width=626,height=436\'); return false;">' + 
+					    '<img src="img/fb-share.png"></a>';
 			};
 			
 			var articleTitle = '';
