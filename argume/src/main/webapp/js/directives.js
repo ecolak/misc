@@ -24,7 +24,7 @@ app.directive('twitterShare', function() {
 		link : function(scope, element, attr) {					
 			var createShareButton = function (articleTitle) {
 				twttr.widgets.createShareButton(attr.url, element[0], function(el) {}, {
-					count : 'horizontal',
+					count : attr.count,
 					text : articleTitle + ' - Doğru mu? Yalan mı?',
 					url: attr.url,
 					lang: 'tr',
