@@ -12,16 +12,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import self.ec.argume.model.User;
 import self.ec.argume.util.AuthUtils;
 
 @Provider
 public class AuthenticationFilter implements ContainerRequestFilter {
-	 
-	private static final Logger LOG = LoggerFactory.getLogger(AuthenticationFilter.class);
 	
 	private static class RouteRequest {
 		private String routePattern;

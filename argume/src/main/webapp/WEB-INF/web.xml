@@ -11,10 +11,6 @@
 			<param-name>javax.ws.rs.Application</param-name>
 			<param-value>self.ec.argume.app.ApplicationConfig</param-value>
 		</init-param>
-		<init-param>
-			<param-name>cacheControl</param-name>
-			<param-value>max-age=0,public</param-value>
-		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
