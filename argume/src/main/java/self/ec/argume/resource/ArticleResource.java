@@ -58,9 +58,11 @@ public class ArticleResource {
 		if ("today".equals(search)) {
 			return articleDao.query(new Criteria().addColumn("dateCreated", 
 					(System.currentTimeMillis() - DAY_MILLIS), Operator.GTE)
-					.addColumn("verified", true));
+					.addColumn("verified", true)
+					.setOrderBy("dateCreated desc"));
 		} else {
-			return articleDao.query(new Criteria().setPagination(page, pageSize).addColumn("verified", true)
+			return articleDao.query(new Criteria().setPagination(page, pageSize)
+					.addColumn("verified", true)
 					.setOrderBy("dateCreated desc"));
 		}
 	}
