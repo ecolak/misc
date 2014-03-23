@@ -2,8 +2,18 @@
 <div class="row-fluid">
 	<div class="text-left">
 		<div ng-repeat="t in arguments">
-			<div class="arg-summary-box" ng-click="toggleExpand(type, $index)">
-				<span ng-bind-html="t.summary | addIndex:$index+1" class="span9"></span> 
+			<div class="arg-summary-box">
+				<span class="span9">
+					<div class="row-fluid">
+						<span ng-bind-html="t.summary | addIndex:$index+1" class="span12"></span>
+					</div>
+					<div class="row-fluid" ng-show="t.body && t.body.length > 0">
+						<a href="" ng-click="toggleExpand(type, $index); $event.stopPropagation();">
+							<span style="color: #999"><small>Devamı</small></span>
+						</a>
+					</div>
+				</span>
+				
 				<span class="span3">
 					<div class="row-fluid">
 						<div class="span6">
