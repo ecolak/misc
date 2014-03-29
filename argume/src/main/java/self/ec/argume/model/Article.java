@@ -20,6 +20,9 @@ public class Article extends BaseEntity implements java.io.Serializable {
 	@Column(name = "img_url")
 	private String imgUrl;
 	
+	@Column(name = "img2_url")
+	private String img2Url;
+	
 	@Column(name = "category_id")
 	private long categoryId;
 	
@@ -36,13 +39,14 @@ public class Article extends BaseEntity implements java.io.Serializable {
 		super(null, null);
 	}
 
-	public Article(String title, String body, String imgUrl,
+	public Article(String title, String body, String imgUrl, String img2Url,
 			long categoryId, String source, String location, boolean verified,
 			int pctTrue, int pctFalse) {
 		super(null, null);
 		this.title = title;
 		this.body = body;
 		this.imgUrl = imgUrl;
+		this.img2Url = img2Url;
 		this.categoryId = categoryId;
 		this.source = source;
 		this.location = location;
@@ -71,6 +75,14 @@ public class Article extends BaseEntity implements java.io.Serializable {
 
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
+	}
+
+	public String getImg2Url() {
+		return img2Url;
+	}
+
+	public void setImg2Url(String img2Url) {
+		this.img2Url = img2Url;
 	}
 
 	public long getCategoryId() {

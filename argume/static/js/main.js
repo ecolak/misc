@@ -236,6 +236,7 @@ app.controller('AdminArticleCtrl', function ($scope, $routeParams, $location, Ar
 			id: this.article.id,
 			title: this.article.title,
 			imgUrl: this.article.imgUrl,
+			img2Url: this.article.img2Url,
 			location: this.article.location,
 			source: this.article.source,
 			body: this.article.body,
