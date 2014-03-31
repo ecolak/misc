@@ -8,8 +8,10 @@
 		<div class="row-fluid">
 			
 				<div class="span8 right-solid-border">
-					<img ng-src="{{article.imgUrl ? article.imgUrl : 'img/resimsiz.gif'}}" 
-						 class="img-polaroid" style="width: 500px; height: auto;">
+					<a href="{{article.imgUrl ? article.imgUrl : 'img/resimsiz.gif'}}" target="_blank">
+					   <img ng-src="{{article.imgUrl ? article.imgUrl : 'img/resimsiz.gif'}}"  
+					   		class="img-polaroid" style="width: 500px; height: auto;">
+					</a>
 					<div style="margin-top: 5px;">
 						<strong>Kaynak: </strong>{{article.source}}, 
 						<strong>Yer: </strong>{{article.location}},
