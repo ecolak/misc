@@ -39,21 +39,30 @@ public class Argument extends BaseEntity implements java.io.Serializable  {
 	@Column(name = "status")
 	private Status status = Status.PENDING;
 	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "login_type")
+	private Login.Type loginType;
+	
 	@Transient
 	private int likes;
 	
 	@Transient
 	private int dislikes;
 	
+	@Transient
+	private String fbAccessToken;
+	
 	public Argument() {
 		super(null, null);
 	}
 
-	public Argument(Long articleId, String summary, String body, boolean affirmative, Status status) {
-		this(articleId, summary, body, affirmative, status, null);
+	public Argument(Long articleId, String summary, String body, 
+					boolean affirmative, Status status) {
+		this(articleId, summary, body, affirmative, status, null, null);
 	}
 	
-	public Argument(Long articleId, String summary, String body, boolean affirmative, Status status, Long userId) {
+	public Argument(Long articleId, String summary, String body, 
+					boolean affirmative, Status status, Long userId, Login.Type loginType) {
 		super(null, null);
 		this.articleId = articleId;
 		this.summary = summary;
@@ -126,6 +135,22 @@ public class Argument extends BaseEntity implements java.io.Serializable  {
 		this.dislikes = dislikes;
 	}
 	
+	public Login.Type getLoginType() {
+		return loginType;
+	}
+
+	public void setLoginType(Login.Type loginType) {
+		this.loginType = loginType;
+	}
+
+	public String getFbAccessToken() {
+		return fbAccessToken;
+	}
+
+	public void setFbAccessToken(String fbAccessToken) {
+		this.fbAccessToken = fbAccessToken;
+	}
+
 	public static float magicScore(int likes, int dislikes) {
 		return (likes - dislikes) + (2 * likes  / MAGIC_NUMBER_LAMBDA) - (dislikes * MU);
 	}

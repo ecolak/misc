@@ -1,4 +1,4 @@
-window.fbAsyncInit = function() {
+/*window.fbAsyncInit = function() {
 	FB.init({
 		appId : '677061055671921',
 		status : true, // check login status
@@ -40,6 +40,16 @@ window.fbAsyncInit = function() {
 	});
 };
 
+// Here we run a very simple test of the Graph API after login is successful.
+// This testAPI() function is only called in those cases.
+function testAPI() {
+	console.log('Welcome!  Fetching your information.... ');
+	FB.api('/me', function(response) {
+		console.log('Good to see you, ' + response.name + '.');
+	});
+}*/
+
+
 // Load the SDK asynchronously
 (function(d) {
 	var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
@@ -52,12 +62,3 @@ window.fbAsyncInit = function() {
 	js.src = "//connect.facebook.net/tr_TR/all.js";
 	ref.parentNode.insertBefore(js, ref);
 }(document));
-
-// Here we run a very simple test of the Graph API after login is successful.
-// This testAPI() function is only called in those cases.
-function testAPI() {
-	console.log('Welcome!  Fetching your information.... ');
-	FB.api('/me', function(response) {
-		console.log('Good to see you, ' + response.name + '.');
-	});
-}

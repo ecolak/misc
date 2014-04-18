@@ -49,22 +49,27 @@ app.factory('AuthService', function ($location, $rootScope, AuthData) {
 		},
 		
 		authenticateUser: function () {
-			// check Facebook login too
 			$rootScope.redirectUrl = $location.path();
-			AuthData.sessionUser.get({}, function (response) {
-				if (!response) {
-					$location.path('/login');
-				} else {
-					$rootScope.redirectUrl = null;
+			FB.getLoginStatus(function (response) {
+				if ('connected' !== response.status) {
+					// If user is not logged in with Facebook,
+					// check Argume login
+					AuthData.sessionUser.get({}, function (response) {
+						if (!response) {
+							$location.path('/login');
+						} else {
+							$rootScope.redirectUrl = null;
+						}
+					}, function (error) {
+						$location.path('/login');
+					});		
 				}
-			}, function (error) {
-				$location.path('/login');
 			});			
 		}
 	}
 });
 
-app.factory('CommonFunc', function () {
+app.factory('CommonFunc', function ($location) {
 	return {
 		generateGuid: function () { 
 			return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -89,6 +94,11 @@ app.factory('CommonFunc', function () {
 				pct_false: pct_false,
 				total: total
 			};
+		},
+		
+		getHomeUrl: function () {
+			return $location.protocol() + '://' + $location.host() + 
+				   ($location.port() ? (':' + $location.port()) : '');
 		}
 	};
 });

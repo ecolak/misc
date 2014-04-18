@@ -1,5 +1,6 @@
 package self.ec.argume.resource;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -24,6 +28,7 @@ import self.ec.argume.dao.DaoFactory;
 import self.ec.argume.dao.GenericDao;
 import self.ec.argume.model.Argument;
 import self.ec.argume.model.Like;
+import self.ec.argume.model.Login;
 import self.ec.argume.model.ResultList;
 import self.ec.argume.model.User;
 import self.ec.argume.util.AuthUtils;
@@ -37,7 +42,8 @@ public class ArgumentResource {
 	private static final int DEFAULT_MAX_ARG_COUNT = 50;
 	private static final GenericDao<Argument> argumentDao = DaoFactory.getArgumentDao();
 	private static final GenericDao<Like> likeDao = DaoFactory.getLikeDao();
-
+	private static final Client jerseyClient = ClientBuilder.newClient();
+	
 	@Context
 	HttpServletRequest request;
 	
@@ -84,15 +90,50 @@ public class ArgumentResource {
 			throw new WebApplicationException(Response.status(Status.NOT_FOUND).build());
 		}
 		
-		argument.setId(id);		
+		argument.setId(id);	
+		argument.setUserId(existing.getUserId());
+		argument.setLoginType(existing.getLoginType());
 		
 		return saveArgument(argument, false);
 	}
 	
+	private boolean isFbUserLoggedIn(Long userId, String accessToken) throws IOException {	
+		WebTarget fbAccessTokenTarget = jerseyClient.target(Constants.FB_GRAPH_API_BASE).path("me");
+		Response response = fbAccessTokenTarget.queryParam("access_token", 
+							accessToken).request().get();
+		if (Status.OK.getStatusCode() == response.getStatus()) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	private Response saveArgument(final Argument argument, boolean isNew) {
 		if (isNew) {
-			User userInSession = AuthUtils.getUserInSession(request);
-			argument.setUserId((userInSession != null ? userInSession.getId() : null));
+			Long userId = null;
+			Login.Type loginType = null;
+			
+			try {
+				if (Login.Type.FACEBOOK == argument.getLoginType() && 
+					argument.getUserId() != null &&
+					isFbUserLoggedIn(argument.getUserId(),
+									 argument.getFbAccessToken())) 
+				{
+					userId = argument.getUserId();
+					loginType = Login.Type.FACEBOOK;
+				} else {
+					User userInSession = AuthUtils.getUserInSession(request);
+					if (userInSession != null) {
+						userId = userInSession.getId();
+						loginType = Login.Type.ARGUME;
+					}
+				} 
+			} catch (IOException ioe) {
+				throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+			}
+			
+			argument.setUserId(userId);
+			argument.setLoginType(loginType);
 			argument.setDateCreated(System.currentTimeMillis());
 		} else {
 			argument.setDateModified(System.currentTimeMillis());

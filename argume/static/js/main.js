@@ -45,6 +45,26 @@ app.config(function($routeProvider) {
 	});
 }).run(function($rootScope, $location) {
 	$rootScope.$location = $location;
+	
+	// Initialize Facebook SDK and subscribe to auth change event
+	window.fbAsyncInit = function() {
+		FB.init({
+			appId : '677061055671921',
+			status : true, // check login status
+			cookie : true, // enable cookies to allow the server to access the session
+			xfbml : true
+		});
+
+		FB.Event.subscribe('auth.authResponseChange', function(response) {
+			if (response.status === 'connected') {
+				$rootScope.fbUserId = response.authResponse.userID;
+				FB.api('/me', function(response) {
+					console.log("Welcome " + response.first_name);
+					$rootScope.fbUserName = response.first_name;
+				});
+			} 
+		});
+	};
 });
 
 app.controller('NewsCtrl', function($scope, $location, ArticleData, CommonFunc, Constants) {
@@ -434,12 +454,14 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, ArticleData,
 			if (this.argument.body) {
 				this.argument.body = this.argument.body.replace(/\n/g, '<br/>'); 
 			}
-			ArticleData.arguments.save({
+			var argument = {
 				articleId: $scope.article.id,
 				summary: this.argument.summary,
 				body: this.argument.body,
 				affirmative: this.argument.affirmative
-			}, function (response) {
+			};
+			
+			var successFn = function () {
 				$scope.submitArgumentMessage = "Argümanınız moderatörümüze iletildi";
 				$scope.success = true;
 				$scope.submitting = false;
@@ -447,11 +469,23 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, ArticleData,
 					jQuery("#writeNewModal").modal('hide');
 					$scope.submitArgumentMessage = null;
 				}, 750);
-			}, function (response, status) {
+			};
+			
+			var errorFn = function () {
 				$scope.submitArgumentMessage = response.data;
 				$scope.success = false;
 				$scope.submitting = false;
-			}); 
+			};
+			
+			FB.getLoginStatus(function(response) {
+				if (response.status === 'connected') {
+					argument.userId = response.authResponse.userID;
+					argument.fbAccessToken = response.authResponse.accessToken;
+					argument.loginType = 'FACEBOOK';
+				}
+				ArticleData.arguments.save(argument, successFn, errorFn); 
+			});
+			
 		}
 	};
 	
@@ -523,7 +557,7 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, ArticleData,
 	};
 });
 
-app.controller('LoginCtrl', function($scope, $rootScope, $location, AuthData) {
+app.controller('LoginCtrl', function($scope, $rootScope, $location, $window, AuthData, CommonFunc) {
 	$scope.login = function () {
 		$scope.submitting = true;
 		
@@ -532,7 +566,7 @@ app.controller('LoginCtrl', function($scope, $rootScope, $location, AuthData) {
 			if ('redirectUrl' in $rootScope) {
 				$location.path($rootScope.redirectUrl); 
 			} else {
-				$location.path('/'); 
+				$window.location.href = CommonFunc.getHomeUrl();
 			}
 		}; 
 		
@@ -551,17 +585,24 @@ app.controller('LoginCtrl', function($scope, $rootScope, $location, AuthData) {
 	$scope.logout = function () {
 		AuthData.session.remove(function (response, status) {
 			$rootScope.userInSession = null;
-			$location.path('/'); 
+			$window.location.href = CommonFunc.getHomeUrl();
 		}, function (response, status) {
 			console.log(response);
 		});
 	};
+	
+	$scope.showFbLogin = function () {
+		FB.login(function(response) {
+			if (response.authResponse) {
+		    	$window.location.href = CommonFunc.getHomeUrl();
+		    } 
+		});
+	}
 
 	AuthData.sessionUser.get({}, function (response) {
 		$rootScope.userInSession = response;
-	}, function (error) {
-		console.log(error);
-	});	
+	}, function (error) {});	
+	
 });
 
 app.controller('SignupCtrl', function($scope, $location, AuthData) {

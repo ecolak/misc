@@ -19,7 +19,7 @@ import self.ec.argume.util.AuthUtils;
 @Path("/session")
 @Produces(MediaType.APPLICATION_JSON)
 public class SessionResource {
-
+	
 	@Context
 	HttpServletRequest request;
 	
@@ -50,4 +50,5 @@ public class SessionResource {
 		request.getSession().setAttribute("user", authUser);
 		return Response.ok().build();
 	}
+	
 }

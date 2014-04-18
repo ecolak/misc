@@ -2,6 +2,10 @@ package self.ec.argume.model;
 
 public class Login {
 	
+	public static enum Type {
+		ARGUME, FACEBOOK, TWITTER
+	}
+	
 	private String email;
 	private String password;
 	
