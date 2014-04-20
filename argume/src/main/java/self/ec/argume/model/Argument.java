@@ -43,6 +43,9 @@ public class Argument extends BaseEntity implements java.io.Serializable  {
 	@Column(name = "login_type")
 	private Login.Type loginType;
 	
+	@Column(name = "submitted_by")
+	private String submittedBy;
+	
 	@Transient
 	private int likes;
 	
@@ -149,6 +152,14 @@ public class Argument extends BaseEntity implements java.io.Serializable  {
 
 	public void setFbAccessToken(String fbAccessToken) {
 		this.fbAccessToken = fbAccessToken;
+	}
+
+	public String getSubmittedBy() {
+		return submittedBy;
+	}
+
+	public void setSubmittedBy(String submittedBy) {
+		this.submittedBy = submittedBy;
 	}
 
 	public static float magicScore(int likes, int dislikes) {

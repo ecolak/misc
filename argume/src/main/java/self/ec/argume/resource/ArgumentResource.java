@@ -23,6 +23,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+
 import self.ec.argume.dao.Criteria;
 import self.ec.argume.dao.DaoFactory;
 import self.ec.argume.dao.GenericDao;
@@ -33,6 +36,7 @@ import self.ec.argume.model.ResultList;
 import self.ec.argume.model.User;
 import self.ec.argume.util.AuthUtils;
 import self.ec.argume.util.Constants;
+import self.ec.argume.util.JerseyUtils;
 import self.ec.argume.util.Messages;
 
 @Path("/arguments")
@@ -43,6 +47,8 @@ public class ArgumentResource {
 	private static final GenericDao<Argument> argumentDao = DaoFactory.getArgumentDao();
 	private static final GenericDao<Like> likeDao = DaoFactory.getLikeDao();
 	private static final Client jerseyClient = ClientBuilder.newClient();
+	
+	private static final ObjectMapper om = new ObjectMapper();
 	
 	@Context
 	HttpServletRequest request;
@@ -97,35 +103,47 @@ public class ArgumentResource {
 		return saveArgument(argument, false);
 	}
 	
-	private boolean isFbUserLoggedIn(Long userId, String accessToken) throws IOException {	
+	private String getFbUserName(Long userId, String accessToken) throws IOException {	
+		String result = null;
 		WebTarget fbAccessTokenTarget = jerseyClient.target(Constants.FB_GRAPH_API_BASE).path("me");
 		Response response = fbAccessTokenTarget.queryParam("access_token", 
 							accessToken).request().get();
 		if (Status.OK.getStatusCode() == response.getStatus()) {
-			return true;
+			JsonNode root = om.readTree(JerseyUtils.getEntityFromResponse(response));
+			if (root != null && root.get("name") != null) {
+				result = root.get("name").getTextValue();
+			}
 		}
 		
-		return false;
+		return result;
 	}
 	
 	private Response saveArgument(final Argument argument, boolean isNew) {
 		if (isNew) {
 			Long userId = null;
 			Login.Type loginType = null;
+			String submittedBy = null;
 			
 			try {
 				if (Login.Type.FACEBOOK == argument.getLoginType() && 
-					argument.getUserId() != null &&
-					isFbUserLoggedIn(argument.getUserId(),
-									 argument.getFbAccessToken())) 
-				{
-					userId = argument.getUserId();
-					loginType = Login.Type.FACEBOOK;
+					argument.getUserId() != null) {
+					String fbUserName = getFbUserName(userId, argument.getFbAccessToken());
+					if (fbUserName != null) {
+						userId = argument.getUserId();
+						loginType = Login.Type.FACEBOOK; 
+						submittedBy = fbUserName;
+					}
 				} else {
 					User userInSession = AuthUtils.getUserInSession(request);
 					if (userInSession != null) {
 						userId = userInSession.getId();
 						loginType = Login.Type.ARGUME;
+						if (userInSession.getFirstName() != null) {
+							submittedBy = userInSession.getFirstName();
+							if (userInSession.getLastName() != null) {
+								submittedBy += " " + userInSession.getLastName();
+							}
+						}
 					}
 				} 
 			} catch (IOException ioe) {
@@ -134,6 +152,7 @@ public class ArgumentResource {
 			
 			argument.setUserId(userId);
 			argument.setLoginType(loginType);
+			argument.setSubmittedBy(submittedBy);
 			argument.setDateCreated(System.currentTimeMillis());
 		} else {
 			argument.setDateModified(System.currentTimeMillis());

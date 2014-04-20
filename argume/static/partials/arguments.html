@@ -12,6 +12,13 @@
 							<span style="color: #999"><small>Devamı</small></span>
 						</a>
 					</div>
+					<div ng-if="t.submittedBy">
+						<hr style="margin-top: 5px; margin-bottom: 5px;">
+						<div ng-if="'FACEBOOK' === t.loginType">
+							<img src="http://graph.facebook.com/{{t.userId}}/picture?type=square&height=25&width=25"> 
+							<small><strong>{{t.submittedBy}}</strong></small>
+						</div>
+					</div>
 				</span>
 				
 				<span class="span3">
