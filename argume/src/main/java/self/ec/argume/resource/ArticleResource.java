@@ -47,6 +47,7 @@ public class ArticleResource {
 	private static final GenericDao<Like> likeDao = DaoFactory.getLikeDao();
 	private static final GenericDao<Article> articleDao = DaoFactory.getArticleDao();
 	private static final GenericDao<Vote> voteDao = DaoFactory.getVoteDao();
+	private static final GenericDao<User> userDao = DaoFactory.getUserDao();
 
 	@Context
 	HttpServletRequest request;
@@ -114,6 +115,19 @@ public class ArticleResource {
 		for (Argument arg : arguments) {
 			arg.setLikes((int)likeDao.count(new Criteria().addColumn("argumentId", arg.getId()).addColumn("favorable", true)));
 			arg.setDislikes((int)likeDao.count(new Criteria().addColumn("argumentId", arg.getId()).addColumn("favorable", false)));
+			User argUser = arg.getUserId() != null ? userDao.findById(arg.getUserId()) : null;	
+			if (argUser != null) {
+				String submittedBy = null;
+				arg.setSource(argUser.getSource());
+				if (argUser.getFirstName() != null) {
+					submittedBy = argUser.getFirstName();
+					if (argUser.getLastName() != null) {
+						submittedBy += " " + argUser.getLastName();
+					}
+				}
+				arg.setSubmittedBy(submittedBy);
+				arg.setUserIdAtSource(argUser.getIdAtSource());
+			}
 		}
 		
 		Collections.sort(arguments, new Comparator<Argument>() {

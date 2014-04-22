@@ -21,6 +21,7 @@ import self.ec.argume.dao.DaoFactory;
 import self.ec.argume.dao.GenericDao;
 import self.ec.argume.model.Signup;
 import self.ec.argume.model.User;
+import self.ec.argume.model.User.Source;
 import self.ec.argume.util.AuthUtils;
 import self.ec.argume.util.Messages;
 
@@ -62,6 +63,7 @@ public class UserResource {
 		String passwordHash = DigestUtils.sha256Hex(saltedPassword.getBytes());
 		
 		User user = new User(signup.getEmail(), passwordHash, passwordSalt);
+		user.setSource(Source.ARGUME);
 		user.setDateCreated(System.currentTimeMillis());
 		userDao.save(user).getId();
 		

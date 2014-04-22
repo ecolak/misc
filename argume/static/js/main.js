@@ -43,7 +43,7 @@ app.config(function($routeProvider) {
 	}).otherwise({
 		redirectTo : '/'
 	});
-}).run(function($rootScope, $location) {
+}).run(function($rootScope, $location, AuthData) {
 	$rootScope.$location = $location;
 	
 	// Initialize Facebook SDK and subscribe to auth change event
@@ -57,12 +57,18 @@ app.config(function($routeProvider) {
 
 		FB.Event.subscribe('auth.authResponseChange', function(response) {
 			if (response.status === 'connected') {
-				$rootScope.fbUserId = response.authResponse.userID;
-				FB.api('/me', function(response) {
-					console.log("Welcome " + response.first_name);
-					$rootScope.fbUserName = response.first_name;
-				});
-			} 
+				var resp = response.authResponse;
+				AuthData.fbLogin.save({
+					userId: resp.userID, 
+					accessToken: resp.accessToken
+				}, function (response, status) {
+					$rootScope.fbUserName = response.firstName;
+				}, function (response, status) {});	
+			} else {
+				AuthData.session.fbLogout(function (response, status) {
+					$rootScope.userInSession = null;
+				}, function (response, status) {});
+			}
 		});
 	};
 });
@@ -477,15 +483,7 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, ArticleData,
 				$scope.submitting = false;
 			};
 			
-			FB.getLoginStatus(function(response) {
-				if (response.status === 'connected') {
-					argument.userId = response.authResponse.userID;
-					argument.fbAccessToken = response.authResponse.accessToken;
-					argument.loginType = 'FACEBOOK';
-				}
-				ArticleData.arguments.save(argument, successFn, errorFn); 
-			});
-			
+			ArticleData.arguments.save(argument, successFn, errorFn); 		
 		}
 	};
 	
@@ -558,6 +556,15 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, ArticleData,
 });
 
 app.controller('LoginCtrl', function($scope, $rootScope, $location, $window, AuthData, CommonFunc) {
+	var loginErrorFn = function (response) {
+		$scope.loginMessage = "Hata";
+		if (response.status == 401) {
+			$scope.loginMessage = "Hatalı kullanıcı adı veya şifre";
+		}
+		$scope.success = false;
+		$scope.submitting = false;
+	};		
+	
 	$scope.login = function () {
 		$scope.submitting = true;
 		
@@ -568,18 +575,24 @@ app.controller('LoginCtrl', function($scope, $rootScope, $location, $window, Aut
 			} else {
 				$window.location.href = CommonFunc.getHomeUrl();
 			}
-		}; 
+		}; 	
 		
-		var error = function (response) {
-			$scope.loginMessage = "Hata";
-			if (response.status == 401) {
-				$scope.loginMessage = "Hatalı kullanıcı adı veya şifre";
-			}
-			$scope.success = false;
-			$scope.submitting = false;
-		};		
-		
-		AuthData.session.save({email: this.user.email, password: this.user.password}, success, error);
+		AuthData.session.save({email: this.user.email, password: this.user.password}, success, loginErrorFn);
+	};
+	
+	$scope.showFbLogin = function () {
+		FB.login(function(response) {
+			if (response.authResponse) {
+				var resp = response.authResponse;
+				AuthData.fbLogin.save({
+					userId: resp.userID, 
+					accessToken: resp.accessToken
+				}, function (response, status) {
+					$rootScope.userInSession = response;
+					$window.location.href = CommonFunc.getHomeUrl();
+				}, loginErrorFn);	    	
+		    } 
+		});
 	};
 	
 	$scope.logout = function () {
@@ -590,14 +603,6 @@ app.controller('LoginCtrl', function($scope, $rootScope, $location, $window, Aut
 			console.log(response);
 		});
 	};
-	
-	$scope.showFbLogin = function () {
-		FB.login(function(response) {
-			if (response.authResponse) {
-		    	$window.location.href = CommonFunc.getHomeUrl();
-		    } 
-		});
-	}
 
 	AuthData.sessionUser.get({}, function (response) {
 		$rootScope.userInSession = response;

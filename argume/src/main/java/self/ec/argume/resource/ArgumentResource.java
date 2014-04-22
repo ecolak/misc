@@ -1,6 +1,5 @@
 package self.ec.argume.resource;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,28 +14,20 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import self.ec.argume.dao.Criteria;
 import self.ec.argume.dao.DaoFactory;
 import self.ec.argume.dao.GenericDao;
 import self.ec.argume.model.Argument;
 import self.ec.argume.model.Like;
-import self.ec.argume.model.Login;
 import self.ec.argume.model.ResultList;
 import self.ec.argume.model.User;
 import self.ec.argume.util.AuthUtils;
 import self.ec.argume.util.Constants;
-import self.ec.argume.util.JerseyUtils;
 import self.ec.argume.util.Messages;
 
 @Path("/arguments")
@@ -46,9 +37,6 @@ public class ArgumentResource {
 	private static final int DEFAULT_MAX_ARG_COUNT = 50;
 	private static final GenericDao<Argument> argumentDao = DaoFactory.getArgumentDao();
 	private static final GenericDao<Like> likeDao = DaoFactory.getLikeDao();
-	private static final Client jerseyClient = ClientBuilder.newClient();
-	
-	private static final ObjectMapper om = new ObjectMapper();
 	
 	@Context
 	HttpServletRequest request;
@@ -98,61 +86,17 @@ public class ArgumentResource {
 		
 		argument.setId(id);	
 		argument.setUserId(existing.getUserId());
-		argument.setLoginType(existing.getLoginType());
 		
 		return saveArgument(argument, false);
 	}
 	
-	private String getFbUserName(Long userId, String accessToken) throws IOException {	
-		String result = null;
-		WebTarget fbAccessTokenTarget = jerseyClient.target(Constants.FB_GRAPH_API_BASE).path("me");
-		Response response = fbAccessTokenTarget.queryParam("access_token", 
-							accessToken).request().get();
-		if (Status.OK.getStatusCode() == response.getStatus()) {
-			JsonNode root = om.readTree(JerseyUtils.getEntityFromResponse(response));
-			if (root != null && root.get("name") != null) {
-				result = root.get("name").getTextValue();
-			}
-		}
-		
-		return result;
-	}
-	
 	private Response saveArgument(final Argument argument, boolean isNew) {
 		if (isNew) {
-			Long userId = null;
-			Login.Type loginType = null;
-			String submittedBy = null;
-			
-			try {
-				if (Login.Type.FACEBOOK == argument.getLoginType() && 
-					argument.getUserId() != null) {
-					String fbUserName = getFbUserName(userId, argument.getFbAccessToken());
-					if (fbUserName != null) {
-						userId = argument.getUserId();
-						loginType = Login.Type.FACEBOOK; 
-						submittedBy = fbUserName;
-					}
-				} else {
-					User userInSession = AuthUtils.getUserInSession(request);
-					if (userInSession != null) {
-						userId = userInSession.getId();
-						loginType = Login.Type.ARGUME;
-						if (userInSession.getFirstName() != null) {
-							submittedBy = userInSession.getFirstName();
-							if (userInSession.getLastName() != null) {
-								submittedBy += " " + userInSession.getLastName();
-							}
-						}
-					}
-				} 
-			} catch (IOException ioe) {
-				throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+			User userInSession = AuthUtils.getUserInSession(request);
+			if (userInSession != null) {
+				argument.setUserId(userInSession.getId());
 			}
-			
-			argument.setUserId(userId);
-			argument.setLoginType(loginType);
-			argument.setSubmittedBy(submittedBy);
+				
 			argument.setDateCreated(System.currentTimeMillis());
 		} else {
 			argument.setDateModified(System.currentTimeMillis());

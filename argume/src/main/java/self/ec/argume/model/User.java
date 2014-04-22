@@ -19,6 +19,10 @@ public class User extends BaseEntity implements java.io.Serializable {
 		REGULAR, ADMIN
 	}
 	
+	public static enum Source {
+		ARGUME, FACEBOOK, TWITTER
+	}
+	
 	@Column(name = "email", unique = true, nullable = false)
 	private String email;
 	
@@ -37,6 +41,13 @@ public class User extends BaseEntity implements java.io.Serializable {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role")
 	private Role role = Role.REGULAR;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "source")
+	private Source source;
+	
+	@Column(name = "id_at_source")
+	private String idAtSource;
 	
 	public User() {
 		super(null, null);
@@ -105,6 +116,22 @@ public class User extends BaseEntity implements java.io.Serializable {
 		this.role = role;
 	}
 	
+	public Source getSource() {
+		return source;
+	}
+
+	public void setSource(Source source) {
+		this.source = source;
+	}
+
+	public String getIdAtSource() {
+		return idAtSource;
+	}
+
+	public void setIdAtSource(String idAtSource) {
+		this.idAtSource = idAtSource;
+	}
+
 	@Transient
 	@JsonIgnore
 	public boolean isAdmin() {
