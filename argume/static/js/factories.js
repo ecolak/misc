@@ -30,7 +30,9 @@ app.factory('AuthData', function ($resource, Constants) {
 	return {
 		session: $resource(Constants.dataServiceBaseUrl + '/session/:id'),
 		sessionUser: $resource(Constants.dataServiceBaseUrl + '/session/user'),
-		user: $resource(Constants.dataServiceBaseUrl + '/users')
+		user: $resource(Constants.dataServiceBaseUrl + '/users'),
+		fbLogin: $resource(Constants.dataServiceBaseUrl + '/session/fb_login'),
+		fbLogout: $resource(Constants.dataServiceBaseUrl + '/session/fb_logout')
 	};
 });
 
@@ -50,21 +52,16 @@ app.factory('AuthService', function ($location, $rootScope, AuthData) {
 		
 		authenticateUser: function () {
 			$rootScope.redirectUrl = $location.path();
-			FB.getLoginStatus(function (response) {
-				if ('connected' !== response.status) {
-					// If user is not logged in with Facebook,
-					// check Argume login
-					AuthData.sessionUser.get({}, function (response) {
-						if (!response) {
-							$location.path('/login');
-						} else {
-							$rootScope.redirectUrl = null;
-						}
-					}, function (error) {
-						$location.path('/login');
-					});		
+			
+			AuthData.sessionUser.get({}, function (response) {
+				if (!response) {
+					$location.path('/login');
+				} else {
+					$rootScope.redirectUrl = null;
 				}
-			});			
+			}, function (error) {
+				$location.path('/login');
+			});	
 		}
 	}
 });

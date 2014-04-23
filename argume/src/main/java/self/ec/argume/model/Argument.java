@@ -7,6 +7,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import self.ec.argume.model.User.Source;
+
 @Entity
 @Table(name = "arguments")
 public class Argument extends BaseEntity implements java.io.Serializable  {
@@ -39,12 +41,14 @@ public class Argument extends BaseEntity implements java.io.Serializable  {
 	@Column(name = "status")
 	private Status status = Status.PENDING;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "login_type")
-	private Login.Type loginType;
+	@Transient
+	private Source source;
 	
-	@Column(name = "submitted_by")
+	@Transient
 	private String submittedBy;
+	
+	@Transient
+	private String userIdAtSource;
 	
 	@Transient
 	private int likes;
@@ -52,20 +56,17 @@ public class Argument extends BaseEntity implements java.io.Serializable  {
 	@Transient
 	private int dislikes;
 	
-	@Transient
-	private String fbAccessToken;
-	
 	public Argument() {
 		super(null, null);
 	}
 
 	public Argument(Long articleId, String summary, String body, 
 					boolean affirmative, Status status) {
-		this(articleId, summary, body, affirmative, status, null, null);
+		this(articleId, summary, body, affirmative, status, null);
 	}
 	
 	public Argument(Long articleId, String summary, String body, 
-					boolean affirmative, Status status, Long userId, Login.Type loginType) {
+					boolean affirmative, Status status, Long userId) {
 		super(null, null);
 		this.articleId = articleId;
 		this.summary = summary;
@@ -137,22 +138,6 @@ public class Argument extends BaseEntity implements java.io.Serializable  {
 	public void setDislikes(int dislikes) {
 		this.dislikes = dislikes;
 	}
-	
-	public Login.Type getLoginType() {
-		return loginType;
-	}
-
-	public void setLoginType(Login.Type loginType) {
-		this.loginType = loginType;
-	}
-
-	public String getFbAccessToken() {
-		return fbAccessToken;
-	}
-
-	public void setFbAccessToken(String fbAccessToken) {
-		this.fbAccessToken = fbAccessToken;
-	}
 
 	public String getSubmittedBy() {
 		return submittedBy;
@@ -160,6 +145,22 @@ public class Argument extends BaseEntity implements java.io.Serializable  {
 
 	public void setSubmittedBy(String submittedBy) {
 		this.submittedBy = submittedBy;
+	}
+
+	public Source getSource() {
+		return source;
+	}
+
+	public void setSource(Source source) {
+		this.source = source;
+	}
+
+	public String getUserIdAtSource() {
+		return userIdAtSource;
+	}
+
+	public void setUserIdAtSource(String userIdAtSource) {
+		this.userIdAtSource = userIdAtSource;
 	}
 
 	public static float magicScore(int likes, int dislikes) {
