@@ -96,6 +96,14 @@ app.factory('CommonFunc', function ($location) {
 		getHomeUrl: function () {
 			return $location.protocol() + '://' + $location.host() + 
 				   ($location.port() ? (':' + $location.port()) : '');
+		},
+		
+		expandHrefs: function (text) {
+			return text.replace(/(https?:\/\/.+?)(\s|$)/g, '<a href="$1" target="_blank">$1</a>');
+		},
+		
+		stripHtmlTags: function (text) {
+			return text.replace(/<\/?[^>]+(>|$)/g, '');
 		}
 	};
 });

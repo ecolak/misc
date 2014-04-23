@@ -458,11 +458,13 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, ArticleData,
 		} else {
 			// replace new lines with html breaks
 			if (this.argument.body) {
+				this.argument.body = CommonFunc.stripHtmlTags(this.argument.body);
 				this.argument.body = this.argument.body.replace(/\n/g, '<br/>'); 
+				this.argument.body = CommonFunc.expandHrefs(this.argument.body);
 			}
 			var argument = {
 				articleId: $scope.article.id,
-				summary: this.argument.summary,
+				summary: CommonFunc.expandHrefs(CommonFunc.stripHtmlTags(this.argument.summary)),
 				body: this.argument.body,
 				affirmative: this.argument.affirmative
 			};
