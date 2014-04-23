@@ -29,7 +29,7 @@
 							<div class="progress progress-danger">
 							  <div class="bar" style="width: {{article | toPct:false}}%">{{article | toPct:false}}%</div>
 							</div>
-							<strong>Toplam oy:</strong> {{article.favorableCnt + article.againstCnt}}
+							<strong>Toplam oy:</strong> {{article.votesFor + article.votesAgainst}}
 							<hr/>
 						</div>
 						<div ng-switch-when="false"></div>	

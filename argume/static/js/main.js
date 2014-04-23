@@ -88,24 +88,20 @@ app.controller('NewsCtrl', function($scope, $location, ArticleData, CommonFunc, 
 					$scope.articles.push(data.objects[i]);
 				}
 			}
+			
+			$scope.articles.forEach(function (article) {
+				var counts = CommonFunc.calculateVotePct({
+					favorable: article.votesFor,
+					against: article.votesAgainst
+				});
+				article.pct_true = counts.pct_true;
+				article.pct_false = counts.pct_false;
+				article.totalVotes = counts.total;
+			});
+			
 			$scope.page = data.page;
 			$scope.total_pages = data.totalPages;
 			$scope.loading = false;
-			
-			$scope.pct_loading = true;
-			var articles = $scope.articles;
-			for (var i in articles) {
-				var article = articles[i];
-				(function (art) {
-					ArticleData.voteCounts.get({id: art.id}, function (result) {
-						var counts = CommonFunc.calculateVotePct(result);
-						art.pct_true = counts.pct_true;
-						art.pct_false = counts.pct_false;
-						art.totalVotes = counts.total;
-						$scope.pct_loading = false;
-					}); 
-				})(article);
-			}
 		});
 	};
 	
@@ -332,10 +328,6 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, ArticleData,
 		loadArguments(true);
 		loadArguments(false);
 		
-		ArticleData.voteCounts.get({id: dbArticle.id}, function (result) {
-			dbArticle.favorableCnt = result.favorable;
-			dbArticle.againstCnt = result.against;
-		});
 		ArticleData.votes.get({id: dbArticle.id}, function (dbVote) {
 			$scope.vote = dbVote;
 			$scope.voteChecked = true;
@@ -492,13 +484,13 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, ArticleData,
 	$scope.giveVote = function (favorable) {	
 		var updateCount = function (isNew) {
 			if (favorable) {
-				$scope.article.favorableCnt += 1; 
+				$scope.article.votesFor += 1; 
 				if (!isNew)
-					$scope.article.againstCnt -= 1;
+					$scope.article.votesAgainst -= 1;
 			} else {
-				$scope.article.againstCnt += 1;
+				$scope.article.votesAgainst += 1;
 				if (!isNew)
-					$scope.article.favorableCnt -= 1;
+					$scope.article.votesFor -= 1;
 			}
 		};
 		
@@ -538,9 +530,9 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, ArticleData,
 				$scope.voteMessage = "Olabilir. Argümanları okumaya devam";
 				
 				if ($scope.vote.favorable) {
-					$scope.article.favorableCnt -= 1;
+					$scope.article.votesFor -= 1;
 				} else {
-					$scope.article.againstCnt -= 1;
+					$scope.article.votesAgainst -= 1;
 				}
 				
 				$scope.submittingVote = false;
@@ -553,7 +545,7 @@ app.controller('ArticleCtrl', function($scope, $http, $routeParams, ArticleData,
 	};
 
 	$scope.isTotalVotesGreaterThanMinimum = function () {
-		return $scope.article &&  ($scope.article.favorableCnt + $scope.article.againstCnt) >= Constants.minVotesToDisplay;
+		return $scope.article &&  ($scope.article.votesFor + $scope.article.votesAgainst) >= Constants.minVotesToDisplay;
 	};
 });
 

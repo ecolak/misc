@@ -56,22 +56,40 @@ public class ArticleResource {
 	public ResultList<Article> list(@DefaultValue(Constants.DEFAULT_PAGE) @QueryParam("page") int page, 
 			   						@DefaultValue(Constants.DEFAULT_PAGE_SIZE) @QueryParam("pagesize") int pageSize) {
 		String search = request.getParameter("search");
+		ResultList<Article> result = null;
 		if ("today".equals(search)) {
-			return articleDao.query(new Criteria().addColumn("dateCreated", 
+			result = articleDao.query(new Criteria().addColumn("dateCreated", 
 					(System.currentTimeMillis() - DAY_MILLIS), Operator.GTE)
 					.addColumn("verified", true)
 					.setOrderBy("dateCreated desc"));
 		} else {
-			return articleDao.query(new Criteria().setPagination(page, pageSize)
+			result = articleDao.query(new Criteria().setPagination(page, pageSize)
 					.addColumn("verified", true)
 					.setOrderBy("dateCreated desc"));
 		}
+		List<Article> articles = result.getObjects();
+		if (articles != null) {
+			for (Article article : articles) {
+				addVoteCountsToArticle(article);
+			}
+		}
+		return result;
+	}
+	
+	private void addVoteCountsToArticle(Article article) {
+		article.setVotesFor((int)voteDao
+				.count(new Criteria().addColumn("articleId", article.getId())
+				.addColumn("favorable", true)));
+		article.setVotesAgainst((int)voteDao.count(new Criteria()
+				.addColumn("articleId", article.getId())
+				.addColumn("favorable", false)));
 	}
 
 	@GET
 	@Path("{id}")
 	public Article getById(@PathParam("id") long id) {
 		Article article = articleDao.findById(id);
+		addVoteCountsToArticle(article);
 		if (article == null || !article.isVerified()) {
 			throw new WebApplicationException(Response.status(Status.NOT_FOUND).build());
 		}

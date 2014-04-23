@@ -26,11 +26,11 @@ app.filter('toTurkish', function(I18n) {
 app.filter('toPct', function() {
 	return function(article, favorable) {
 		if (article != null) {
-			var total = article.favorableCnt + article.againstCnt;
+			var total = article.votesFor + article.votesAgainst;
 			if (favorable) {
-				return total > 0 ? Math.round(article.favorableCnt / total * 100) : 50;
+				return total > 0 ? Math.round(article.votesFor / total * 100) : 50;
 			} else {
-				return total > 0 ? Math.round(article.againstCnt / total * 100) : 50;
+				return total > 0 ? Math.round(article.votesAgainst / total * 100) : 50;
 			}
 		}
 		return "";
