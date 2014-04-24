@@ -49,6 +49,9 @@ public class User extends BaseEntity implements java.io.Serializable {
 	@Column(name = "id_at_source")
 	private String idAtSource;
 	
+	@Column(name = "img_url")
+	private String imgUrl;
+	
 	public User() {
 		super(null, null);
 	}
@@ -130,6 +133,14 @@ public class User extends BaseEntity implements java.io.Serializable {
 
 	public void setIdAtSource(String idAtSource) {
 		this.idAtSource = idAtSource;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
 	}
 
 	@Transient

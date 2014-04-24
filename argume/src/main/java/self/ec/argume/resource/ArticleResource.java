@@ -144,6 +144,7 @@ public class ArticleResource {
 					}
 				}
 				arg.setSubmittedBy(submittedBy);
+				arg.setSubmitterImgUrl(argUser.getImgUrl());
 				arg.setUserIdAtSource(argUser.getIdAtSource());
 			}
 		}

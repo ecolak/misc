@@ -51,6 +51,9 @@ public class Argument extends BaseEntity implements java.io.Serializable  {
 	private String userIdAtSource;
 	
 	@Transient
+	private String submitterImgUrl;
+	
+	@Transient
 	private int likes;
 	
 	@Transient
@@ -161,6 +164,14 @@ public class Argument extends BaseEntity implements java.io.Serializable  {
 
 	public void setUserIdAtSource(String userIdAtSource) {
 		this.userIdAtSource = userIdAtSource;
+	}
+
+	public String getSubmitterImgUrl() {
+		return submitterImgUrl;
+	}
+
+	public void setSubmitterImgUrl(String submitterImgUrl) {
+		this.submitterImgUrl = submitterImgUrl;
 	}
 
 	public static float magicScore(int likes, int dislikes) {

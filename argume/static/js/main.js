@@ -40,6 +40,9 @@ app.config(function($routeProvider) {
 	}).when('/suggest_article', {
 		controller: 'SuggestArticleCtrl',
 		templateUrl: 'suggest_article.html'
+	}).when('/settings', {
+		controller: 'SettingsCtrl',
+		templateUrl: 'settings.html'
 	}).otherwise({
 		redirectTo : '/'
 	});
@@ -712,5 +715,58 @@ app.controller('SuggestArticleCtrl', function($scope,  ArticleData) {
 		};
 		
 		ArticleData.articleSuggestion.save($scope.article, success, error);
+	};
+});
+
+app.controller('SettingsCtrl', function($scope, $rootScope, $location, $http, Constants) {
+	if (!$rootScope.userInSession) {
+		$location.path('/login');
+	}
+	
+	$scope.user = $rootScope.userInSession;
+	
+	var successFn = function (message) {
+		$scope.success = true;
+		$scope.actionMessage = message;
+		$scope.submitting = false;
+	};
+	
+	var errorFn = function (message) {
+		$scope.success = false;
+		$scope.actionMessage = message;
+		$scope.submitting = false;
+	};
+	
+	$scope.updatePassword = function () {
+		$scope.submitting = true;
+		
+		if (this.user.change.newPassword !== this.user.change.newPasswordConfirmation) {
+			$scope.actionMessage = "Hatalı şifre tekrarı";
+			$scope.success = false;
+			$scope.submitting = false;
+		} else {	
+			$http.put([Constants.dataServiceBaseUrl, 'users/password'].join('/'), {
+				oldPassword: this.user.change.oldPassword,
+				newPassword: this.user.change.newPassword
+			}).success(function(data, status) {
+				successFn('Şifreniz başarıyla değiştirildi');
+		    }).error(function(data, status) {
+		    	errorFn(data);
+		    });
+		}
+	};
+	
+	$scope.updateDetails = function () {
+		$scope.submitting = true;
+		
+		$http.put([Constants.dataServiceBaseUrl, 'users'].join('/'), {
+			firstName: this.user.firstName,
+			lastName: this.user.lastName,
+			imgUrl: this.user.imgUrl
+		}).success(function(data, status) {
+			successFn('Kişisel bilgileriniz başarıyla değiştirildi');
+	    }).error(function(data, status) {
+	    	errorFn('Hata');
+	    });
 	};
 });

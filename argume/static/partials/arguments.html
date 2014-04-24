@@ -5,12 +5,17 @@
 			<div class="arg-summary-box">
 				<span class="span9">
 					<div class="row-fluid">
-						<span ng-if="t.submittedBy && 'FACEBOOK' === t.source">
-							<img src="http://graph.facebook.com/{{t.userIdAtSource}}/picture?type=square&height=25&width=25"> <small><strong>{{t.submittedBy}}</strong></small>
-						</span>
-						<span ng-if="!t.submittedBy || 'FACEBOOK' !== t.source">
+						<div ng-if="t.submittedBy">
+							<span ng-if="'FACEBOOK' === t.source">
+								<img src="http://graph.facebook.com/{{t.userIdAtSource}}/picture?type=square&height=25&width=25"> <small><strong>{{t.submittedBy}}</strong></small>
+							</span>
+							<span ng-if="'FACEBOOK' !== t.source">
+								<img src="{{t.submitterImgUrl ? t.submitterImgUrl : 'img/fb-no-image.jpg'}}" width="25" height="25"> <small><strong>{{t.submittedBy}}</strong></small>
+							</span>
+						</div>
+						<div ng-if="!t.submittedBy">
 							<img src="img/fb-no-image.jpg"> <small><strong>Anonim</strong></small>
-						</span>
+						</div>
 						<hr style="margin-top: 5px; margin-bottom: 5px;">
 					</div>
 					<div class="row-fluid">

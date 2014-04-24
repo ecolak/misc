@@ -27,6 +27,7 @@ import self.ec.argume.model.Login;
 import self.ec.argume.model.User;
 import self.ec.argume.model.User.Source;
 import self.ec.argume.util.AuthUtils;
+import self.ec.argume.util.Constants;
 
 @Path("/session")
 @Produces(MediaType.APPLICATION_JSON)
@@ -104,6 +105,7 @@ public class SessionResource {
 					user.setLastName(response.getLastName());
 					user.setSource(Source.FACEBOOK);
 					user.setIdAtSource(fbLogin.getUserId());
+					user.setImgUrl(String.format(Constants.FB_IMG_URL_TEMPLATE, fbLogin.getUserId()));
 					user.setDateCreated(System.currentTimeMillis());
 					userDao.save(user);
 				}

@@ -13,11 +13,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import self.ec.argume.dao.DaoFactory;
 import self.ec.argume.model.FacebookMeResponse;
+import self.ec.argume.model.HashedPassword;
 import self.ec.argume.model.User;
 
 public class AuthUtils {
@@ -34,10 +36,7 @@ public class AuthUtils {
 		List<User> list = DaoFactory.getUserDao().findBy("email", email);
 		if (!list.isEmpty()) {
 			User user = list.get(0);
-			String salt = user.getPasswordSalt();
-			String saltedPassword = salt + password;
-			String saltedHash = DigestUtils.sha256Hex(saltedPassword);
-			if (saltedHash.equals(user.getPasswordHash())) {
+			if (isCorrectPassword(user, password)) {
 				result = user;
 			}
 		}
@@ -95,5 +94,24 @@ public class AuthUtils {
 		}
 		
 		return result;
+	}
+	
+	public static HashedPassword getHashedPassword(String password) {
+		String passwordSalt = RandomStringUtils.randomAlphabetic(32);
+		String saltedPassword = passwordSalt + password;
+		String passwordHash = DigestUtils.sha256Hex(saltedPassword.getBytes());
+		return new HashedPassword(passwordHash, passwordSalt);
+	}
+	
+	public static boolean isCorrectPassword(User user, String password) {
+		if (user != null && password != null) {
+			String salt = user.getPasswordSalt();
+			String saltedPassword = salt + password;
+			String saltedHash = DigestUtils.sha256Hex(saltedPassword);
+			if (saltedHash.equals(user.getPasswordHash())) {
+				return true; 
+			}
+		}
+		return false;
 	}
 }

@@ -1,0 +1,68 @@
+<div class="container">
+	<div class="content">
+		<div class="page-header">
+			<h1>Kişisel Bilgiler</h1>
+		</div>
+		<div>
+			<form class="form-horizontal" ng-submit="updateDetails()">
+			  <div class="control-group">
+			    <label class="control-label">İsim</label>
+			    <div class="controls">
+			      <input type="text" id="firstName" ng-model="user.firstName">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Soy isim</label>
+			    <div class="controls">
+			      <input type="text" id="lastName" ng-model="user.lastName">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Foto URL</label>
+			    <div class="controls">
+			      <input type="text" id="imgUrl" ng-model="user.imgUrl" class="input-xxlarge">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			  	<div class="controls">
+			    	<button class="btn btn-primary" ng-class="{'disabled': submitting}" id="submit-button">Güncelle</button>
+			    </div>
+			  </div>
+			</form>
+		</div>
+		
+		<hr/>
+		
+		<div>
+			<form class="form-horizontal" ng-submit="updatePassword()">
+			  <div class="control-group">
+			    <label class="control-label">Eski şifre</label>
+			    <div class="controls">
+			      <input type="password" id="oldPassword" ng-model="user.change.oldPassword">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Yeni şifre</label>
+			    <div class="controls">
+			      <input type="password" id="newPassword" ng-model="user.change.newPassword">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Yeni şifre tekrarı</label>
+			    <div class="controls">
+			      <input type="password" id="newPassword" ng-model="user.change.newPasswordConfirmation">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			  	<div class="controls">
+			    	<button class="btn btn-primary" ng-class="{'disabled': submitting}" id="submit-button">Güncelle</button>
+			    </div>
+			  </div>
+			</form>
+		</div>
+		<div class="alert text-center" ng-class="{'alert-success': success, 'alert-error': !success}" 
+			 ng-show="actionMessage != null">{{actionMessage}}
+		</div>	
+		
+	</div>	
+</div>

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
@@ -13,15 +14,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 
 import self.ec.argume.dao.DaoFactory;
 import self.ec.argume.dao.GenericDao;
+import self.ec.argume.model.HashedPassword;
+import self.ec.argume.model.PasswordChange;
 import self.ec.argume.model.Signup;
 import self.ec.argume.model.User;
 import self.ec.argume.model.User.Source;
+import self.ec.argume.model.UserDetails;
 import self.ec.argume.util.AuthUtils;
 import self.ec.argume.util.Messages;
 
@@ -58,11 +60,9 @@ public class UserResource {
 					.entity(Messages.getMessage("errors.signup.emailExists")).build());
 		}
 		
-		String passwordSalt = RandomStringUtils.randomAlphabetic(32);
-		String saltedPassword = passwordSalt + signup.getPassword();
-		String passwordHash = DigestUtils.sha256Hex(saltedPassword.getBytes());
+		HashedPassword hp = AuthUtils.getHashedPassword(signup.getPassword());
 		
-		User user = new User(signup.getEmail(), passwordHash, passwordSalt);
+		User user = new User(signup.getEmail(), hp.getHash(), hp.getSalt());
 		user.setSource(Source.ARGUME);
 		user.setDateCreated(System.currentTimeMillis());
 		userDao.save(user).getId();
@@ -70,15 +70,38 @@ public class UserResource {
 		return Response.status(Status.CREATED).build();
 	}
 	
-	@POST
-	@Path("reset_pwd")
+	@PUT
+	@Path("password")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response resetPassword(String email) {
-		List<User> users = userDao.findBy("email", email);
-		if (users.isEmpty()) {
-			throw new WebApplicationException(Response.status(Status.NOT_FOUND)
-					.entity(Messages.getMessage("errors.forgotpwd.emailDoesNotExist")).build());
+	public Response updatePassword(PasswordChange passwordChange) {
+		User userInSession = userDao.findById(AuthUtils.getUserInSession(request).getId());
+		if (!AuthUtils.isCorrectPassword(userInSession, passwordChange.getOldPassword())) {
+			throw new WebApplicationException(Response.status(Status.FORBIDDEN)
+					.entity(Messages.getMessage("errors.updatepwd.oldPwdDoesNotMatch")).build());
+		} 
+		
+		if (!passwordChange.getNewPassword().matches(AuthUtils.PASSWORD_REGEX)) {
+			throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
+					.entity(Messages.getMessage("errors.signup.weakPassword")).build());
 		}
+		
+		HashedPassword hp = AuthUtils.getHashedPassword(passwordChange.getNewPassword());
+		userInSession.setPasswordHash(hp.getHash());
+		userInSession.setPasswordSalt(hp.getSalt());
+		userDao.save(userInSession);
+		
+		return Response.ok().build();
+	}
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateUserDetails(UserDetails userDetails) {
+		User userInSession = userDao.findById(AuthUtils.getUserInSession(request).getId());
+		userInSession.setFirstName(userDetails.getFirstName());
+		userInSession.setLastName(userDetails.getLastName());
+		userInSession.setImgUrl(userDetails.getImgUrl());
+		userDao.save(userInSession);
+		request.getSession().setAttribute("user", userInSession);
 		
 		return Response.ok().build();
 	}

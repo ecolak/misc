@@ -61,9 +61,17 @@
 						<ul class="nav pull-right">	
 							<li class="divider-vertical"></li>				
 							<li class="dropdown">
-								<a href="" class="dropdown-toggle" data-toggle="dropdown">Menü <b class="caret"></b></a>
+								<a href="" class="dropdown-toggle" data-toggle="dropdown">
+									<div ng-if="userInSession.imgUrl">
+										<img src="{{userInSession.imgUrl}}" width="25" height="25"> 
+										{{userInSession.firstName ? userInSession.firstName : ''}}
+										<b class="caret"></b>
+									</div>
+									<span ng-if="!userInSession.imgUrl">Menü <b class="caret"></b></span> 
+								</a>
 								<ul class="dropdown-menu">
 								    <li><a href="#dashboard">Aktivite</a></li>
+								    <li><a href="#settings">Kişisel Bilgiler</a></li>
 								    <li ng-if="userInSession.role == 'ADMIN'"><a href="#admin/article">Haberler</a></li>
 								    <li ng-if="userInSession.role == 'ADMIN'"><a href="#admin/argument">Argümanlar</a></li>
 								    <li class="divider"></li>

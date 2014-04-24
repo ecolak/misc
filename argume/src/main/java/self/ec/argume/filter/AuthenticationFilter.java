@@ -41,6 +41,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 	static {
 		authRoutes.add(new RouteRequest("/session/user", new String[]{"GET"}));
 		authRoutes.add(new RouteRequest("/dashboard.*", new String[]{"GET"}));
+		authRoutes.add(new RouteRequest("/users.*", new String[]{"PUT","DELETE"}));
 		
 		adminRoutes.add(new RouteRequest("/admin.*", new String[]{"GET", "POST", "PUT", "DELETE"}));
 	}
