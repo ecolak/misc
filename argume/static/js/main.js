@@ -55,19 +55,21 @@ app.config(function($routeProvider) {
 			xfbml : true
 		});
 
-		FB.Event.subscribe('auth.authResponseChange', function(response) {
+		FB.getLoginStatus(function(response) {
 			if (response.status === 'connected') {
 				var resp = response.authResponse;
 				AuthData.fbLogin.save({
 					userId: resp.userID, 
 					accessToken: resp.accessToken
 				}, function (response, status) {
-					$rootScope.fbUserName = response.firstName;
+					$rootScope.userInSession = response;
 				}, function (response, status) {});	
 			} else {
-				AuthData.session.fbLogout(function (response, status) {
+				AuthData.fbLogout.save({}, function (response, status) {
 					$rootScope.userInSession = null;
-				}, function (response, status) {});
+				}, function (response, status) {
+					// nobody got logged out
+				});
 			}
 		});
 	};

@@ -14,6 +14,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
@@ -60,10 +61,11 @@ public class SessionResource {
 			User user = (User) session.getAttribute("user");
 			if (user != null && Source.FACEBOOK == user.getSource()) {
 				session.invalidate(); 
+				return Response.ok().build();
 			} 
 		}
 		
-		return Response.ok().build();
+		return Response.status(Status.NOT_FOUND).build();
 	}
 	
 	@POST
@@ -80,8 +82,9 @@ public class SessionResource {
 	
 	@POST
 	@Path("fb_login")
-	public FacebookMeResponse fbLogin(final FacebookLogin fbLogin) {
+	public User fbLogin(final FacebookLogin fbLogin) {
 		FacebookMeResponse response = null;
+		User loggedInUser = null;
 		try {
 			response = AuthUtils.getLoggedInFacebookUser(fbLogin.getUserId(), fbLogin.getAccessToken());
 			if (response != null) {
@@ -106,6 +109,7 @@ public class SessionResource {
 				}
 				user.clearPassword();
 				request.getSession().setAttribute("user", user);
+				loggedInUser = user;
 			} else {
 				throw new WebApplicationException(Response.Status.UNAUTHORIZED);
 			} 
@@ -113,7 +117,7 @@ public class SessionResource {
 			throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
 		}
 		
-		return response;
+		return loggedInUser;
 	}
 	
 }
