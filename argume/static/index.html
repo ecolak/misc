@@ -59,7 +59,15 @@
 				<div ng-controller="LoginCtrl">
 					<div ng-if="userInSession && 'FACEBOOK' !== userInSession.source">
 						<ul class="nav pull-right">	
-							<li class="divider-vertical"></li>				
+							<li><a href="https://gucbirligi.org"><img src="img/gucunubirliktenalir.png"></a></li>	
+							<li class="divider-vertical"></li>			
+							<li style="margin-top: 10px;">
+								<div class="fb-like" data-href="https://www.facebook.com/argumehaber" 
+									 data-layout="button_count" data-action="like" 
+									 data-show-faces="true" data-share="false">
+								</div>
+							</li>				
+							<li class="divider-vertical"></li>		
 							<li class="dropdown">
 								<a href="" class="dropdown-toggle" data-toggle="dropdown">
 									<div ng-if="userInSession.imgUrl">
@@ -82,7 +90,15 @@
 					</div>
 					<div ng-if="userInSession && 'FACEBOOK' === userInSession.source">
 						<ul class="nav pull-right">	
-							<li class="divider-vertical"></li>				
+							<li><a href="https://gucbirligi.org"><img src="img/gucunubirliktenalir.png"></a></li>	
+							<li class="divider-vertical"></li>		
+							<li style="margin-top: 10px;">
+								<div class="fb-like" data-href="https://www.facebook.com/argumehaber" 
+									 data-layout="button_count" data-action="like" 
+									 data-show-faces="true" data-share="false">
+								</div>
+							</li>				
+							<li class="divider-vertical"></li>			
 							<li class="dropdown">
 								<a href="" class="dropdown-toggle" data-toggle="dropdown">
 									<img src="http://graph.facebook.com/{{userInSession.idAtSource}}/picture?type=square&height=25&width=25"> {{userInSession.firstName}}
@@ -96,6 +112,8 @@
 					
 					<div ng-if="!userInSession">
 						<ul class="nav pull-right">	
+							<li><a href="https://gucbirligi.org"><img src="img/gucunubirliktenalir.png"></a></li>
+							<li class="divider-vertical"></li>	
 							<li style="margin-top: 10px;">
 								<div class="fb-like" data-href="https://www.facebook.com/argumehaber" 
 									 data-layout="button_count" data-action="like" 
