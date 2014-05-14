@@ -1,0 +1,42 @@
+<div class="well">
+	<div class="row-fluid">
+		<div class="span4">
+			<a href="news/{{id}}"> 
+				{{#img2Url}}
+					<img src="{{img2Url}}" class="img-polaroid">
+				{{/img2Url}}
+				{{^img2Url}}					
+					{{#imgUrl}}
+						<img src="{{imgUrl}}" class="img-polaroid">
+					{{/imgUrl}}
+					{{^imgUrl}}
+						<img src="/img/resimsiz.gif" class="img-polaroid">
+					{{/imgUrl}}				
+				{{/img2Url}}
+			</a>
+			<div class="row-fluid" style="margin-top: 5px;">
+				<div class="span7 right-solid-border2">
+					<strong>Kaynak: </strong>{{source}}<br /> 
+					<strong>Yer: </strong>{{location}}<br /> 
+					<strong>Zaman: </strong><span name="article-date-created">{{dateCreated}}</span><br />
+				</div>
+				<div class="span5">
+					<strong>Doğru:</strong> 
+						<span class="badge badge-success">%{{votesForPct}}</span><br /> 
+					<strong>Yalan:</strong>
+					<span class="badge badge-important">%{{votesAgainstPct}}</span><br />
+						<span class="badge badge-warning text-center"
+							style="width: 80px;"> 
+						<a href="/news/{{id}}" style="color: white">Oy ver</a>
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="span8">
+			<legend>
+				<a href="/news/{{id}}">{{title}}</a>
+			</legend>
+			<span>{{{body}}}</span>
+		</div>
+	</div>
+</div>

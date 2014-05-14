@@ -1,0 +1,56 @@
+{{> src/main/webapp/html/partials/header}}
+<div class="container">
+	<div class="content">
+		<div class="page-header">
+			<h1>Haber Listesi</h1>
+		</div>
+		<div>
+			<div class="row-fluid">
+				<div class="span6 text-left">
+					<form id="article-status-form" method="GET">
+						<select id="article-status-dropdown" name="verified">
+							<option disabled="disabled">Onay</option>
+							<option value="">Hepsi</option>
+							<option value="false">Onay bekliyor</option>
+							<option value="true">Onaylandı</option>
+						</select>
+					</form>
+				</div>
+				<div class="span6 text-right">
+					<a href="/admin/articles/new">Yeni haber gir</a>
+				</div>
+			</div>
+			
+			<table class="table table-striped" id="articles-table">
+				<tr>
+					<th></th><th>Başlık</th><th>Kaynak</th><th>Zaman</th><th>Onay</th>
+				</tr>
+				{{#content.objects}}
+				<tr>
+					<td>{{id}}</td>
+					<td><a href="/admin/articles/{{id}}">{{title}}</a></td>
+					<td>{{source}}</td>
+					<td><span name="article-date-created">{{dateCreated}}</span></td>
+					<td>{{verifiedInTurkish}}</td>
+				</tr>
+				{{/content.objects}}
+			</table>
+			
+			<div class="text-center" id="admin-articles-spinner" style="display: none">
+				<i class="icon-spinner icon-spin icon-4x"></i>
+			</div>
+			
+			{{#content.showNextPage}}
+	    	<div class="text-center">
+				<a class="btn btn-info btn-mini" id="next-page-btn"
+					data-page="{{content.page}}" 
+					data-pagesize="{{content.pageSize}}"
+					data-totalpages="{{content.totalPages}}">Diğer Haberler
+				</a>
+			</div>
+	    	{{/content.showNextPage}}
+		</div>
+	</div>
+</div>
+{{> src/main/webapp/html/partials/footer}}
+<script src="/js/admin/articles.js"></script>

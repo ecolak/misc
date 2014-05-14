@@ -1,0 +1,70 @@
+{{> src/main/webapp/html/partials/header}}
+<div class="container">
+	<div class="content">
+		<div class="page-header">
+			<h1>Kişisel Bilgiler</h1>
+		</div>
+		<div>
+			<form class="form-horizontal" method="POST">
+			  <div class="control-group">
+			    <label class="control-label">İsim</label>
+			    <div class="controls">
+			      <input type="text" id="first_name" name="first_name" value="{{session.user.firstName}}">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Soy isim</label>
+			    <div class="controls">
+			      <input type="text" id="last_name" name="last_name" value="{{session.user.lastName}}">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Foto URL</label>
+			    <div class="controls">
+			      <input type="text" id="img_url" name="img_url" value="{{session.user.imgUrl}}" class="input-xxlarge">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			  	<div class="controls">
+			    	<button class="btn btn-primary" type="submit">Güncelle</button>
+			    </div>
+			  </div>
+			</form>
+		</div>
+		
+		<hr/>
+		
+		<div>
+			<form class="form-horizontal" method="POST" action="/user/password">
+			  <div class="control-group">
+			    <label class="control-label">Eski şifre</label>
+			    <div class="controls">
+			      <input type="password" id="old_password" name="old_password" required>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Yeni şifre</label>
+			    <div class="controls">
+			      <input type="password" id="new_password" name="new_password" required>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Yeni şifre tekrarı</label>
+			    <div class="controls">
+			      <input type="password" id="new_password_confirmation" name="new_password_confirmation">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			  	<div class="controls">
+			    	<button class="btn btn-primary" type="submit">Güncelle</button>
+			    </div>
+			  </div>
+			</form>
+		</div>
+		{{#content.updateUserProfileMessage}}
+		<div class="alert {{content.updateUserProfileMessageCssClass}} text-center">{{content.updateUserProfileMessage}}</div>	
+		{{/content.updateUserProfileMessage}}
+		
+	</div>	
+</div>
+{{> src/main/webapp/html/partials/footer}}

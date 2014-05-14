@@ -1,0 +1,40 @@
+{{> src/main/webapp/html/partials/header}}
+<div class="container">
+	<div class="content">
+		<div class="well" style="width: 500px; margin-left: auto; margin-right: auto">
+			<form class="form-horizontal" method="POST">
+			  <div class="control-group">
+			    <label class="control-label" for="email">Email</label>
+			    <div class="controls">
+			      <input type="email" id="email" name="email" required>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label" for="password">Şifre</label>
+			    <div class="controls">
+			      <input type="password" id="password" name="password" required>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label" for="password_confirmation">Şifre tekrarı</label>
+			    <div class="controls">
+			      <input type="password" id="password_confirmation" name="password_confirmation" required>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <div class="controls">
+			      <button type="submit" class="btn btn-primary">Gönder</button>
+			    </div>
+			  </div>
+			</form>
+		</div>
+		{{#content.successMessage}}
+			<div class="alert alert-success text-center">{{content.successMessage}} <a href="/login">Giriş yap</a></div>
+		{{/content.successMessage}}
+		{{#content.errorMessage}}
+			<div class="alert alert-danger text-center">{{content.errorMessage}}</div>	
+		{{/content.errorMessage}}
+		
+	</div>	
+</div>
+{{> src/main/webapp/html/partials/footer}}

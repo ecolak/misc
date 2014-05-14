@@ -1,0 +1,55 @@
+{{> src/main/webapp/html/partials/header}}
+<div class="container">
+	<div class="content">
+		<div class="page-header">
+			<h1>Haber Tavsiye Et</h1>
+		</div>
+		<div>
+			<form class="form-horizontal" method="POST">
+			  <div class="control-group">
+			    <label class="control-label">Başlık</label>
+			    <div class="controls">
+			      <input type="text" id="title" name="title" class="input-xxlarge" required>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Foto</label>
+			    <div class="controls">
+			      <input type="text" id="img_url" name="img_url" class="input-xxlarge">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Kaynak</label>
+			    <div class="controls">
+			      <input type="text" id="source" name="source" required>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Yer</label>
+			    <div class="controls">
+			      <input type="text" id="location" name="location">
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Haber</label>
+			    <div class="controls">
+			      <textarea id="body" name="body"  rows="10" class="input-block-level" required></textarea>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			  	<div class="controls">
+			    	<button class="btn btn-primary" type="submit">Gönder</button>
+			    </div>
+			  </div>
+			</form>
+		</div>
+		{{#content.successMessage}}
+			<div class="alert alert-success text-center">{{content.successMessage}} <a href="/">Anasayfa'ya geri dön</a></div>	
+		{{/content.successMessage}}
+		{{#content.errorMessage}}
+			<div class="alert alert-danger text-center">{{content.errorMessage}}</div>	
+		{{/content.errorMessage}}
+		
+	</div>	
+</div>
+{{> src/main/webapp/html/partials/footer}}

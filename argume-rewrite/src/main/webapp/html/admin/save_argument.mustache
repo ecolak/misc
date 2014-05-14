@@ -1,0 +1,58 @@
+{{> src/main/webapp/html/partials/header}}
+<div class="container">
+	<div class="content">
+		<div class="page-header">
+			<h1>Arguman</h1>
+		</div>
+		<div>
+			<form class="form-horizontal" id="save-argument-form">
+			  <div class="control-group">
+			    <label class="control-label">Başlık</label>
+			    <div class="controls">
+			    	<textarea rows="3" class="input-block-level" id="summary" required>{{content.summary}}</textarea>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Detay</label>
+			    <div class="controls">
+			      <textarea rows="10" class="input-block-level" id="body">{{content.body}}</textarea>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Doğru?</label>
+			    <div class="controls">
+			      {{#content.affirmative}}
+			     	 <input type="checkbox" id="affirmative" checked>
+			      {{/content.affirmative}}
+			      {{^content.affirmative}}
+			    	  <input type="checkbox" id="affirmative">
+			      {{/content.affirmative}}	      
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label">Onay</label>
+			    <div class="controls">
+			      {{#content.verified}}
+			     	 <input type="checkbox" id="verified" checked>
+			      {{/content.verified}}
+			      {{^content.verified}}
+			    	  <input type="checkbox" id="verified">
+			      {{/content.verified}}	      
+			    </div>
+			  </div>
+			  <div class="control-group">
+			  	<div class="controls">
+			    	<button class="btn btn-primary" id="submit-button">Kaydet</button>
+			    	<button class="btn" id="delete-button">Sil</button>
+			    </div>
+			  </div>
+			  <input type="hidden" id="argument-id" value="{{content.id}}">
+			  <input type="hidden" id="article-id" value="{{content.articleId}}">
+			</form>
+		</div>
+		<div class="alert text-center" id="save-argument-msg-container" style="display: none">{{saveArgumentMessage}}</div>	
+		
+	</div>	
+</div>
+{{> src/main/webapp/html/partials/footer}}
+<script src="/js/admin/save_argument.js"></script>

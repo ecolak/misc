@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+<title>{{meta.title}}</title>
+<meta charset="utf-8" />
+<meta name="keywords" content="{{meta.keywords}}" />
+<meta name="description" content="{{meta.description}}" />
+
+<!-- Twitter Card data -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@ArgumeHaber" />
+<meta name="twitter:title" content="{{meta.title}}" />
+<meta name="twitter:description" content="{{meta.description}}" />
+<!-- <meta name="twitter:creator" content="@ArgumeHaber" /> -->
+<meta name="twitter:image" content="{{meta.image}}" />
+
+<!-- Open Graph data -->
+<meta property="og:title" content="{{meta.title}}" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="{{meta.url}}" />
+<meta property="og:image" content="{{meta.image}}" />
+<meta property="og:description" content="{{meta.description}}" /> 
+<meta property="og:site_name" content="Argume" />
+
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="apple-touch-icon" href="/lib/bootstrap/images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/lib/bootstrap/images/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/lib/bootstrap/images/apple-touch-icon-114x114.png">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+<link rel="shortcut icon" href="img/argume-icon.ico" type="image/x-icon">
+
+<script src="/lib/jquery/jquery-2.0.2.min.js"></script>
+<script src="/lib/jquery/jquery-cookie.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/moment/moment.min.js"></script>
+<script src="/lib/moment/lang/tr.js"></script>
+<script src="/lib/fingerprintjs/fingerprint.min.js"></script>
+<script src="/lib/mustache/mustache.min.js"></script>
+<script src="/js/commons.js"></script>
+<script src="/js/facebook.js"></script>
+</head>
+
+<body>
+	<div class="navbar navbar-fixed">
+		<div class="navbar-inner">
+			<div class="container">
+				<ul class="nav">
+					<li>
+						<a href="/" style="padding: 0 0 0 0"> <img src="/img/argume_transparent.gif"></a>
+					</li>
+					<li class="active"><a href="/news">Tüm Haberler</a></li>
+					<li class=""><a href="/news?search=today">Bugün</a></li>
+					<li class=""><a href="/suggest_article">Haber Tavsiye Et</a></li>
+				</ul>
+
+				<div>
+					<ul class="nav pull-right">	
+						<li><a href="https://gucbirligi.org"><img src="img/gucunubirliktenalir.png"></a></li>
+						<li class="divider-vertical"></li>
+						<li style="margin-top: 10px;">
+							<div class="fb-like"
+								data-href="https://www.facebook.com/argumehaber"
+								data-layout="button_count" data-action="like"
+								data-show-faces="true" data-share="false">
+							</div>
+						</li>
+						<li class="divider-vertical"></li>
+						{{#session.user}}
+						<li class="dropdown">
+							<a href="" class="dropdown-toggle" data-toggle="dropdown">
+								{{#session.user.imgUrl}}
+								<div>
+									<img src="{{session.user.imgUrl}}" width="25" height="25"> {{session.user.firstName}}<b class="caret"></b>
+								</div>
+								{{/session.user.imgUrl}}
+								{{^session.user.imgUrl}}
+								<span>Menü <b class="caret"></b></span> 
+								{{/session.user.imgUrl}}
+							</a>
+							<ul class="dropdown-menu">
+								{{#session.user.isFromFacebook}}
+							    	<li><a href="/dashboard">Aktivite</a></li>
+							    {{/session.user.isFromFacebook}}
+							    {{^session.user.isFromFacebook}}
+							    	<li><a href="/dashboard">Aktivite</a></li>
+								    <li><a href="/user">Kişisel Bilgiler</a></li>
+								    {{#session.user.admin}}
+								    	<li><a href="/admin/articles">Haberler</a></li>
+								   		<li><a href="/admin/arguments">Argümanlar</a></li>
+								    {{/session.user.admin}}
+							    {{/session.user.isFromFacebook}}						    
+							    <li class="divider"></li>
+							    <li><a href="/logout">Çıkış</a></li>
+							  </ul>
+						</li>													
+						{{/session.user}}
+						{{^session.user}}
+						<li class="dropdown">
+							<a href="" class="dropdown-toggle" 
+							   data-toggle="dropdown">Giriş <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="/login">Argume girişi</a></li>
+							</ul>
+						</li>		
+						{{/session.user}}
+					</ul>			
+				</div>
+			</div>
+		</div>
+	</div>

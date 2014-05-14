@@ -1,0 +1,36 @@
+{{> src/main/webapp/html/partials/header}}
+<div class="container">
+	<div class="content">
+		<div class="well" style="width: 500px; margin-left: auto; margin-right: auto">
+			<div class="text-center">
+				<a href="" id="fb-login-link"><img src="img/facebook_giris.gif"></a>
+			</div>
+			<hr/>
+			<form id="login-form" class="form-horizontal" method="POST">
+			  <div class="control-group">
+			    <label class="control-label" for="email">Email</label>
+			    <div class="controls">
+			      <input type="email" id="email" name="email" required>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <label class="control-label" for="password">Şifre</label>
+			    <div class="controls">
+			      <input type="password" id="password" name="password" required>
+			    </div>
+			  </div>
+			  <div class="control-group">
+			    <div class="controls">
+			      <button type="submit" class="btn btn-primary" id="submit-button">Giriş</button>
+			      <a href="/signup">Üye ol</a>   |   <a href="/forgotpwd">Şifremi unuttum</a>
+			    </div>
+			  </div>
+			</form>
+		</div>
+		{{#content.errorMessage}}
+		<div class="alert alert-danger text-center" id="login-error-msg-container">{{content.errorMessage}}</div>	
+		{{/content.errorMessage}}
+	</div>	
+</div>
+{{> src/main/webapp/html/partials/footer}}
+<script src="/js/fb_login.js"></script>

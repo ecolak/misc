@@ -1,0 +1,42 @@
+{{> src/main/webapp/html/partials/header}}
+
+<div class="container">
+	<div class="content">		
+			
+		<div class="alert alert-info fade in">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<img src="img/argume_transparent.gif" width="100" height="28">'ye hoşgeldiniz! <br /> 
+			<span class="badge badge-info">1</span> Haberlere tıklayın <br /> 
+			<span class="badge badge-info">2</span> "Neden doğru? / Neden yalan?" konusunda görüş belirtin <br /> 
+			<span class="badge badge-info">3</span> Dürüstçe oyunuzu kullanın
+		</div>
+		
+		<div id="news-container">
+		{{#content.objects}}
+			{{> src/main/webapp/html/partials/homepage_article}}
+		{{/content.objects}}
+		</div>
+		
+		{{^content.objects}}
+			<i>Bu kategoride haber bulunamadı</i>
+		{{/content.objects}}
+
+		<div class="text-center" id="news-spinner" style="display: none">
+			<i class="icon-spinner icon-spin icon-4x"></i>
+		</div>
+
+		{{#content.showNextPage}}
+	    	<div class="text-center">
+				<a class="btn btn-info btn-mini" id="next-page-btn"
+					data-page="{{content.page}}" 
+					data-pagesize="{{content.pageSize}}"
+					data-totalpages="{{content.totalPages}}">Diğer Haberler
+				</a>
+			</div>
+	    {{/content.showNextPage}}
+		   
+	</div>
+</div>
+
+{{> src/main/webapp/html/partials/footer}}
+<script src="/js/news.js"></script>
