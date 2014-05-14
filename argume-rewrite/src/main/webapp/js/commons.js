@@ -1,7 +1,7 @@
 function Commons () {};
 
-Commons.BASE_URL = 'http://localhost:8080';
-Commons.API_BASE_URL = 'http://localhost:8080/api';
+Commons.BASE_URL = 'http://www.argume.com';
+Commons.API_BASE_URL = Commons.BASE_URL + '/api';
 
 Commons.postJson = function(url, data) { 
 	return $.ajax({
