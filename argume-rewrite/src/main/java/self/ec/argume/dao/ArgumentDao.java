@@ -153,7 +153,18 @@ public class ArgumentDao extends GenericDao<Argument> {
 		Collections.sort(result, new Comparator<Argument>() {
 			@Override
 			public int compare(Argument arg0, Argument arg1) {
-				return -(arg0.getDateCreated().compareTo(arg1.getDateCreated()));
+				Long dc1 = arg0.getDateCreated();
+				Long dc2 = arg1.getDateCreated();
+				if (dc1 == null && dc2 == null) {
+					return 0;
+				}
+				if (dc1 == null && dc2 != null) {
+					return -1;
+				}
+				if (dc1 != null && dc2 == null) {
+					return 1;
+				}
+				return -(dc1.compareTo(dc2));
 			}			
 		});
 		

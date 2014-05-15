@@ -75,15 +75,7 @@
 								</div>
 								{{/session.user.imgUrl}}
 								{{^session.user.imgUrl}}
-								<div>
-									<img src="img/fb-no-image.jpg" width="25" height="25">
-									{{#session.user.firstName}}
-										{{session.user.firstName}} <b class="caret"></b>
-									{{/session.user.firstName}}
-									{{^session.user.firstName}}
-										Menü <b class="caret"></b>
-									{{/session.user.firstName}}
-								</div>
+								<span>Menü <b class="caret"></b></span> 
 								{{/session.user.imgUrl}}
 							</a>
 							<ul class="dropdown-menu">

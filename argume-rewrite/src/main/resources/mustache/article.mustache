@@ -1,4 +1,4 @@
-{{> src/main/webapp/html/partials/header}}
+{{> mustache/partials/header}}
 <div class="container">
 	<div class="content">
 		<div id="article-id" style="display: none">{{content.id}}</div>
@@ -72,7 +72,7 @@
 				</div>
 				<div id="args-for-container">
 					{{#content.argumentsFor.objects}}			
-						{{> src/main/webapp/html/partials/argument}}
+						{{> mustache/partials/argument}}
 					{{/content.argumentsFor.objects}}
 				</div>
 				
@@ -99,7 +99,7 @@
 				</div>
 				<div id="args-against-container">
 					{{#content.argumentsAgainst.objects}}
-						{{> src/main/webapp/html/partials/argument}}
+						{{> mustache/partials/argument}}
 					{{/content.argumentsAgainst.objects}}
 				</div>
 				
@@ -121,8 +121,8 @@
 		</div>
 	</div>
 </div>
-{{> src/main/webapp/html/partials/write_new_modal}}
-{{> src/main/webapp/html/partials/footer}}
+{{> mustache/partials/write_new_modal}}
+{{> mustache/partials/footer}}
 <script src="/js/article.js"></script>
 <script src="/js/twitter.js"></script>
 <script src="/js/googleplus.js"></script>

@@ -10,12 +10,12 @@ window.fbAsyncInit = function() {
 	FB.getLoginStatus(function(response) {
 		if (response.status === 'connected') {
 			var resp = response.authResponse;
-			Commons.postJson([Commons.BASE_URL, 'fb_login'], {
+			Commons.postJson([Commons.BASE_URL, 'fb_login'].join('/'), {
 				userId: resp.userID, 
 				accessToken: resp.accessToken
 			}).done(function(data, status, xhr) {}).fail(function (xhr, status, error) {});
 		} else {
-			Commons.postJson([Commons.BASE_URL, 'fb_logout'], {})
+			Commons.postJson([Commons.BASE_URL, 'fb_logout'].join('/'), {})
 				.done(function(data, status, xhr) {})
 				.fail(function (xhr, status, error) {});
 		}

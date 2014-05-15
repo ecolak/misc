@@ -3,7 +3,7 @@ $(function() {
 		FB.login(function(response) {
 			if (response.authResponse) {
 				var resp = response.authResponse;
-				Commons.postJson([Commons.BASE_URL, 'fb_login'], {
+				Commons.postJson([Commons.BASE_URL, 'fb_login'].join('/'), {
 					userId: resp.userID, 
 					accessToken: resp.accessToken
 				}).done(function(data, status, xhr) {

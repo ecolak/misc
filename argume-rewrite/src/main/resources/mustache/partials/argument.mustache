@@ -1,0 +1,66 @@
+<div class="row-fluid">
+	<div class="text-left">
+		<div class="arg-summary-box">
+			<span class="span9">
+				<div class="row-fluid">
+					{{#submittedBy}}
+						{{#submitterImgUrl}}
+							<img src="{{submitterImgUrl}}" width="25" height="25"> <small><strong>{{submittedBy}}</strong></small>
+						{{/submitterImgUrl}}
+						{{^submitterImgUrl}}
+							<img src="/img/fb-no-image.jpg"> <small><strong>{{submittedBy}}</strong></small>
+						{{/submitterImgUrl}}
+					{{/submittedBy}}
+					{{^submittedBy}}
+						<img src="/img/fb-no-image.jpg"> <small><strong>Anonim</strong></small>
+					{{/submittedBy}}	
+					<hr style="margin-top: 5px; margin-bottom: 5px;">
+				</div>
+				<div class="row-fluid">
+					<span class="span12">{{{summary}}}</span>
+				</div>
+				{{#hasBody}}
+				<div class="row-fluid">
+					<a href="javascript: $('#arg-body-{{id}}').slideToggle()">
+						<span style="color: #999"><small>Devamı</small></span>
+					</a>
+				</div>
+				{{/hasBody}}
+			</span>
+			<span class="span3">
+				<div class="row-fluid" style="margin-bottom: 5px;">
+					<div class="span6">
+						<div class="row text-right">
+							<span id="likes-span-{{id}}" class="badge badge-success">{{likes}}</span> 
+						</div>
+						<div class="row text-right">
+							<a name="like-it-button" data-id="{{id}}">
+								<i class="icon-thumbs-up-alt"></i>
+							</a>	
+						</div>						
+					</div>
+					<div class="span6">
+						<div class="row text-right">
+							<span id="dislikes-span-{{id}}" class="badge badge-important">{{dislikes}}</span> 
+						</div>
+						<div class="row text-right" style="margin-left: 0px;">
+							<a name="dislike-it-button" data-id="{{id}}">
+								<i class="icon-thumbs-down-alt"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="row-fluid" style="margin-bottom: 5px;">
+					<div class="fb-share-button" data-href="{{meta.url}}" data-type="button_count"></div>
+				</div>
+				<div class="row-fluid">
+					<a href="https://twitter.com/share" class="twitter-share-button" 
+				  	   data-via="ArgumeHaber" data-text="{{summary}}" data-lang="tr">Tweet</a>
+				</div>
+			</span>
+		</div>
+		<div class="arg-desc-box" id="arg-body-{{id}}">
+			<span>{{{body}}}</span>
+		</div>
+	</div>
+</div>

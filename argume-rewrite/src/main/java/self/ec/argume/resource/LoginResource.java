@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import self.ec.argume.dao.DaoFactory;
 import self.ec.argume.dao.GenericDao;
+import self.ec.argume.model.FacebookLogin;
 import self.ec.argume.model.FacebookMeResponse;
 import self.ec.argume.model.HtmlResponse;
 import self.ec.argume.model.User;
@@ -92,9 +93,11 @@ public class LoginResource {
 	
 	@POST
 	@Path("fb_login")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response fbLogin(@FormParam("userId") String userId, @FormParam("accessToken") String accessToken) {
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response fbLogin(final FacebookLogin login) {
 		FacebookMeResponse response = null;
+		String userId = login.getUserId();
+		String accessToken = login.getAccessToken();
 		try {
 			response = AuthUtils.getLoggedInFacebookUser(userId, accessToken);
 			if (response != null) {

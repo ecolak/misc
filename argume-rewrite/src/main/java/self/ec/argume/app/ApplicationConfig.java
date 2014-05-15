@@ -15,7 +15,7 @@ public class ApplicationConfig extends ResourceConfig {
 	
 	public ApplicationConfig() {
 		packages("self.ec.argume").register(JacksonFeature.class).register(MustacheMvcFeature.class).
-		property(MustacheMvcFeature.TEMPLATE_BASE_PATH, "/html");
+		property(MustacheMvcFeature.TEMPLATE_BASE_PATH, "/mustache");
 
 		LOG.info("Registering Hibernate Jasypt encryptor");
 		registerJasyptEncryptor();

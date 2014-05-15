@@ -1,4 +1,4 @@
-{{> src/main/webapp/html/partials/header}}
+{{> mustache/partials/header}}
 
 <div class="container">
 	<div class="content">		
@@ -13,7 +13,7 @@
 		
 		<div id="news-container">
 		{{#content.objects}}
-			{{> src/main/webapp/html/partials/homepage_article}}
+			{{> mustache/partials/homepage_article}}
 		{{/content.objects}}
 		</div>
 		
@@ -38,5 +38,5 @@
 	</div>
 </div>
 
-{{> src/main/webapp/html/partials/footer}}
+{{> mustache/partials/footer}}
 <script src="/js/news.js"></script>
