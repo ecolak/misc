@@ -20,7 +20,7 @@ import self.ec.argume.util.Messages;
 
 @Path("/suggest_article")
 @Produces(MediaType.TEXT_HTML)
-public class SuggestArticleMessage {
+public class SuggestArticleResource {
 
 	@Context
 	HttpServletRequest request;

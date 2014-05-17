@@ -1,15 +1,4 @@
-$(function() {
-	var formatDate = function (dateStr) {
-		return dateStr ? moment(parseInt(dateStr)).fromNow() : "";
-	}
-	
-	var formatDateCreatedFields = function () {
-		$.each($('[name="article-date-created"]'), function (index, value) {
-			var dc = value.innerText;
-			value.innerText = formatDate(dc);
-		});
-	};	 
-	
+$(function() {	 
 	var nextPageBtn = $("#next-page-btn");
 	var spinner = $("#admin-articles-spinner");
 	
@@ -32,7 +21,7 @@ $(function() {
 								+ article.title + '</a></td>' +
 								'<td>' + article.source + '</td>' +
 								'<td><span name="article-date-created">' 
-								+ formatDate(article.dateCreated) + '</span></td>' +
+								+ Commons.formatDate(article.dateCreated) + '</span></td>' +
 								'<td>' + article.verifiedInTurkish + '</td>' +
 							'</tr>';
 				$('#articles-table').append(html);
@@ -50,6 +39,6 @@ $(function() {
 		$("#article-status-form").submit();
 	});
 	
-	formatDateCreatedFields();
+	Commons.formatDateCreatedFields('article-date-created');
 	
 });

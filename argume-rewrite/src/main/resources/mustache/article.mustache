@@ -7,9 +7,14 @@
 		</div>
 		<div class="row-fluid">	
 			<div class="span8 right-solid-border">
-				<a href="{{content.imgUrl}}" target="_blank">
-				   <img src="{{content.imgUrl}}"  class="img-polaroid" style="width: 500px; height: auto;">
-				</a>
+				{{#content.imgUrl}}
+					<a href="{{content.imgUrl}}" target="_blank">
+					   <img src="{{content.imgUrl}}"  class="img-polaroid" style="width: 500px; height: auto;">
+					</a>
+				{{/content.imgUrl}}
+				{{^content.imgUrl}}
+					<img src="/img/resimsiz.gif"  class="img-polaroid" style="width: 500px; height: auto;">
+				{{/content.imgUrl}}
 				<div style="margin-top: 5px;">
 					<strong>Kaynak: </strong>{{content.source}}, 
 					<strong>Yer: </strong>{{content.location}},

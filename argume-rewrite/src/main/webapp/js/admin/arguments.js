@@ -1,15 +1,4 @@
 $(function() {
-	var formatDate = function (dateStr) {
-		return dateStr ? moment(parseInt(dateStr)).fromNow() : "";
-	}
-	
-	var formatDateCreatedFields = function () {
-		$.each($('[name="argument-date-created"]'), function (index, value) {
-			var dc = value.innerText;
-			value.innerText = formatDate(dc);
-		});
-	};	 
-	
 	var nextPageBtn = $("#next-page-btn");
 	var spinner = $("#admin-articles-spinner");
 	
@@ -49,5 +38,5 @@ $(function() {
 		$("#argument-status-form").submit();
 	});
 	
-	formatDateCreatedFields();
+	Commons.formatDateCreatedFields('argument-date-created');
 });

@@ -28,7 +28,7 @@
 <link rel="apple-touch-icon" sizes="72x72" href="/lib/bootstrap/images/apple-touch-icon-72x72.png">
 <link rel="apple-touch-icon" sizes="114x114" href="/lib/bootstrap/images/apple-touch-icon-114x114.png">
 <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
-<link rel="shortcut icon" href="img/argume-icon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="/img/argume-icon.ico" type="image/x-icon">
 
 <script src="/lib/jquery/jquery-2.0.2.min.js"></script>
 <script src="/lib/jquery/jquery-cookie.js"></script>
@@ -39,6 +39,7 @@
 <script src="/lib/mustache/mustache.min.js"></script>
 <script src="/js/commons.js"></script>
 <script src="/js/facebook.js"></script>
+<script src="/js/google_analytics.js"></script>
 </head>
 
 <body>
@@ -49,14 +50,14 @@
 					<li>
 						<a href="/" style="padding: 0 0 0 0"> <img src="/img/argume_transparent.gif"></a>
 					</li>
-					<li class="active"><a href="/news">Tüm Haberler</a></li>
-					<li class=""><a href="/news?search=today">Bugün</a></li>
-					<li class=""><a href="/suggest_article">Haber Tavsiye Et</a></li>
+					<li class="active" id="first-tab"><a href="/news">Tüm Haberler</a></li>
+					<li class="" id="second-tab"><a href="/news?search=today">Bugün</a></li>
+					<li class="" id="third-tab"><a href="/suggest_article">Haber Tavsiye Et</a></li>
 				</ul>
 
 				<div>
 					<ul class="nav pull-right">	
-						<li><a href="https://gucbirligi.org"><img src="img/gucunubirliktenalir.png"></a></li>
+						<li><a href="https://gucbirligi.org"><img src="/img/gucunubirliktenalir.png"></a></li>
 						<li class="divider-vertical"></li>
 						<li style="margin-top: 10px;">
 							<div class="fb-like"

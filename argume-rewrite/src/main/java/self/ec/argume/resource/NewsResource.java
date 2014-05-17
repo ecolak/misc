@@ -28,6 +28,8 @@ import self.ec.argume.util.ContentUtils;
 @Produces(MediaType.TEXT_HTML)
 public class NewsResource {
 
+	private static final String NO_HTML_TAGS_REGEX = "<\\/?[^>]+(>|$)";
+	
 	@Context
 	private HttpServletRequest request;
 	
@@ -65,10 +67,15 @@ public class NewsResource {
 		meta.put("title", article.getTitle());
 		meta.put("image", article.getImgUrl());
 		String description = article.getBody();
-		meta.put("description", ((description != null && description.length() > 200)
-				? (description.substring(0, 197) + "...")
-				: description));
+		String metaDescription = description;
+		if (metaDescription != null) {
+			metaDescription = metaDescription.replaceAll(NO_HTML_TAGS_REGEX, "");
+			if (metaDescription.length() > 200) {
+				metaDescription = metaDescription.substring(0, 197) + "...";
+			}
+		}
 		
+		meta.put("description", (metaDescription != null ? metaDescription : ""));	
 		meta.put("url", request.getRequestURL().toString());
 		
         return new Viewable("/article", new HtmlResponse(meta, article, request));

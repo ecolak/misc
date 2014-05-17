@@ -22,3 +22,14 @@ Commons.generateGuid = function () {
 Commons.generateFingerprint = function () {
 	return new Fingerprint().get();
 };
+
+Commons.formatDate = function (dateStr) {
+	return dateStr ? moment(parseInt(dateStr)).fromNow() : "";
+}
+
+Commons.formatDateCreatedFields = function (elemName) {
+	$.each($('[name=' + elemName + ']'), function (index, value) {
+		var dc = value.textContent;
+		value.textContent = Commons.formatDate(dc);
+	});
+};	
