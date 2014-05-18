@@ -93,7 +93,7 @@ $(function() {
 		return text.replace(/<\/?[^>]+(>|$)/g, '');
 	};
 	
-	$("#submit-argument-form").submit(function () {
+	$("#submit-argument-form").submit(function (event) {
 		var summary = $("#arg-summary").val().trim();
 		var body = $("#arg-body").val().trim();
 		var alertContainer = $("#alert-container");
@@ -141,8 +141,8 @@ $(function() {
 				submitArgumentBtn.prop('disabled', false);
 				submitArgumentSpinner.hide();
 			});
-			event.preventDefault(); // so that the browser doesn't submit the form
 		}
+		event.preventDefault(); // so that the browser doesn't submit the form
 	});
 	
 	var updateRemainingChars = function (elem, numCharsAllowed, updateElem) {

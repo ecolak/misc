@@ -10,7 +10,7 @@ $(function() {
 		button.prop('disabled', false);
 	};
 	
-	$("#save-argument-form").submit(function () {
+	$("#save-argument-form").submit(function (event) {
 		submitButton.prop('disabled', true);
 		messageContainer.html('');
 		messageContainer.removeClass('alert-danger');
@@ -46,7 +46,7 @@ $(function() {
 	});
 	
 	var deleteButton = $("#delete-button");
-	deleteButton.click(function () {
+	deleteButton.click(function (event) {
 		messageContainer.removeClass('alert-danger');
 		var sure = window.confirm('Emin misin?');
 		if (sure) {
