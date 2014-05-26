@@ -38,7 +38,7 @@ public class ArgumentService {
 		
 		argument.setId(id);	
 		argument.setUserId(existing.getUserId());
-		argument.setDateCreated(existing.getDateModified());
+		argument.setDateCreated(existing.getDateCreated());
 		
 		return saveArgument(argument, false);
 	}
