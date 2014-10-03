@@ -71,8 +71,7 @@ public class MainActivity extends Activity {
 	
 	@Override
 	protected void onStop() {
-		super.onStop();	
-		System.out.println("On stop");
+		super.onStop();
 		
 		this.editText.setText("");
 		
@@ -143,9 +142,7 @@ public class MainActivity extends Activity {
 	}
 	
 	public void calculateTip(View view) {
-		String billAmtStr = this.editText.getText().toString();
-		System.out.println(String.format("Bill amount: %s", billAmtStr));
-		
+		String billAmtStr = this.editText.getText().toString();	
 		float billAmount = Float.parseFloat(billAmtStr);
 		
 		this.tenPctRadio.setText("10% = " + getTipAmount(billAmount, 0.10f));
@@ -171,24 +168,20 @@ public class MainActivity extends Activity {
 	
 	public void onRadioButtonClicked(View view) {
 	    boolean checked = ((RadioButton) view).isChecked();
-	    System.out.println("Radio button clicked and it is " + (!checked ? "NOT" : "") + " checked");
 	    
 	    switch(view.getId()) {
 	        case R.id.ten_pct_radio:
 	            if (checked) {
-	            	System.out.println("Add 10% tip");
 	            	setTotalText(0.10f);
 	            }	                
 	            break;
 	        case R.id.fifteen_pct_radio:
 	            if (checked) {
-	            	System.out.println("Add 15% tip");
 	            	setTotalText(0.15f);
 	            }	                
 	            break;
 	        case R.id.twenty_pct_radio:
 	        	if (checked) {
-	        		System.out.println("Add 20% tip");
 	        		setTotalText(0.20f);
 	        	}
 	        	break;
