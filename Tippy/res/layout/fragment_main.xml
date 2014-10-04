@@ -33,21 +33,21 @@
         <RadioButton
             android:id="@+id/ten_pct_radio"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:onClick="onRadioButtonClicked"
             android:text="@string/ten_pct" />
 
         <RadioButton
             android:id="@+id/fifteen_pct_radio"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:onClick="onRadioButtonClicked"
             android:text="@string/fifteen_pct" />
 
         <RadioButton
             android:id="@+id/twenty_pct_radio"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:onClick="onRadioButtonClicked"
             android:text="@string/twenty_pct" />
     </RadioGroup>
@@ -61,29 +61,33 @@
         android:textSize="20sp" />
     
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal" >
 
         <TextView
-	        android:id="@+id/divide_by_text_view"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@string/divide_by" />
-        
-        <EditText
-            android:id="@+id/enter_num_people"
+            android:id="@+id/divide_by_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="@string/divide_by" />
+
+        <EditText
+            android:id="@+id/enter_num_people"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.04"
             android:inputType="number" />
 
         <Button
             android:id="@+id/divide_by_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0.01"
             android:onClick="divideBy"
             android:text="@string/button_enter" />
+
     </LinearLayout>
     
     <TextView

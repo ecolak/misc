@@ -5,6 +5,7 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -127,6 +128,13 @@ public class MainActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		// Gets fired when screen is rotated etc.
+		// Don't do anything special right now
+	    super.onConfigurationChanged(newConfig); 
 	}
 	
 	public void divideBy(View view) {	
