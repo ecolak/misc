@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html ng-app="ionicApp">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+      <title>Ionic-AngularJS-Cordova</title>
+      <!-- Ionic framework - replace the CDN links with local files and build -->    
+      <link href="lib/ionicframework/css/ionic.min.css" rel="stylesheet">
+		<link href="lib/ionicframework/css/ionicons.min.css" rel="stylesheet">
+      <script src="lib/ionicframework/js/ionic.bundle.min.js"></script>
+      <script src="js/app.js"></script>
+      <script src="cordova.js"></script>  
+      <script src="xhr.js"></script>  
+      <style>
+         .box {height:300px;padding: 10px}
+      </style>
+   </head>
+   <body ng-controller="AppCtrl">
+      <ion-header-bar class="bar-positive">
+         <h1 class="title">Tippy</h1>
+      </ion-header-bar>
+      <ion-content padding="true">
+			 
+         <form ng-submit="calculateTip()">
+         	<div class="list">
+               <div class="item item-input-inset">
+                  <label class="item-input-wrapper">
+                  <input type="text" pattern="^[0-9]+\.?[0-9]*$" placeholder="Enter amount" 
+								 ng-model="amount">
+                  </label>
+                  <button type="submit" class="button button-small"> Enter </button>
+               </div>
+            </div>
+         
+				<div class="list" ng-show="amountAvailable">
+					<label class="item item-radio">
+						<input type="radio" name="group" ng-click="selectTipPct(10)">
+						<div class="item-content"> 10% = {{pct10}}</div>
+						<i class="radio-icon ion-checkmark" ng-show="selectedTip === 10"></i>
+					</label>
+					<label class="item item-radio">
+						<input type="radio" name="group" ng-click="selectTipPct(15)">
+						<div class="item-content"> 15% = {{pct15}}</div>
+						<i class="radio-icon ion-checkmark" ng-show="selectedTip === 15"></i>
+					</label>
+					<label class="item item-radio">
+						<input type="radio" name="group" ng-click="selectTipPct(20)">
+						<div class="item-content"> 20% = {{pct20}}</div>
+						<i class="radio-icon ion-checkmark" ng-show="selectedTip === 20"></i>
+					</label>
+				</div>
+				 
+			</form>
+			 
+			<div class="card" ng-show="totalAvailable">
+				<div class="item item-text-wrap"><strong>Total = </strong>{{totalAmount}}</div>
+			</div>
+			
+			
+			<form ng-submit="divideBill()" ng-show="totalAvailable">
+				<div class="list">
+				  <div class="item item-input-inset">
+					 <label class="item-input-wrapper">
+						<input type="number" min="1" placeholder="Divide by" ng-model="divideBy">
+					 </label>
+					 <button class="button button-small"> Divide </button>
+				  </div>
+				</div>
+			</form>
+			
+			<div class="card" ng-show="amountPerPersonAvailable">
+				<div class="item item-text-wrap">
+					<strong>Amount per person = </strong>{{amountPerPerson}}
+				</div>
+			</div>
+			
+      </ion-content>
+   </body>
+</html>
