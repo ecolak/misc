@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blank HTML</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	 <link href="lib/jquery-mobile/css/jquery.mobile-1.4.5.min.css" rel="stylesheet">
+	
+    <script src="intelxdk.js"></script>
+    <script src="cordova.js"></script>
+    <script src="xhr.js"></script>
+	 <script src="lib/jquery/jquery-2.1.3.min.js"></script>
+	 <script src="lib/jquery-mobile/js/jquery.mobile-1.4.5.min.js"></script>
+	 <script src="js/app.js"></script>
+    <script>
+        function onDeviceReady() {
+            if( navigator.splashscreen && navigator.splashscreen.hide ) {
+                navigator.splashscreen.hide() ;
+            }
+            if( window.intel && intel.xdk && intel.xdk.device ) {
+                if( intel.xdk.device.hideSplashScreen )
+                    intel.xdk.device.hideSplashScreen() ;
+            }
+        }
+        document.addEventListener("deviceready", onDeviceReady, false) ;
+    </script>
+</head>
+<body>
+	
+   <div data-role="header">
+		 <h1>Tippy</h1>
+	</div>
+	
+	<div role="main" class="ui-content">
+		<form id="enter-amount-form">
+			<input type="text" pattern="^[0-9]+\.?[0-9]*$" id="amount" placeholder="Enter amount">
+			<input type="submit" value="Enter" data-theme="a">
+		</form>
+		
+		<div id="tip-pct-div" class="ui-body ui-body-a ui-corner-all" style="display: none">
+			<fieldset data-role="controlgroup">
+				<input type="radio" name="tip-pct" id="tip-pct-10" value="10">
+				<label for="tip-pct-10">10% = <span id="span-tip-pct-10"></span></label>
+				<input type="radio" name="tip-pct" id="tip-pct-15" value="15">
+				<label for="tip-pct-15">15% = <span id="span-tip-pct-15"></span></label>
+				<input type="radio" name="tip-pct" id="tip-pct-20" value="20">
+				<label for="tip-pct-20">20% = <span id="span-tip-pct-20"></span></label>
+			</fieldset>
+		</div>
+		
+		<div id="total-div" class="ui-body ui-body-a ui-corner-all" style="display: none">
+			<strong>Total amount = </strong> <span id="total-amount"></span>
+		</div>
+		<br/>
+		
+		<form id="divide-by-form" style="display: none">
+			<input type="number" min="1" id="divide-by" placeholder="Divide by">
+			<input type="submit" value="Divide" data-theme="a">
+		</form>
+		
+		<div id="per-person-div" class="ui-body ui-body-a ui-corner-all" style="display: none">
+			<strong>Amount per person = </strong> <span id="per-person-amount"></span>
+		</div>
+	</div>
+</body>
+</html>
