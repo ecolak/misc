@@ -1,4 +1,5 @@
 $(function() {
+	var totalAmount;
 	
 	var getAmount = function() {
 		var amountStr = $("#amount").val().trim();
@@ -24,7 +25,8 @@ $(function() {
 	$("input:radio[name=tip-pct]").click(function() {
    	var tipPct = parseInt($(this).val());
 		processAmount(function (amount) {
-			$("#total-amount").text((amount + (amount * tipPct / 100)).toFixed(2)); 
+			totalAmount = (amount + (amount * tipPct / 100)).toFixed(2);
+			$("#total-amount").text(totalAmount); 
 			$("#total-div").show();
 			$("#divide-by-form").show();
 		});
@@ -33,10 +35,8 @@ $(function() {
 	
 	$("#divide-by-form").submit(function (event) {
 		var divideBy = parseInt($("#divide-by").val().trim());
-		processAmount(function (amount) {
-			$("#per-person-amount").text((amount / divideBy).toFixed(2));
-			$("#per-person-div").show();
-		});
+		$("#per-person-amount").text((totalAmount / divideBy).toFixed(2));
+		$("#per-person-div").show();
 		return false;
 	});
 });
