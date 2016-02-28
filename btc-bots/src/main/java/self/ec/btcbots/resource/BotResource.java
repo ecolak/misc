@@ -54,206 +54,203 @@ import self.ec.btcbots.util.ResourceUtils;
 @Produces(MediaType.APPLICATION_JSON)
 public class BotResource {
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(BotResource.class);
+  private static final Logger LOG = LoggerFactory.getLogger(BotResource.class);
 
-	private static final String DEFAULT_TRIGGER_GROUP = "default_trigger_group";
-	private static final String DEFAULT_TRIGGER = "default_trigger";
-	private static final int DEFAULT_TRIGGER_PERIOD_MINS = 1;
+  private static final String DEFAULT_TRIGGER_GROUP = "default_trigger_group";
+  private static final String DEFAULT_TRIGGER = "default_trigger";
+  private static final int DEFAULT_TRIGGER_PERIOD_MINS = 1;
 
-	private static final GenericDao<Account> accountDao = DaoFactory.getAccountDao();
-	
-	@Context
-	private HttpServletRequest request;
+  private static final GenericDao<Account> accountDao = DaoFactory.getAccountDao();
 
-	@GET
-	public List<Bot> getBots() {
-		List<Bot> result = new ArrayList<>();
-		Long userId = AuthUtils.getUserInSession(request).getId();
-		
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Get bots belonging to user " + userId); 
-		}
-		try {
-			Map<String, JobExecutionContext> runningJobMap = getRunningJobMap();
+  @Context
+  private HttpServletRequest request;
 
-			Scheduler sched = StdSchedulerFactory.getDefaultScheduler();
-			Set<JobKey> jobKeys = sched.getJobKeys(GroupMatcher.jobGroupEquals(
-					String.valueOf(userId)));
-			for (JobKey jobKey : jobKeys) {
-				List<Trigger> triggers = (List<Trigger>) sched.getTriggersOfJob(jobKey);
-				Trigger trigger = triggers.size() > 0 ? triggers.get(0) : null;
+  @GET
+  public List<Bot> getBots() {
+    List<Bot> result = new ArrayList<>();
+    Long userId = AuthUtils.getUserInSession(request).getId();
 
-				JobDetail jobDetail = sched.getJobDetail(jobKey);
-				JobDataMap jobData = jobDetail.getJobDataMap();
-				Bot bot = new Bot();
-				bot.setConfig((BotConfig) jobData.get("config"));
-				BotState botState = (BotState) jobData.get("state");
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("Get bots belonging to user " + userId);
+    }
+    try {
+      Map<String, JobExecutionContext> runningJobMap = getRunningJobMap();
 
-				String status = runningJobMap.containsKey(jobKey.toString()) ? BotState.RUNNING
-						: sched.getTriggerState(trigger.getKey()).name();
+      Scheduler sched = StdSchedulerFactory.getDefaultScheduler();
+      Set<JobKey> jobKeys = sched.getJobKeys(GroupMatcher.jobGroupEquals(String.valueOf(userId)));
+      for (JobKey jobKey : jobKeys) {
+        List<Trigger> triggers = (List<Trigger>) sched.getTriggersOfJob(jobKey);
+        Trigger trigger = triggers.size() > 0 ? triggers.get(0) : null;
 
-				botState.setStatus(status);
-				bot.setState(botState);
+        JobDetail jobDetail = sched.getJobDetail(jobKey);
+        JobDataMap jobData = jobDetail.getJobDataMap();
+        Bot bot = new Bot();
+        bot.setConfig((BotConfig) jobData.get("config"));
+        BotState botState = (BotState) jobData.get("state");
 
-				result.add(bot);
-			}
-		} catch (SchedulerException se) {
-			LOG.error("Error retrieving running bots", se);
-			throw new WebApplicationException("Error retrieving running bots");
-		}
-		return result;
-	}
+        String status =
+            runningJobMap.containsKey(jobKey.toString()) ? BotState.RUNNING : sched
+                .getTriggerState(trigger.getKey()).name();
 
-	private Map<String, JobExecutionContext> getRunningJobMap()
-			throws SchedulerException {
-		Map<String, JobExecutionContext> result = new HashMap<>();
-		List<JobExecutionContext> jobs = StdSchedulerFactory
-				.getDefaultScheduler().getCurrentlyExecutingJobs();
-		for (JobExecutionContext jec : jobs) {
-			result.put(jec.getJobDetail().getKey().toString(), jec);
-		}
-		return result;
-	}
+        botState.setStatus(status);
+        bot.setState(botState);
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response startBot(BotConfig config) {
-		Long userId = AuthUtils.getUserInSession(request).getId();
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Schedule job " + config.getName() + " for user " + userId); 
-		}
-		
-		Account account = ResourceUtils.getAccountForLoggedInUser(request);
-		if (account == null) {
-			throw new WebApplicationException("You cannot start a bot without having an account", 
-					Response.Status.NOT_FOUND);
-		} else if (account.getUsdBalance() <= 0) {
-			throw new WebApplicationException("Insufficient funds in your account", 
-					Response.Status.BAD_REQUEST);
-		}
-		
-		JobKey jobKey = new JobKey(config.getName(), String.valueOf(userId));
-		try {
-			assertBotDoesNotExist(jobKey);
+        result.add(bot);
+      }
+    } catch (SchedulerException se) {
+      LOG.error("Error retrieving running bots", se);
+      throw new WebApplicationException("Error retrieving running bots");
+    }
+    return result;
+  }
 
-			JobDataMap jobData = new JobDataMap();
-			jobData.put("config", config);
-			jobData.put("state", new BotState());
+  private Map<String, JobExecutionContext> getRunningJobMap() throws SchedulerException {
+    Map<String, JobExecutionContext> result = new HashMap<>();
+    List<JobExecutionContext> jobs =
+        StdSchedulerFactory.getDefaultScheduler().getCurrentlyExecutingJobs();
+    for (JobExecutionContext jec : jobs) {
+      result.put(jec.getJobDetail().getKey().toString(), jec);
+    }
+    return result;
+  }
 
-			JobDetail jd = JobBuilder.newJob(config.getBotType().getClazz())
-					.withIdentity(jobKey).usingJobData(jobData).build();
+  @POST
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response startBot(BotConfig config) {
+    Long userId = AuthUtils.getUserInSession(request).getId();
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("Schedule job " + config.getName() + " for user " + userId);
+    }
 
-			Duration period = config.getSchedule().getPeriod();
-			SimpleScheduleBuilder ssb = SimpleScheduleBuilder.simpleSchedule();
-			if (TimeUnit.DAY == period.getTimeUnit()) {
-				ssb = ssb.withIntervalInHours(period.getInterval() * 24);
-			} else if (TimeUnit.HOUR == period.getTimeUnit()) {
-				ssb = ssb.withIntervalInHours(period.getInterval());
-			} else if (TimeUnit.MINUTE == period.getTimeUnit()) {
-				ssb = ssb.withIntervalInMinutes(period.getInterval());
-			} else if (TimeUnit.SECOND == period.getTimeUnit()) {
-				ssb = ssb.withIntervalInSeconds(period.getInterval());
-			} else {
-				ssb = ssb.withIntervalInMinutes(DEFAULT_TRIGGER_PERIOD_MINS);
-			}
+    Account account = ResourceUtils.getAccountForLoggedInUser(request);
+    if (account == null) {
+      throw new WebApplicationException("You cannot start a bot without having an account",
+          Response.Status.NOT_FOUND);
+    } else if (account.getUsdBalance() <= 0) {
+      throw new WebApplicationException("Insufficient funds in your account",
+          Response.Status.BAD_REQUEST);
+    }
 
-			PointInTime startTime = config.getSchedule().getStartTime();
-			TriggerBuilder tb = TriggerBuilder.newTrigger().withIdentity(
-					"trigger of " + config.getName(), DEFAULT_TRIGGER_GROUP);
-			if (startTime.isNow()) {
-				tb = tb.startNow();
-			} else if (startTime.getDelayFromNow() != null) {
-				tb = tb.startAt(new Date(System.currentTimeMillis()
-						+ startTime.getDelayFromNow().toMillis()));
-			} else if (startTime.getTimeInMillis() != null) {
-				tb = tb.startAt(new Date(startTime.getTimeInMillis()));
-			}
+    JobKey jobKey = new JobKey(config.getName(), String.valueOf(userId));
+    try {
+      assertBotDoesNotExist(jobKey);
 
-			Trigger trigger = tb.withSchedule(ssb.repeatForever()).build();
-			StdSchedulerFactory.getDefaultScheduler().scheduleJob(jd, trigger);
-		} catch (SchedulerException se) {
-			LOG.error("Error starting bot", se);
-			throw new WebApplicationException("Error starting bot");
-		}
-		return Response.status(Status.CREATED).entity(
-				new MapBuilder().entry("id", jobKey.toString()).build()).build();
-	}
+      JobDataMap jobData = new JobDataMap();
+      jobData.put("config", config);
+      jobData.put("state", new BotState());
 
-	@DELETE
-	public Response deleteBot(@QueryParam("name") String name) {
-		Long userId = AuthUtils.getUserInSession(request).getId();
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Delete bot " + name + " for user " + userId); 
-		}
-		
-		JobKey jobKey = JobKey.jobKey(name, String.valueOf(userId));
+      JobDetail jd =
+          JobBuilder.newJob(config.getBotType().getClazz()).withIdentity(jobKey)
+              .usingJobData(jobData).build();
 
-		try {
-			assertBotExists(jobKey);
-			StdSchedulerFactory.getDefaultScheduler().deleteJob(jobKey);
-		} catch (SchedulerException se) {
-			String error = "Error deleting bot with job key: "
-					+ jobKey.toString();
-			LOG.error(error, se);
-			throw new WebApplicationException(error);
-		}
-		return Response.ok().build();
-	}
+      Duration period = config.getSchedule().getPeriod();
+      SimpleScheduleBuilder ssb = SimpleScheduleBuilder.simpleSchedule();
+      if (TimeUnit.DAY == period.getTimeUnit()) {
+        ssb = ssb.withIntervalInHours(period.getInterval() * 24);
+      } else if (TimeUnit.HOUR == period.getTimeUnit()) {
+        ssb = ssb.withIntervalInHours(period.getInterval());
+      } else if (TimeUnit.MINUTE == period.getTimeUnit()) {
+        ssb = ssb.withIntervalInMinutes(period.getInterval());
+      } else if (TimeUnit.SECOND == period.getTimeUnit()) {
+        ssb = ssb.withIntervalInSeconds(period.getInterval());
+      } else {
+        ssb = ssb.withIntervalInMinutes(DEFAULT_TRIGGER_PERIOD_MINS);
+      }
 
-	@PUT
-	@Path("pause")
-	public Response pauseBot(@QueryParam("name") String name) {
-		Long userId = AuthUtils.getUserInSession(request).getId();
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Pause bot " + name + " for user " + userId); 
-		}
-		
-		JobKey jobKey = JobKey.jobKey(name, String.valueOf(userId));
-		try {
-			assertBotExists(jobKey);
-			StdSchedulerFactory.getDefaultScheduler().pauseJob(jobKey);
-		} catch (SchedulerException se) {
-			String error = "Error pausing bot with job key: "
-					+ jobKey.toString();
-			LOG.error(error, se);
-			throw new WebApplicationException(error);
-		}
-		return Response.ok().build();
-	}
+      PointInTime startTime = config.getSchedule().getStartTime();
+      TriggerBuilder tb =
+          TriggerBuilder.newTrigger().withIdentity("trigger of " + config.getName(),
+              DEFAULT_TRIGGER_GROUP);
+      if (startTime.isNow()) {
+        tb = tb.startNow();
+      } else if (startTime.getDelayFromNow() != null) {
+        tb =
+            tb.startAt(new Date(System.currentTimeMillis() + startTime.getDelayFromNow().toMillis()));
+      } else if (startTime.getTimeInMillis() != null) {
+        tb = tb.startAt(new Date(startTime.getTimeInMillis()));
+      }
 
-	@PUT
-	@Path("resume")
-	public Response resumeBot(@QueryParam("name") String name) {
-		Long userId = AuthUtils.getUserInSession(request).getId();
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Resume bot " + name + " for user " + userId); 
-		}
-		JobKey jobKey = JobKey.jobKey(name, String.valueOf(userId));
-		try {
-			assertBotExists(jobKey);
-			StdSchedulerFactory.getDefaultScheduler().resumeJob(jobKey);
-		} catch (SchedulerException se) {
-			String error = "Error resuming bot with job key: " + jobKey.toString();
-			LOG.error(error, se);
-			throw new WebApplicationException(error);
-		}
-		return Response.ok().build();
-	}
+      Trigger trigger = tb.withSchedule(ssb.repeatForever()).build();
+      StdSchedulerFactory.getDefaultScheduler().scheduleJob(jd, trigger);
+    } catch (SchedulerException se) {
+      LOG.error("Error starting bot", se);
+      throw new WebApplicationException("Error starting bot");
+    }
+    return Response.status(Status.CREATED)
+        .entity(new MapBuilder().entry("id", jobKey.toString()).build()).build();
+  }
 
-	private void assertBotExists(JobKey jobKey) throws SchedulerException {
-		boolean exists = StdSchedulerFactory.getDefaultScheduler().checkExists(jobKey);
-		if (!exists) {
-			throw new WebApplicationException("Bot does not exist", Response.Status.NOT_FOUND);
-		}
-	}
+  @DELETE
+  public Response deleteBot(@QueryParam("name") String name) {
+    Long userId = AuthUtils.getUserInSession(request).getId();
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("Delete bot " + name + " for user " + userId);
+    }
 
-	private void assertBotDoesNotExist(JobKey jobKey) throws SchedulerException {
-		boolean exists = StdSchedulerFactory.getDefaultScheduler().checkExists(jobKey);
-		if (exists) {
-			throw new WebApplicationException("Bot with name "
-					+ jobKey.getName() + " already exists",
-					Response.Status.CONFLICT);
-		}
-	}
+    JobKey jobKey = JobKey.jobKey(name, String.valueOf(userId));
+
+    try {
+      assertBotExists(jobKey);
+      StdSchedulerFactory.getDefaultScheduler().deleteJob(jobKey);
+    } catch (SchedulerException se) {
+      String error = "Error deleting bot with job key: " + jobKey.toString();
+      LOG.error(error, se);
+      throw new WebApplicationException(error);
+    }
+    return Response.ok().build();
+  }
+
+  @PUT
+  @Path("pause")
+  public Response pauseBot(@QueryParam("name") String name) {
+    Long userId = AuthUtils.getUserInSession(request).getId();
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("Pause bot " + name + " for user " + userId);
+    }
+
+    JobKey jobKey = JobKey.jobKey(name, String.valueOf(userId));
+    try {
+      assertBotExists(jobKey);
+      StdSchedulerFactory.getDefaultScheduler().pauseJob(jobKey);
+    } catch (SchedulerException se) {
+      String error = "Error pausing bot with job key: " + jobKey.toString();
+      LOG.error(error, se);
+      throw new WebApplicationException(error);
+    }
+    return Response.ok().build();
+  }
+
+  @PUT
+  @Path("resume")
+  public Response resumeBot(@QueryParam("name") String name) {
+    Long userId = AuthUtils.getUserInSession(request).getId();
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("Resume bot " + name + " for user " + userId);
+    }
+    JobKey jobKey = JobKey.jobKey(name, String.valueOf(userId));
+    try {
+      assertBotExists(jobKey);
+      StdSchedulerFactory.getDefaultScheduler().resumeJob(jobKey);
+    } catch (SchedulerException se) {
+      String error = "Error resuming bot with job key: " + jobKey.toString();
+      LOG.error(error, se);
+      throw new WebApplicationException(error);
+    }
+    return Response.ok().build();
+  }
+
+  private void assertBotExists(JobKey jobKey) throws SchedulerException {
+    boolean exists = StdSchedulerFactory.getDefaultScheduler().checkExists(jobKey);
+    if (!exists) {
+      throw new WebApplicationException("Bot does not exist", Response.Status.NOT_FOUND);
+    }
+  }
+
+  private void assertBotDoesNotExist(JobKey jobKey) throws SchedulerException {
+    boolean exists = StdSchedulerFactory.getDefaultScheduler().checkExists(jobKey);
+    if (exists) {
+      throw new WebApplicationException("Bot with name " + jobKey.getName() + " already exists",
+          Response.Status.CONFLICT);
+    }
+  }
 }

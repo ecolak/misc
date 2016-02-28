@@ -2,30 +2,30 @@ package self.ec.btcbots.model;
 
 public class MonetaryAmount {
 
-	private float value;
-	private Currency currency;
-	
-	public MonetaryAmount() {}
+  private float value;
+  private Currency currency;
 
-	public MonetaryAmount(float value, Currency currency) {
-		this.value = value;
-		this.currency = currency;
-	}
+  public MonetaryAmount() {}
 
-	public float getValue() {
-		return value;
-	}
+  public MonetaryAmount(float value, Currency currency) {
+    this.value = value;
+    this.currency = currency;
+  }
 
-	public void setValue(float value) {
-		this.value = value;
-	}
+  public float getValue() {
+    return value;
+  }
 
-	public Currency getCurrency() {
-		return currency;
-	}
+  public void setValue(float value) {
+    this.value = value;
+  }
 
-	public void setCurrency(Currency currency) {
-		this.currency = currency;
-	}
-	
+  public Currency getCurrency() {
+    return currency;
+  }
+
+  public void setCurrency(Currency currency) {
+    this.currency = currency;
+  }
+
 }

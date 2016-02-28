@@ -2,30 +2,30 @@ package self.ec.btcbots.model;
 
 public class Schedule {
 
-	private Duration period;
-	private PointInTime startTime;
-	
-	public Schedule() {}
-	
-	public Schedule(Duration period, PointInTime startTime) {
-		this.period = period;
-		this.startTime = startTime;
-	}
+  private Duration period;
+  private PointInTime startTime;
 
-	public Duration getPeriod() {
-		return period;
-	}
+  public Schedule() {}
 
-	public void setPeriod(Duration period) {
-		this.period = period;
-	}
+  public Schedule(Duration period, PointInTime startTime) {
+    this.period = period;
+    this.startTime = startTime;
+  }
 
-	public PointInTime getStartTime() {
-		return startTime;
-	}
+  public Duration getPeriod() {
+    return period;
+  }
 
-	public void setStartTime(PointInTime startTime) {
-		this.startTime = startTime;
-	}
-	
+  public void setPeriod(Duration period) {
+    this.period = period;
+  }
+
+  public PointInTime getStartTime() {
+    return startTime;
+  }
+
+  public void setStartTime(PointInTime startTime) {
+    this.startTime = startTime;
+  }
+
 }

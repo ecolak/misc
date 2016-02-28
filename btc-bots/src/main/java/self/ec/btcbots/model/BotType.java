@@ -6,15 +6,15 @@ import self.ec.btcbots.bot.SimpleBot;
 
 public enum BotType {
 
-	SIMPLE(SimpleBot.class), PREDICTIVE(SimpleBot.class);
-	
-	private Class<? extends Job> clazz;
-	
-	BotType(Class<? extends Job> clazz) {
-		this.clazz = clazz;
-	}
-	
-	public Class<? extends Job> getClazz() {
-		return clazz;
-	}
+  SIMPLE(SimpleBot.class), PREDICTIVE(SimpleBot.class);
+
+  private Class<? extends Job> clazz;
+
+  BotType(Class<? extends Job> clazz) {
+    this.clazz = clazz;
+  }
+
+  public Class<? extends Job> getClazz() {
+    return clazz;
+  }
 }

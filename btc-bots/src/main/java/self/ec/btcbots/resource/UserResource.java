@@ -28,52 +28,53 @@ import self.ec.btcbots.util.AuthUtils;
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
 
-	private static final GenericDao<User> userDao = DaoFactory.getUserDao();
-	
-	@Context
-	HttpServletRequest request;
-	
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response create(final Signup signup) {
-		if (StringUtils.isBlank(signup.getEmail())) {
-			throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
-					.entity("Email cannot be blank").build());
-		}
-		
-		if (!signup.getPassword().matches(AuthUtils.PASSWORD_REGEX)) {
-			throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
-					.entity("Password is too weak").build());
-		}
-		
-		List<User> users = userDao.findBy("email", signup.getEmail());
-		if (!users.isEmpty()) {
-			throw new WebApplicationException(Response.status(Status.CONFLICT)
-					.entity("An account with this email address already exists").build());
-		}
-		
-		String passwordSalt = RandomStringUtils.randomAlphabetic(32);
-		String saltedPassword = passwordSalt + signup.getPassword();
-		String passwordHash = DigestUtils.sha256Hex(saltedPassword.getBytes());
-		
-		User user = new User(signup.getEmail(), passwordHash, passwordSalt);
-		user.setDateCreated(System.currentTimeMillis());
-		Long userId = userDao.save(user).getId();
-		
-		return Response.status(Status.CREATED).entity(new MapBuilder().entry("id", userId).build()).build();
-	}
-	
-	@POST
-	@Path("reset_pwd")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response resetPassword(String email) {
-		List<User> users = userDao.findBy("email", email);
-		if (users.isEmpty()) {
-			throw new WebApplicationException(Response.status(Status.NOT_FOUND)
-					.entity("An account with this email address does not exist").build());
-		}
-		
-		return Response.ok().build();
-	}
-	
+  private static final GenericDao<User> userDao = DaoFactory.getUserDao();
+
+  @Context
+  HttpServletRequest request;
+
+  @POST
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response create(final Signup signup) {
+    if (StringUtils.isBlank(signup.getEmail())) {
+      throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
+          .entity("Email cannot be blank").build());
+    }
+
+    if (!signup.getPassword().matches(AuthUtils.PASSWORD_REGEX)) {
+      throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
+          .entity("Password is too weak").build());
+    }
+
+    List<User> users = userDao.findBy("email", signup.getEmail());
+    if (!users.isEmpty()) {
+      throw new WebApplicationException(Response.status(Status.CONFLICT)
+          .entity("An account with this email address already exists").build());
+    }
+
+    String passwordSalt = RandomStringUtils.randomAlphabetic(32);
+    String saltedPassword = passwordSalt + signup.getPassword();
+    String passwordHash = DigestUtils.sha256Hex(saltedPassword.getBytes());
+
+    User user = new User(signup.getEmail(), passwordHash, passwordSalt);
+    user.setDateCreated(System.currentTimeMillis());
+    Long userId = userDao.save(user).getId();
+
+    return Response.status(Status.CREATED).entity(new MapBuilder().entry("id", userId).build())
+        .build();
+  }
+
+  @POST
+  @Path("reset_pwd")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response resetPassword(String email) {
+    List<User> users = userDao.findBy("email", email);
+    if (users.isEmpty()) {
+      throw new WebApplicationException(Response.status(Status.NOT_FOUND)
+          .entity("An account with this email address does not exist").build());
+    }
+
+    return Response.ok().build();
+  }
+
 }

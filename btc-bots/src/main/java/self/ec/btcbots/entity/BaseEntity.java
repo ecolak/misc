@@ -9,39 +9,39 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class BaseEntity {
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-	private Long id;
-	
-	@Column(name = "date_created")
-	private Long dateCreated;
-	
-	@Column(name = "date_modified")
-	private Long dateModified;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
 
-	public Long getId() {
-		return id;
-	}
+  @Column(name = "date_created")
+  private Long dateCreated;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  @Column(name = "date_modified")
+  private Long dateModified;
 
-	public Long getDateCreated() {
-		return dateCreated;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public void setDateCreated(Long dateCreated) {
-		this.dateCreated = dateCreated;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public Long getDateModified() {
-		return dateModified;
-	}
+  public Long getDateCreated() {
+    return dateCreated;
+  }
 
-	public void setDateModified(Long dateModified) {
-		this.dateModified = dateModified;
-	}
-	
+  public void setDateCreated(Long dateCreated) {
+    this.dateCreated = dateCreated;
+  }
+
+  public Long getDateModified() {
+    return dateModified;
+  }
+
+  public void setDateModified(Long dateModified) {
+    this.dateModified = dateModified;
+  }
+
 }

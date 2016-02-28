@@ -3,26 +3,26 @@ package self.ec.btcbots.model;
 
 public class Duration {
 
-	private int interval;
-	private TimeUnit timeUnit;
-	
-	public int getInterval() {
-		return interval;
-	}
-	
-	public void setInterval(int interval) {
-		this.interval = interval;
-	}
+  private int interval;
+  private TimeUnit timeUnit;
 
-	public TimeUnit getTimeUnit() {
-		return timeUnit;
-	}
+  public int getInterval() {
+    return interval;
+  }
 
-	public void setTimeUnit(TimeUnit timeUnit) {
-		this.timeUnit = timeUnit;
-	}
-	
-	public long toMillis() {
-		return interval * timeUnit.getMillis();
-	}
+  public void setInterval(int interval) {
+    this.interval = interval;
+  }
+
+  public TimeUnit getTimeUnit() {
+    return timeUnit;
+  }
+
+  public void setTimeUnit(TimeUnit timeUnit) {
+    this.timeUnit = timeUnit;
+  }
+
+  public long toMillis() {
+    return interval * timeUnit.getMillis();
+  }
 }

@@ -10,25 +10,25 @@ import org.slf4j.LoggerFactory;
 
 public class WebappListener implements ServletContextListener {
 
-	private static final Logger LOG = LoggerFactory.getLogger(WebappListener.class);
-	
-	public void contextDestroyed(ServletContextEvent event) {
-		LOG.info("Stopping Quartz scheduler");
-		try {
-			StdSchedulerFactory.getDefaultScheduler().shutdown();
-		} catch (SchedulerException e) {
-			LOG.error("Stopping Quartz scheduler failed", e);
-		}	
-	}
+  private static final Logger LOG = LoggerFactory.getLogger(WebappListener.class);
 
-	public void contextInitialized(ServletContextEvent event) {
-		LOG.info("Starting Quartz scheduler");
-		try {
-			StdSchedulerFactory.getDefaultScheduler().start();
-		} catch (SchedulerException e) {
-			LOG.error("Starting Quartz scheduler failed", e);
-			throw new RuntimeException(e);
-		}
-	}
+  public void contextDestroyed(ServletContextEvent event) {
+    LOG.info("Stopping Quartz scheduler");
+    try {
+      StdSchedulerFactory.getDefaultScheduler().shutdown();
+    } catch (SchedulerException e) {
+      LOG.error("Stopping Quartz scheduler failed", e);
+    }
+  }
+
+  public void contextInitialized(ServletContextEvent event) {
+    LOG.info("Starting Quartz scheduler");
+    try {
+      StdSchedulerFactory.getDefaultScheduler().start();
+    } catch (SchedulerException e) {
+      LOG.error("Starting Quartz scheduler failed", e);
+      throw new RuntimeException(e);
+    }
+  }
 
 }
