@@ -31,9 +31,11 @@ public class AddWordActivity extends AppCompatActivity {
     }
 
     public void addNewWord(View view) {
-        EditText editText = (EditText) findViewById(R.id.new_word);
-        String newWord = editText.getText().toString();
-        dbService.createWordIfNotExists(new WordEntity(newWord, null));
+        EditText editTextNewWord = (EditText) findViewById(R.id.new_word);
+        String newWord = editTextNewWord.getText().toString();
+        EditText editTextSoundFile = (EditText) findViewById(R.id.path_to_sound_file);
+        String pathToFile = editTextSoundFile.getText().toString();
+        dbService.createWordIfNotExists(new WordEntity(newWord, pathToFile));
         Toast.makeText(getApplicationContext(), String.format("You added the word '%s'", newWord),
                 Toast.LENGTH_LONG).show();
     }
