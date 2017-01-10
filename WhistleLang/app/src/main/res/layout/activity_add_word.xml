@@ -6,34 +6,42 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:layout_gravity="center"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_height="wrap_content">
 
-        <EditText android:id="@+id/new_word"
+        <EditText
+            android:id="@+id/new_word"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:hint="@string/new_word" />
     </LinearLayout>
 
     <LinearLayout
+        android:layout_gravity="center"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_height="wrap_content">
 
-        <EditText android:id="@+id/path_to_sound_file"
+        <EditText
+            android:id="@+id/path_to_sound_file"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:hint="@string/path_to_sound_file" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_file"
+            android:onClick="selectFile" />
     </LinearLayout>
 
     <LinearLayout
+        android:layout_gravity="center"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_height="wrap_content">
 
         <Button
             android:layout_width="wrap_content"
@@ -41,5 +49,4 @@
             android:text="@string/add"
             android:onClick="addNewWord" />
     </LinearLayout>
-
 </LinearLayout>

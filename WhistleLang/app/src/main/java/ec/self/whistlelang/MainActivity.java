@@ -1,119 +1,97 @@
 package ec.self.whistlelang;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import ec.self.whistlelang.model.WordEntity;
+import ec.self.whistlelang.fragments.SentencesFragment;
+import ec.self.whistlelang.fragments.WordsFragment;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final String[] words = new String[] {
-            "a", "an", "and", "are", "at", "ate", "ant",
-            "b", "be", "bee", "bet", "ban", "bat", "bit",
-            "c", "cat", "can", "cut", "cute"
+    private static String[] PERMISSIONS_STORAGE = new String[]{
+            "android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.WRITE_EXTERNAL_STORAGE"
     };
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
 
-    private static class SearchBoxWatcher implements TextWatcher {
+    private final DBService dbService;
+    private final MediaPlayer mediaPlayer;
 
-        private final ListView listView;
-        private final ArrayAdapter<String> adapter;
-
-        public SearchBoxWatcher(ListView listView, ArrayAdapter<String> adapter) {
-            this.listView = listView;
-            this.adapter = adapter;
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            adapter.getFilter().filter(s);
-            listView.setAdapter(adapter);
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-        @Override
-        public void afterTextChanged(Editable editable) {}
+    public MainActivity() {
+        this.dbService = new DBService(this);
+        this.mediaPlayer = new MediaPlayer();
     }
 
-    private final DBService dbService = new DBService(this);
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+        ((TabLayout) findViewById(R.id.sliding_tabs)).setupWithViewPager(viewPager);
+        initMediaPlayer();
+        verifyStoragePermissions(this);
+    }
 
-        // Insert initial words to db
-        insertInitialWords();
-
-        final ListView listView = (ListView) findViewById(R.id.list);
-
-        Collection<WordEntity> wordsInDb = dbService.listWords();
-        List<String> wordList = new ArrayList<>(wordsInDb.size());
-        for (WordEntity we : wordsInDb) {
-            wordList.add(we.getWord());
-        }
-
-        final ArrayAdapter<String> wordAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, wordList);
-
-        // Assign adapter to ListView
-        listView.setAdapter(wordAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    private void initMediaPlayer() {
+        this.mediaPlayer.setAudioStreamType(3);
+        this.mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String  itemValue = (String) listView.getItemAtPosition(position);
-
-                // Show Alert
-                Toast.makeText(getApplicationContext(),
-                        String.format("Position: %d, Item: %s", position, itemValue),
-                        Toast.LENGTH_LONG).show();
+            public void onCompletion(MediaPlayer mp) {
+                mp.stop();
+                mp.reset();
             }
         });
-
-        final EditText searchBox = (EditText) findViewById(R.id.search_box);
-        searchBox.addTextChangedListener(new SearchBoxWatcher(listView, wordAdapter));
     }
 
-    private void insertInitialWords() {
-        for (String word : words) {
-            dbService.createWordIfNotExists(new WordEntity(word, null));
+    private static void verifyStoragePermissions(Activity activity) {
+        if (ContextCompat.checkSelfPermission(activity, "android.permission.READ_EXTERNAL_STORAGE") != 0) {
+            ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
         }
     }
 
-    @Override
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new WordsFragment(), getString(R.string.words_tab));
+        adapter.addFragment(new SentencesFragment(), getString(R.string.sentences_tab));
+        viewPager.setAdapter(adapter);
+    }
+
+    public MediaPlayer getMediaPlayer() {
+        return this.mediaPlayer;
+    }
+
+    public DBService getDbService() {
+        return this.dbService;
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_menu, menu);
+        getMenuInflater().inflate(R.menu.options_menu, menu);
         return true;
     }
 
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_new_button:
-                startActivity(new Intent(this, AddWordActivity.class));
+                startActivity(new Intent(this, AddNewActivity.class));
+                return true;
+            case R.id.about_button:
+                startActivity(new Intent(this, AboutActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void onStop() {
+        this.mediaPlayer.release();
+        super.onStop();
     }
 }

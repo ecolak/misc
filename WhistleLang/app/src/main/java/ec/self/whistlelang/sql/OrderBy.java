@@ -1,11 +1,6 @@
 package ec.self.whistlelang.sql;
 
-/**
- * Created by emre on 12/12/16.
- */
-
 public class OrderBy {
-
     private final String columnName;
     private final OrderByDir dir;
 
@@ -18,14 +13,17 @@ public class OrderBy {
             throw new NullPointerException();
         }
         this.columnName = columnName;
-        this.dir = dir == null ? OrderByDir.ASC : dir;
+        if (dir == null) {
+            dir = OrderByDir.ASC;
+        }
+        this.dir = dir;
     }
 
     public String getColumnName() {
-        return columnName;
+        return this.columnName;
     }
 
     public OrderByDir getDir() {
-        return dir;
+        return this.dir;
     }
 }
