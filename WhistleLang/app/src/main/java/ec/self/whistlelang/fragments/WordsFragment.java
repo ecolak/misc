@@ -36,11 +36,9 @@ public class WordsFragment extends Fragment {
             this.listView.setAdapter(this.adapter);
         }
 
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-        public void afterTextChanged(Editable editable) {
-        }
+        public void afterTextChanged(Editable editable) {}
     }
 
     public void onCreate(Bundle savedInstanceState) {

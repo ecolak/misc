@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         this.mediaPlayer = new MediaPlayer();
     }
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -77,21 +78,20 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_new_button:
                 startActivity(new Intent(this, AddNewActivity.class));
-                return true;
-            case R.id.about_button:
-                startActivity(new Intent(this, AboutActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void onStop() {
+    @Override
+    public void onDestroy() {
         this.mediaPlayer.release();
-        super.onStop();
+        super.onDestroy();
     }
 }

@@ -13,9 +13,6 @@ public class OrderBy {
             throw new NullPointerException();
         }
         this.columnName = columnName;
-        if (dir == null) {
-            dir = OrderByDir.ASC;
-        }
         this.dir = dir;
     }
 

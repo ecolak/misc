@@ -18,6 +18,7 @@ import ec.self.whistlelang.model.SentenceEntity;
 import ec.self.whistlelang.model.WordEntity;
 import ec.self.whistlelang.sql.Constants;
 import ec.self.whistlelang.sql.OrderBy;
+import ec.self.whistlelang.sql.OrderByDir;
 import ec.self.whistlelang.sql.SQLEntity;
 
 public class DBService extends SQLiteOpenHelper {
@@ -144,9 +145,13 @@ public class DBService extends SQLiteOpenHelper {
     private Cursor fetchSQLEntities(String tableName, OrderBy orderBy) {
         StringBuilder qbuf = new StringBuilder("select * from ").append(tableName);
         if (orderBy != null) {
-            qbuf.append(" order by ").append(orderBy.getColumnName()).append(" ")
-                    .append(orderBy.getDir().name().toLowerCase());
+            qbuf.append(" order by ").append(orderBy.getColumnName()).append(" collate unicode");
+            OrderByDir dir = orderBy.getDir();
+            if (dir != null) {
+                qbuf.append(" ").append(dir.name().toLowerCase());
+            }
         }
+
         return getReadableDatabase().rawQuery(qbuf.toString(), null);
     }
 
