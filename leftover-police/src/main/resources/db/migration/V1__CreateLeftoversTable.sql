@@ -1,0 +1,9 @@
+CREATE TABLE leftovers
+(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(256) NOT NULL,
+    source VARCHAR(256),
+    box_color VARCHAR(32),
+    is_deleted BOOLEAN DEFAULT FALSE,
+    date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
