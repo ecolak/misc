@@ -1,24 +1,20 @@
 package emre.colak.leftoverpolice.model;
 
+import java.util.Date;
+
 public class Leftover {
 
-  private String id;
+  private int id;
   private String name;
   private String source; // e.g. restaurant name or our cooking
   private String boxColor;
-  private long dateAdded;
+  private Date dateAdded;
   private boolean deleted;
   
-  public Leftover() {}
-  
-  public Leftover(String id) {
-    this.id = id;
-  }
-  
-  public String getId() {
+  public int getId() {
     return id;
   }
-  public void setId(String id) {
+  public void setId(int id) {
     this.id = id;
   }
   public String getName() {
@@ -39,10 +35,10 @@ public class Leftover {
   public void setBoxColor(String boxColor) {
     this.boxColor = boxColor;
   }
-  public long getDateAdded() {
+  public Date getDateAdded() {
     return dateAdded;
   }
-  public void setDateAdded(long dateAdded) {
+  public void setDateAdded(Date dateAdded) {
     this.dateAdded = dateAdded;
   }
   public boolean isDeleted() {

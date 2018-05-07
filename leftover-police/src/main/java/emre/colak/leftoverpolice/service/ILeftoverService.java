@@ -1,15 +1,19 @@
 package emre.colak.leftoverpolice.service;
 
+import java.util.List;
+
 import emre.colak.leftoverpolice.model.Leftover;
 
 public interface ILeftoverService {
 
   void create(Leftover leftover);
   
-  void delete(String id);
+  void delete(int id);
   
-  Iterable<Leftover> list();
+  List<Leftover> list();
   
-  Iterable<Leftover> listSortedByDateAdded(SortDir sortDir);
+  List<Leftover> listSortedByDateAdded(SortDir sortDir);
+  
+  List<String> listNames();
   
 }
