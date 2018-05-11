@@ -54,7 +54,7 @@ public class AlexaHandler implements RequestHandler<Map<String, Object>, AlexaRe
     StringBuilder sb = new StringBuilder();
     int i = 1;
     for (Iterator<Leftover> iter = list.iterator(); iter.hasNext(); i++) {
-      sb.append("<p>").append(i).append(" <break strength=\"medium\"/>")
+      sb.append("<p>").append(i).append("<break strength=\"medium\"/>")
         .append(leftoverToString(iter.next()))
         .append("</p>");
     }
