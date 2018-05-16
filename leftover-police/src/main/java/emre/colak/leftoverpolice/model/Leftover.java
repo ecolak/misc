@@ -11,6 +11,14 @@ public class Leftover {
   private Date dateAdded;
   private boolean deleted;
   
+  public Leftover() {}
+    
+  public Leftover(String name, String source, String boxColor) {
+    this.name = name;
+    this.source = source;
+    this.boxColor = boxColor;
+  }
+
   public int getId() {
     return id;
   }

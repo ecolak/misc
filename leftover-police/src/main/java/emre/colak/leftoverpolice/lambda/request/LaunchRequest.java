@@ -37,5 +37,4 @@ public class LaunchRequest implements IRequest {
   public String getLocale() {
     return br.getLocale();
   }
-
 }

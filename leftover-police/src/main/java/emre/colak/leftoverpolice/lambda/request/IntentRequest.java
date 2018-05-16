@@ -2,6 +2,8 @@ package emre.colak.leftoverpolice.lambda.request;
 
 import java.util.Objects;
 
+import emre.colak.leftoverpolice.lambda.request.intent.Intent;
+
 /**
  * {
     "type": "IntentRequest",
@@ -21,35 +23,29 @@ import java.util.Objects;
       }
     }
  * */
-public class IntentRequest implements IRequest {
+public abstract class IntentRequest implements IRequest {
   
-  private BaseRequest br;
-  private String dialogState;
-  private Intent intent;
+  protected final BaseRequest br;
+  protected final String dialogState;
+  protected final Intent intent;
   
   public IntentRequest(BaseRequest br) {
+    this(br, null, null);
+  }
+  
+  public IntentRequest(BaseRequest br, String dialogState, Intent intent) {
     Objects.requireNonNull(br);
     this.br = br;
+    this.dialogState = dialogState;
+    this.intent = intent;
   }
-  
-  public IntentRequest(String requestId, String timestamp, String locale) {
-    br = new BaseRequest(requestId, timestamp, locale);
-  }
-  
+
   public String getDialogState() {
     return dialogState;
   }
 
-  public void setDialogState(String dialogState) {
-    this.dialogState = dialogState;
-  }
-
   public Intent getIntent() {
     return intent;
-  }
-
-  public void setIntent(Intent intent) {
-    this.intent = intent;
   }
 
   @Override
@@ -66,5 +62,4 @@ public class IntentRequest implements IRequest {
   public String getLocale() {
     return br.getLocale();
   }
-
 }

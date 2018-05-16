@@ -64,7 +64,7 @@ public class PostgresBackedLeftoverService implements ILeftoverService {
     try (Connection conn = DriverManager.getConnection(url, username, password)) {
       StringBuilder sb = new StringBuilder("INSERT INTO ").append(TABLE_NAME)
           .append(" (").append(COL_NAME).append(",").append(COL_SOURCE).append(",")
-          .append(COL_BOX_COLOR).append(") values (?,?,?,?)");
+          .append(COL_BOX_COLOR).append(") values (?,?,?)");
       PreparedStatement ps = conn.prepareStatement(sb.toString());
       int i = 1;
       ps.setString(i++, leftover.getName());
@@ -81,8 +81,9 @@ public class PostgresBackedLeftoverService implements ILeftoverService {
     // Does not really delete. Marks it deleted
     try (Connection conn = DriverManager.getConnection(url, username, password)) {
       StringBuilder sb = new StringBuilder("UPDATE ").append(TABLE_NAME).append(" SET ")
-          .append(COL_IS_DELETED).append(" = true");
+          .append(COL_IS_DELETED).append(" = true WHERE ").append(COL_ID).append(" = ?");
       PreparedStatement ps = conn.prepareStatement(sb.toString());
+      ps.setInt(1, id);
       ps.executeUpdate();
     } catch (SQLException se) {
       throw new RuntimeException(se);
@@ -136,7 +137,7 @@ public class PostgresBackedLeftoverService implements ILeftoverService {
     } else {
       sb.append(selectColumns.stream().collect(Collectors.joining(", ")));
     }
-    sb.append(" FROM ").append(TABLE_NAME);
+    sb.append(" FROM ").append(TABLE_NAME).append(" WHERE ").append(COL_IS_DELETED).append(" = false");
     if (sortDir != null && sortColumns != null && !sortColumns.isEmpty()) {
       sb.append(" ORDER BY ")
         .append(sortColumns.stream().collect(Collectors.joining(",")))
@@ -156,4 +157,23 @@ public class PostgresBackedLeftoverService implements ILeftoverService {
     return lo;
   }
 
+  @Override
+  public List<Leftover> searchByName(String name) {
+    Objects.requireNonNull(name);
+    List<Leftover> result = new ArrayList<>();
+    try (Connection conn = DriverManager.getConnection(url, username, password)) {
+      StringBuilder sb = new StringBuilder("SELECT * FROM ").append(TABLE_NAME)
+          .append(" WHERE ").append(COL_IS_DELETED).append(" = false AND ")
+          .append(COL_NAME).append(" = ?");
+      PreparedStatement ps = conn.prepareStatement(sb.toString());
+      ps.setString(1, name);
+      ResultSet rs = ps.executeQuery();
+      while (rs.next()) {
+        result.add(fromResultSet(rs));
+      }
+    } catch (SQLException se) {
+      throw new RuntimeException(se);
+    }
+    return result;
+  }
 }

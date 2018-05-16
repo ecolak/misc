@@ -38,5 +38,4 @@ public class SessionEndedRequest implements IRequest {
   public String getLocale() {
     return br.getLocale();
   }
-
 }

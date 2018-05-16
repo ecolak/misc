@@ -2,8 +2,11 @@ package emre.colak.leftoverpolice.lambda;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
+import java.util.List;
 import java.util.TimeZone;
 
+import emre.colak.leftoverpolice.model.Leftover;
 import emre.colak.leftoverpolice.service.ILeftoverService;
 import emre.colak.leftoverpolice.service.PostgresBackedLeftoverService;
 
@@ -21,8 +24,32 @@ public class Utils {
     dateFormat.setTimeZone(TimeZone.getTimeZone("PST"));
   }
   
-  static ILeftoverService dbService() {
+  public static ILeftoverService dbService() {
     return new PostgresBackedLeftoverService(
         System.getenv(DB_HOST), System.getenv(DB_NAME), System.getenv(DB_USER), System.getenv(DB_PWD));
+  }
+  
+  public static String leftoverToString(Leftover lo) {
+    StringBuilder sb = new StringBuilder();
+    sb.append(lo.getName());
+    String source = lo.getSource();
+    if (source != null) {
+      sb.append(" from ").append(source);
+    }
+    return sb.toString();
+  }
+  
+  public static String leftoversToSSML(List<Leftover> list) {
+    if (list.size() == 1) {
+      return leftoverToString(list.get(0));
+    }
+    StringBuilder sb = new StringBuilder();
+    int i = 1;
+    for (Iterator<Leftover> iter = list.iterator(); iter.hasNext(); i++) {
+      sb.append("<p>").append(i).append("<break strength=\"medium\"/>")
+        .append(leftoverToString(iter.next()))
+        .append("</p>");
+    }
+    return sb.toString();
   }
 }

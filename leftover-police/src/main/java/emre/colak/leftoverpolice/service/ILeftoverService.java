@@ -16,4 +16,6 @@ public interface ILeftoverService {
   
   List<String> listNames();
   
+  List<Leftover> searchByName(String name);
+  
 }
