@@ -89,6 +89,18 @@ public class PostgresBackedLeftoverService implements ILeftoverService {
       throw new RuntimeException(se);
     }
   }
+  
+  @Override
+  public int deleteAll() {
+ // Does not really delete. Marks it deleted
+    try (Connection conn = DriverManager.getConnection(url, username, password)) {
+      StringBuilder sb = new StringBuilder("UPDATE ").append(TABLE_NAME).append(" SET ")
+          .append(COL_IS_DELETED).append(" = true");
+      return conn.prepareStatement(sb.toString()).executeUpdate();
+    } catch (SQLException se) {
+      throw new RuntimeException(se);
+    }
+  }
 
   @Override
   public List<Leftover> list() {

@@ -14,6 +14,7 @@ import emre.colak.leftoverpolice.lambda.request.intent.AddLeftoverRequest;
 import emre.colak.leftoverpolice.lambda.request.intent.ConfirmationStatus;
 import emre.colak.leftoverpolice.lambda.request.intent.Intent;
 import emre.colak.leftoverpolice.lambda.request.intent.ListLeftoversRequest;
+import emre.colak.leftoverpolice.lambda.request.intent.RemoveAllLeftoversRequest;
 import emre.colak.leftoverpolice.lambda.request.intent.RemoveLeftoverRequest;
 import emre.colak.leftoverpolice.lambda.request.intent.Slot;
 import emre.colak.leftoverpolice.lambda.request.intent.UnknownRequest;
@@ -70,6 +71,7 @@ public class AlexaRequest {
   private static final String LIST_LEFTOVER_REQUEST = "ListLeftovers";
   private static final String ADD_LEFTOVER_REQUEST = "AddLeftover";
   private static final String REMOVE_LEFTOVER_REQUEST = "RemoveLeftover";
+  private static final String REMOVE_ALL_LEFTOVERS_REQUEST = "RemoveAllLeftovers";
   
   public String version;
   public Map<String, Object> session = new HashMap<>();
@@ -115,6 +117,8 @@ public class AlexaRequest {
               foodSlot.getValue(),
               (sourceSlot != null ? sourceSlot.getValue() : null));
         }
+      case REMOVE_ALL_LEFTOVERS_REQUEST:
+        return new RemoveAllLeftoversRequest(br);
     }
     return null;
   }

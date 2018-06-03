@@ -10,6 +10,8 @@ public interface ILeftoverService {
   
   void delete(int id);
   
+  int deleteAll();
+  
   List<Leftover> list();
   
   List<Leftover> listSortedByDateAdded(SortDir sortDir);
