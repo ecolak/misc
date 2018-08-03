@@ -5,13 +5,10 @@ import java.util.List;
 import emre.colak.helixinsights.lambda.request.BaseRequest;
 import emre.colak.helixinsights.lambda.request.IntentRequest;
 import emre.colak.helixinsights.model.Report;
-import emre.colak.helixinsights.service.DefaultInsightsService;
-import emre.colak.helixinsights.service.InsightsService;
+import emre.colak.helixinsights.service.SingleInsightsService;
 import emre.colak.helixinsights.util.AlexaUtils;
 
 public class ListInsightsRequest extends IntentRequest {
-
-  private final InsightsService service = new DefaultInsightsService();
   
   public ListInsightsRequest(BaseRequest br) {
     super(br);
@@ -19,7 +16,7 @@ public class ListInsightsRequest extends IntentRequest {
 
   @Override
   public String respondWithSSML() {
-    Report report = service.getReport();
+    Report report = SingleInsightsService.INSTANCE.getReport();
     if (report == null) {
       return "Nothing";
     }

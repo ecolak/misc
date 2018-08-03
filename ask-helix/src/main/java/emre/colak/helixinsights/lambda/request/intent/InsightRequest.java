@@ -4,18 +4,17 @@ import emre.colak.helixinsights.lambda.request.BaseRequest;
 import emre.colak.helixinsights.lambda.request.IntentRequest;
 import emre.colak.helixinsights.model.Report;
 import emre.colak.helixinsights.model.TraitReport;
-import emre.colak.helixinsights.service.DefaultInsightsService;
-import emre.colak.helixinsights.service.InsightsService;
+import emre.colak.helixinsights.service.SingleInsightsService;
 
 public abstract class InsightRequest extends IntentRequest {
-
-  protected final InsightsService service = new DefaultInsightsService();
   
   protected String insight;
   
   public InsightRequest(BaseRequest br, String insight) {
     super(br);
-    this.insight = insight;
+    // convert hyphens to spaces
+    // e.g. Alexa turns "risk taking behavior" to "risk-taking behavior"
+    this.insight = insight.replaceAll("-", " ");
   }
 
   public String getInsight() {
@@ -26,7 +25,7 @@ public abstract class InsightRequest extends IntentRequest {
   
   @Override
   public String respondWithSSML() {
-    Report report = service.getReport();
+    Report report = SingleInsightsService.INSTANCE.getReport();
     if (report == null) {
       return "Failed generating report";
     }
