@@ -14,6 +14,7 @@ import emre.colak.helixinsights.lambda.request.intent.ConfirmationStatus;
 import emre.colak.helixinsights.lambda.request.intent.GetInsightRequest;
 import emre.colak.helixinsights.lambda.request.intent.Intent;
 import emre.colak.helixinsights.lambda.request.intent.ListInsightsRequest;
+import emre.colak.helixinsights.lambda.request.intent.ReadyRequest;
 import emre.colak.helixinsights.lambda.request.intent.Slot;
 import emre.colak.helixinsights.lambda.request.intent.UnknownRequest;
 
@@ -66,6 +67,7 @@ public class AlexaRequest {
   private static final String SESSION_ENDED_REQUEST = "SessionEndedRequest";
   
   // Different intents
+  private static final String READY_REQUEST = "CheckReady";
   private static final String LIST_INSIGHTS_REQUEST = "ListInsights";
   private static final String GET_INSIGHT_REQUEST = "GetInsight";
   
@@ -101,11 +103,12 @@ public class AlexaRequest {
     }
     List<Slot> slots = intent.getSlots();
     switch (intent.getName()) {
+      case READY_REQUEST:
+        return new ReadyRequest(br);
       case LIST_INSIGHTS_REQUEST:
         return new ListInsightsRequest(br);
       case GET_INSIGHT_REQUEST:
-        return GetInsightRequest.fromQuery(br, Slot.byName(slots, "insight").getValue());
-
+        return new GetInsightRequest(br, Slot.byName(slots, "insight").getValue());
     }
     return null;
   }

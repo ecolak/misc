@@ -1,12 +1,16 @@
 package emre.colak.helixinsights.lambda.request.intent;
 
-import java.util.Objects;
-
 import emre.colak.helixinsights.lambda.request.BaseRequest;
 import emre.colak.helixinsights.lambda.request.IntentRequest;
+import emre.colak.helixinsights.model.Report;
+import emre.colak.helixinsights.model.TraitReport;
+import emre.colak.helixinsights.service.DefaultInsightsService;
+import emre.colak.helixinsights.service.InsightsService;
 
 public class GetInsightRequest extends IntentRequest {
 
+  private final InsightsService service = new DefaultInsightsService();
+  
   private String insight;
   
   public GetInsightRequest(BaseRequest br, String insight) {
@@ -20,12 +24,21 @@ public class GetInsightRequest extends IntentRequest {
   
   @Override
   public String respondWithSSML() {
-    // Utils.leftoversToSSML(leftovers);
-    return "OK";
+    Report report = service.getReport();
+    if (report == null) {
+      return "Failed generating report";
+    }
+    TraitReport tr = report.traitReport(insight);
+    if (tr != null) {
+      return tr.traitDetails.userResult.body;
+    }
+    return "Failed fetching details for " + insight;
+  }
+
+  @Override
+  public String toString() {
+    return "GetInsightRequest [insight=" + insight + "]";
   }
   
-  public static GetInsightRequest fromQuery(BaseRequest br, String query) {
-    Objects.requireNonNull(query);
-    return new GetInsightRequest(br, query);
-  }
+  
 }

@@ -7,16 +7,17 @@ public class AlexaUtils {
   private AlexaUtils() {}
   
   public static <T> String listToSSML(List<T> list) {
+    return listToSSML(list, null);
+  }
+  
+  public static <T> String listToSSML(List<T> list, String title) {
     if (list.size() == 1) {
       return list.get(0).toString();
     }
     StringBuilder sb = new StringBuilder();
-    /*int i = 1;
-    for (Iterator<T> iter = list.iterator(); iter.hasNext(); i++) {
-      sb.append("<p>").append(i).append("<break strength=\"medium\"/>")
-        .append(iter.next().toString())
-        .append("</p>");
-    }*/
+    if (title != null) {
+      sb.append("<p>").append(title).append("</p>");
+    }
     for (T t : list) {
       sb.append("<p>").append(t.toString()).append("</p>");
     }
