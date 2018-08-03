@@ -10,7 +10,10 @@ import emre.colak.helixinsights.lambda.request.IRequest;
 import emre.colak.helixinsights.lambda.request.IntentRequest;
 import emre.colak.helixinsights.lambda.request.LaunchRequest;
 import emre.colak.helixinsights.lambda.request.SessionEndedRequest;
+import emre.colak.helixinsights.lambda.request.intent.AboutInsightRequest;
 import emre.colak.helixinsights.lambda.request.intent.ConfirmationStatus;
+import emre.colak.helixinsights.lambda.request.intent.GenesAndEnvironmentRequest;
+import emre.colak.helixinsights.lambda.request.intent.GeneticImpactRequest;
 import emre.colak.helixinsights.lambda.request.intent.GetInsightRequest;
 import emre.colak.helixinsights.lambda.request.intent.GlobalFrequencyRequest;
 import emre.colak.helixinsights.lambda.request.intent.Intent;
@@ -74,6 +77,9 @@ public class AlexaRequest {
   private static final String GET_INSIGHT_REQUEST = "GetInsight";
   private static final String RECOMMEND_PRODUCTS_REQUEST = "RecommendProducts";
   private static final String GLOBAL_FREQUENCY_REQUEST = "CompareToPopulation";
+  private static final String ABOUT_INSIGHT_REQUEST = "AboutInsight";
+  private static final String GENETIC_IMPACT_REQUEST = "GeneticImpact";
+  private static final String GENES_AND_ENV_REQUEST = "GenesAndEnvironment";
   
   public String version;
   public Map<String, Object> session = new HashMap<>();
@@ -117,6 +123,12 @@ public class AlexaRequest {
         return new RecommendProductsRequest(br, getInsightSlot(slots));
       case GLOBAL_FREQUENCY_REQUEST:
         return new GlobalFrequencyRequest(br, getInsightSlot(slots));
+      case ABOUT_INSIGHT_REQUEST:
+        return new AboutInsightRequest(br, getInsightSlot(slots));
+      case GENETIC_IMPACT_REQUEST:
+        return new GeneticImpactRequest(br, getInsightSlot(slots));
+      case GENES_AND_ENV_REQUEST:
+        return new GenesAndEnvironmentRequest(br, getInsightSlot(slots));
         
     }
     return null;
