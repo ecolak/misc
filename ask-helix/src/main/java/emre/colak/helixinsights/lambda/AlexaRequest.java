@@ -12,6 +12,7 @@ import emre.colak.helixinsights.lambda.request.LaunchRequest;
 import emre.colak.helixinsights.lambda.request.SessionEndedRequest;
 import emre.colak.helixinsights.lambda.request.intent.ConfirmationStatus;
 import emre.colak.helixinsights.lambda.request.intent.GetInsightRequest;
+import emre.colak.helixinsights.lambda.request.intent.GlobalFrequencyRequest;
 import emre.colak.helixinsights.lambda.request.intent.Intent;
 import emre.colak.helixinsights.lambda.request.intent.ListInsightsRequest;
 import emre.colak.helixinsights.lambda.request.intent.ReadyRequest;
@@ -72,6 +73,7 @@ public class AlexaRequest {
   private static final String LIST_INSIGHTS_REQUEST = "ListInsights";
   private static final String GET_INSIGHT_REQUEST = "GetInsight";
   private static final String RECOMMEND_PRODUCTS_REQUEST = "RecommendProducts";
+  private static final String GLOBAL_FREQUENCY_REQUEST = "CompareToPopulation";
   
   public String version;
   public Map<String, Object> session = new HashMap<>();
@@ -110,12 +112,18 @@ public class AlexaRequest {
       case LIST_INSIGHTS_REQUEST:
         return new ListInsightsRequest(br);
       case GET_INSIGHT_REQUEST:
-        return new GetInsightRequest(br, Slot.byName(slots, "insight").getValue());
+        return new GetInsightRequest(br, getInsightSlot(slots));
       case RECOMMEND_PRODUCTS_REQUEST:
-        return new RecommendProductsRequest(br, Slot.byName(slots, "insight").getValue());
+        return new RecommendProductsRequest(br, getInsightSlot(slots));
+      case GLOBAL_FREQUENCY_REQUEST:
+        return new GlobalFrequencyRequest(br, getInsightSlot(slots));
         
     }
     return null;
+  }
+  
+  private static String getInsightSlot(List<Slot> slots) {
+    return Slot.byName(slots, "insight").getValue();
   }
   
   @SuppressWarnings("unchecked")
