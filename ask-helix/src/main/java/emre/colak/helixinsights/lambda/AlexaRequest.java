@@ -15,6 +15,7 @@ import emre.colak.helixinsights.lambda.request.intent.GetInsightRequest;
 import emre.colak.helixinsights.lambda.request.intent.Intent;
 import emre.colak.helixinsights.lambda.request.intent.ListInsightsRequest;
 import emre.colak.helixinsights.lambda.request.intent.ReadyRequest;
+import emre.colak.helixinsights.lambda.request.intent.RecommendProductsRequest;
 import emre.colak.helixinsights.lambda.request.intent.Slot;
 import emre.colak.helixinsights.lambda.request.intent.UnknownRequest;
 
@@ -70,6 +71,7 @@ public class AlexaRequest {
   private static final String READY_REQUEST = "CheckReady";
   private static final String LIST_INSIGHTS_REQUEST = "ListInsights";
   private static final String GET_INSIGHT_REQUEST = "GetInsight";
+  private static final String RECOMMEND_PRODUCTS_REQUEST = "RecommendProducts";
   
   public String version;
   public Map<String, Object> session = new HashMap<>();
@@ -109,6 +111,9 @@ public class AlexaRequest {
         return new ListInsightsRequest(br);
       case GET_INSIGHT_REQUEST:
         return new GetInsightRequest(br, Slot.byName(slots, "insight").getValue());
+      case RECOMMEND_PRODUCTS_REQUEST:
+        return new RecommendProductsRequest(br, Slot.byName(slots, "insight").getValue());
+        
     }
     return null;
   }

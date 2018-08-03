@@ -39,10 +39,21 @@ public class TraitDetails {
     public List<Bin> bins = new ArrayList<>(); 
   }
   
+  public static class RecommendedProducts {
+    public static class Product {
+      public String company;
+      public String productName;
+      public String subtitle;
+    }
+    
+    public List<Product> products = new ArrayList<>();
+  }
+  
   public UserResult userResult;
   public AboutScience aboutScience;
   public GeneticImpact geneticImpact;
   public GenesEnvironment genesEnvironment;
   public GlobalFrequency globalFrequency;
+  public RecommendedProducts recommendedProducts;
   
 }
