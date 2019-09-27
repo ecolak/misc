@@ -18,7 +18,12 @@ public class AlexaHandler implements RequestHandler<AlexaRequest, AlexaResponse>
     
     OutputSpeech os = new OutputSpeech();
     os.type = "SSML"; // Change to PlainText if you don't want SSML;
-    String ssml = request.respondWithSSML();
+    String ssml = null;
+    try {
+      ssml = request.respondWithSSML(); 
+    } catch (Exception e) {
+      System.err.println(e.getMessage());
+    }
     System.out.println("produced ssml: " + ssml);
     os.ssml = "<speak>" + ssml + "</speak>";
     

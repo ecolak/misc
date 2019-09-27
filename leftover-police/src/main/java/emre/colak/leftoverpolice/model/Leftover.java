@@ -14,9 +14,15 @@ public class Leftover {
   public Leftover() {}
     
   public Leftover(String name, String source, String boxColor) {
+    this((int)System.currentTimeMillis(), name, source, boxColor, new Date());
+  }
+
+  public Leftover(int id, String name, String source, String boxColor, Date dateAdded) {
+    this.id = id;
     this.name = name;
     this.source = source;
     this.boxColor = boxColor;
+    this.dateAdded = dateAdded;
   }
 
   public int getId() {
@@ -55,5 +61,5 @@ public class Leftover {
   public void setDeleted(boolean deleted) {
     this.deleted = deleted;
   }
-  
+ 
 }

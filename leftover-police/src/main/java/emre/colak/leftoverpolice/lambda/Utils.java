@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.TimeZone;
 
 import emre.colak.leftoverpolice.model.Leftover;
+import emre.colak.leftoverpolice.service.DynamoDBBackedLeftoverService;
 import emre.colak.leftoverpolice.service.ILeftoverService;
-import emre.colak.leftoverpolice.service.PostgresBackedLeftoverService;
 
 public class Utils {
 
@@ -25,8 +25,9 @@ public class Utils {
   }
   
   public static ILeftoverService dbService() {
-    return new PostgresBackedLeftoverService(
-        System.getenv(DB_HOST), System.getenv(DB_NAME), System.getenv(DB_USER), System.getenv(DB_PWD));
+    //return new PostgresBackedLeftoverService(
+      //  System.getenv(DB_HOST), System.getenv(DB_NAME), System.getenv(DB_USER), System.getenv(DB_PWD));
+    return new DynamoDBBackedLeftoverService();
   }
   
   public static String leftoverToString(Leftover lo) {
