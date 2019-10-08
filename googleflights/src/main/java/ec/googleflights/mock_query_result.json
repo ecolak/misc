@@ -1,0 +1,1565 @@
+{
+	"aircraft_dictionary": {
+		"aircraft": [{
+				"iata_code": "320",
+				"name": "Airbus A320"
+			},
+			{
+				"iata_code": "321",
+				"name": "Airbus A321"
+			},
+			{
+				"iata_code": "339",
+				"name": "Airbus A330-900neo"
+			},
+			{
+				"iata_code": "346",
+				"name": "Airbus A340"
+			},
+			{
+				"iata_code": "75W",
+				"name": "Boeing 757"
+			},
+			{
+				"iata_code": "76W",
+				"name": "Boeing 767"
+			},
+			{
+				"iata_code": "77W",
+				"name": "Boeing 777"
+			},
+			{
+				"iata_code": "789",
+				"name": "Boeing 787"
+			}
+		]
+	},
+	"airline_dictionary": {
+		"airline": [{
+				"iata_code": "FI",
+				"is_train": false,
+				"name": "Icelandair"
+			},
+			{
+				"iata_code": "BF",
+				"is_train": false,
+				"name": "French bee"
+			},
+			{
+				"iata_code": "DI",
+				"is_train": false,
+				"name": "Norwegian Air UK"
+			},
+			{
+				"iata_code": "TK",
+				"is_train": false,
+				"name": "Turkish Airlines"
+			},
+			{
+				"iata_code": "LH",
+				"is_train": false,
+				"name": "Lufthansa"
+			},
+			{
+				"iata_code": "TP",
+				"is_train": false,
+				"name": "Tap Air Portugal"
+			},
+			{
+				"iata_code": "UA",
+				"is_train": false,
+				"name": "United"
+			},
+			{
+				"iata_code": "U2",
+				"is_train": false,
+				"name": "easyJet"
+			},
+			{
+				"iata_code": "ONEWORLD",
+				"name": "Oneworld"
+			},
+			{
+				"iata_code": "SKYTEAM",
+				"name": "SkyTeam"
+			},
+			{
+				"iata_code": "STAR_ALLIANCE",
+				"name": "Star Alliance"
+			}
+		]
+	},
+	"debug_info": {},
+	"ei": "71CZXfyxF9fL0PEPqP6NyAo",
+	"event_id": "GqDSvBG----------pfqi9AAAAAF2ZUO8F6qlAA",
+	"location_dictionary": {
+		"location": [{
+				"city_image": {
+					"hd": {
+						"height": 1176,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcQtNdj4LHwTz0Wwa2rLAEAQtqqyGX0eJ9wDEZ1ems1M8JNm8S-2",
+						"width": 1762
+					},
+					"image": {
+						"height": 720,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcTqDoFuVmr64cJPUcD6Tzrn1lW8eWGFNDk6n5EwK2e_V7x4kMHq5WOlPtn-IZS1DhYjk2NS8OYk",
+						"width": 960
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcQSx7T3WuZ6_Tmn2dMoWdkWxSccGGu0BcqB24Rc2Sull0fK71y3bvygDAdBv7MukDqj1Y4Bljiz",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/05qtj",
+				"city_name": "Paris",
+				"country": "FR",
+				"iata_code": "CDG",
+				"is_metro": false,
+				"is_train_station": false,
+				"latitude": 49.0097222,
+				"location_code": {
+					"code": "CDG",
+					"type": "AIRPORT"
+				},
+				"longitude": 2.54777778,
+				"metro_code": "PAR",
+				"name": "Paris-Charles De Gaulle"
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1176,
+						"url": "//t2.gstatic.com/images?q=tbn:ANd9GcRvv6lWlW_kP5jdSWt12aKJIKbwJf6mU-kOnJXVkQdVRcgYFMBR",
+						"width": 1762
+					},
+					"image": {
+						"height": 720,
+						"url": "//t2.gstatic.com/images?q=tbn:ANd9GcSodn4fM6zfYAM0Y3QpnJq6WL8IcwVqczAPCQiKnhuCtCTp0hp3oZrlgr2VUw3e7Yl2xtkaKbE",
+						"width": 960
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t2.gstatic.com/images?q=tbn:ANd9GcTYbfw9kz6d1W2EUS1-EAeKRWDTnjYEBx4PcNR2gxQJm-Hti14wBFYGwmJq2p3uXBf9bbdCOs8",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/09949m",
+				"city_name": "İstanbul",
+				"country": "TR",
+				"iata_code": "IST",
+				"is_metro": false,
+				"is_train_station": false,
+				"latitude": 41.2705556,
+				"location_code": {
+					"code": "IST",
+					"type": "AIRPORT"
+				},
+				"longitude": 28.7425,
+				"metro_code": "IST",
+				"name": "Istanbul Airport"
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1175,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcQJQgHQ-MedgKiCRbmAheAkzY3YSBTrt2lQY6kLRRvpfM4y3jIn",
+						"width": 1763
+					},
+					"image": {
+						"height": 720,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcSlKGoTWuRnyX1U1nD2_PKZK7RMKrAk07n9gzaamFOn5MZf8CTmjAINqfDF8F4sifCMnJaSlj0",
+						"width": 960
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcShKHlEgCd3Z3akdANi-8uG4riC4bWpEIY8hF6j_svl0SZ5GzXZ_wbZvZxJRiC5zmTNBzp0mEaQ",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/06flg",
+				"city_name": "Reykjavík",
+				"country": "IS",
+				"iata_code": "KEF",
+				"is_metro": false,
+				"is_train_station": false,
+				"latitude": 63.985,
+				"location_code": {
+					"code": "KEF",
+					"type": "AIRPORT"
+				},
+				"longitude": -22.605556,
+				"metro_code": "REK",
+				"name": "Keflavík International Airport"
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1175,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcQ4jjfsxi2VRT9BVNYfR9OjQnpjAsDOKS6QLOwjLUX5YhuGGUHN",
+						"width": 1763
+					},
+					"image": {
+						"height": 719,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcS7iK64Th6bg9yKMjBavSCJA0CtyYGEnqSvxPSu9yOnj_qzg1xVo1kmbkHcpUABCzAeTam1807m",
+						"width": 958
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcRMgUvNCi65PivT-c4rQi4aSjdmqFH7CgcreJ4v8SqsVlnasvc_vE44_YKRTrmrfR_kkiapyRo",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/04jpl",
+				"city_name": "London",
+				"country": "GB",
+				"iata_code": "LGW",
+				"is_metro": false,
+				"is_train_station": false,
+				"latitude": 51.1480556,
+				"location_code": {
+					"code": "LGW",
+					"type": "AIRPORT"
+				},
+				"longitude": -0.1902778,
+				"metro_code": "LON",
+				"name": "Gatwick Airport"
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1175,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcQ4jjfsxi2VRT9BVNYfR9OjQnpjAsDOKS6QLOwjLUX5YhuGGUHN",
+						"width": 1763
+					},
+					"image": {
+						"height": 719,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcS7iK64Th6bg9yKMjBavSCJA0CtyYGEnqSvxPSu9yOnj_qzg1xVo1kmbkHcpUABCzAeTam1807m",
+						"width": 958
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcRMgUvNCi65PivT-c4rQi4aSjdmqFH7CgcreJ4v8SqsVlnasvc_vE44_YKRTrmrfR_kkiapyRo",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/04jpl",
+				"city_name": "London",
+				"country": "GB",
+				"iata_code": "LHR",
+				"is_metro": false,
+				"is_train_station": false,
+				"latitude": 51.4775,
+				"location_code": {
+					"code": "LHR",
+					"type": "AIRPORT"
+				},
+				"longitude": -0.4613889,
+				"metro_code": "LON",
+				"name": "Heathrow Airport"
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1164,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcS9eIjPpf89LViVvM4yeWfRYWasVqwdb0wMg2X-37XPu_ikpoVq",
+						"width": 1781
+					},
+					"image": {
+						"height": 705,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcQkmvw_gd6Kus6KjkAjyTEu_D7C6M-JNJM7XaIuJ03d3d-qCEZO9JTekUh1IkfTQvyetsiUTKXz",
+						"width": 940
+					},
+					"thumbnail": {
+						"height": 181,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcTK1jChaqYAlnKoB7s6yRLghZIWWZKICUYG2Zb2pqwFxMdai0bP9NhoMIZJnu61SOOnvJpl08Uc",
+						"width": 241
+					}
+				},
+				"city_mid": "/m/04llb",
+				"city_name": "Lisbon",
+				"country": "PT",
+				"iata_code": "LIS",
+				"is_metro": false,
+				"is_train_station": false,
+				"latitude": 38.7741667,
+				"location_code": {
+					"code": "LIS",
+					"type": "AIRPORT"
+				},
+				"longitude": -9.1341667,
+				"name": "Lisbon Portela Airport"
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1175,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcQ4jjfsxi2VRT9BVNYfR9OjQnpjAsDOKS6QLOwjLUX5YhuGGUHN",
+						"width": 1763
+					},
+					"image": {
+						"height": 719,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcS7iK64Th6bg9yKMjBavSCJA0CtyYGEnqSvxPSu9yOnj_qzg1xVo1kmbkHcpUABCzAeTam1807m",
+						"width": 958
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcRMgUvNCi65PivT-c4rQi4aSjdmqFH7CgcreJ4v8SqsVlnasvc_vE44_YKRTrmrfR_kkiapyRo",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/04jpl",
+				"city_name": "London",
+				"country": "GB",
+				"iata_code": "LON",
+				"is_metro": true,
+				"is_train_station": false,
+				"latitude": 51.5073509,
+				"location_code": {
+					"code": "LON",
+					"type": "METRO"
+				},
+				"longitude": -0.1277583,
+				"name": "Metropolitan Area"
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1173,
+						"url": "//t3.gstatic.com/images?q=tbn:ANd9GcTfo6zeQxxgYtTK7wngXXnaSOwfhfvyELXsWWooU-R4mtWY2uGg",
+						"width": 1766
+					},
+					"image": {
+						"height": 717,
+						"url": "//t3.gstatic.com/images?q=tbn:ANd9GcTftRIr0NLE8mSC6NEFBkiQ5zgtTi6PpNOFZg4N0OJ0qxqG2z2ouAgipqQcBEdLe70yVtiImcU",
+						"width": 956
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t3.gstatic.com/images?q=tbn:ANd9GcQOaNvZ2d6iSn1m9mvlYj3J53nLdpnlEkm8eBRNW-h1SpqRw0Ig0QsW8nSDEGceBsx6ImB4y_N_",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/02h6_6p",
+				"city_name": "Munich",
+				"country": "DE",
+				"iata_code": "MUC",
+				"is_metro": false,
+				"is_train_station": false,
+				"latitude": 48.3538889,
+				"location_code": {
+					"code": "MUC",
+					"type": "AIRPORT"
+				},
+				"longitude": 11.7861111,
+				"metro_code": "MUC",
+				"name": "Munich Airport"
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1176,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcQtNdj4LHwTz0Wwa2rLAEAQtqqyGX0eJ9wDEZ1ems1M8JNm8S-2",
+						"width": 1762
+					},
+					"image": {
+						"height": 720,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcTqDoFuVmr64cJPUcD6Tzrn1lW8eWGFNDk6n5EwK2e_V7x4kMHq5WOlPtn-IZS1DhYjk2NS8OYk",
+						"width": 960
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcQSx7T3WuZ6_Tmn2dMoWdkWxSccGGu0BcqB24Rc2Sull0fK71y3bvygDAdBv7MukDqj1Y4Bljiz",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/05qtj",
+				"city_name": "Paris",
+				"country": "FR",
+				"iata_code": "ORY",
+				"is_metro": false,
+				"is_train_station": false,
+				"latitude": 48.7233333,
+				"location_code": {
+					"code": "ORY",
+					"type": "AIRPORT"
+				},
+				"longitude": 2.37944444,
+				"metro_code": "PAR",
+				"name": "Orly Airport"
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1176,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcQtNdj4LHwTz0Wwa2rLAEAQtqqyGX0eJ9wDEZ1ems1M8JNm8S-2",
+						"width": 1762
+					},
+					"image": {
+						"height": 720,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcTqDoFuVmr64cJPUcD6Tzrn1lW8eWGFNDk6n5EwK2e_V7x4kMHq5WOlPtn-IZS1DhYjk2NS8OYk",
+						"width": 960
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcQSx7T3WuZ6_Tmn2dMoWdkWxSccGGu0BcqB24Rc2Sull0fK71y3bvygDAdBv7MukDqj1Y4Bljiz",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/05qtj",
+				"city_name": "Paris",
+				"country": "FR",
+				"iata_code": "PAR",
+				"is_metro": true,
+				"is_train_station": false,
+				"latitude": 48.856614,
+				"location_code": {
+					"code": "PAR",
+					"type": "METRO"
+				},
+				"longitude": 2.3522219000000004,
+				"name": "Metropolitan Area"
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1175,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcQJQgHQ-MedgKiCRbmAheAkzY3YSBTrt2lQY6kLRRvpfM4y3jIn",
+						"width": 1763
+					},
+					"image": {
+						"height": 720,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcSlKGoTWuRnyX1U1nD2_PKZK7RMKrAk07n9gzaamFOn5MZf8CTmjAINqfDF8F4sifCMnJaSlj0",
+						"width": 960
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcShKHlEgCd3Z3akdANi-8uG4riC4bWpEIY8hF6j_svl0SZ5GzXZ_wbZvZxJRiC5zmTNBzp0mEaQ",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/06flg",
+				"city_name": "Reykjavík",
+				"country": "IS",
+				"iata_code": "REK",
+				"is_metro": true,
+				"is_train_station": false,
+				"latitude": 64.133333,
+				"location_code": {
+					"code": "REK",
+					"type": "METRO"
+				},
+				"longitude": -21.933333,
+				"name": "Metropolitan Area"
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1176,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcT5lWz1dAvk7P7PYkoNomsDQAMVOQVk3MWhrwvpUDtRux9aP6k2",
+						"width": 1762
+					},
+					"image": {
+						"height": 720,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcTGLTrVXg12ztm4zMg_BnWxDRKeoW2ySpIJCUQBhM581gcsXnImKgHDTZSU5QHBcldNcPSqQHJq",
+						"width": 960
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcQm9Fdwma9mRVQD2qsTErNDNhESXpp_NrNoj90WGZsEVL21s-RpCsfthaZcACTkq6aMIFDNG-w",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/0d6lp",
+				"city_name": "San Francisco",
+				"country": "US",
+				"iata_code": "SFO",
+				"is_metro": false,
+				"is_train_station": false,
+				"latitude": 37.6188889,
+				"location_code": {
+					"code": "SFO",
+					"type": "AIRPORT"
+				},
+				"longitude": -122.39167,
+				"name": "San Francisco International Airport"
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1176,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcQtNdj4LHwTz0Wwa2rLAEAQtqqyGX0eJ9wDEZ1ems1M8JNm8S-2",
+						"width": 1762
+					},
+					"image": {
+						"height": 720,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcTqDoFuVmr64cJPUcD6Tzrn1lW8eWGFNDk6n5EwK2e_V7x4kMHq5WOlPtn-IZS1DhYjk2NS8OYk",
+						"width": 960
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcQSx7T3WuZ6_Tmn2dMoWdkWxSccGGu0BcqB24Rc2Sull0fK71y3bvygDAdBv7MukDqj1Y4Bljiz",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/05qtj",
+				"city_name": "Paris",
+				"country": "FR",
+				"is_metro": true,
+				"is_train_station": false,
+				"location_code": {
+					"code": "/m/05qtj",
+					"type": "CITY_MID"
+				}
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1176,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcT5lWz1dAvk7P7PYkoNomsDQAMVOQVk3MWhrwvpUDtRux9aP6k2",
+						"width": 1762
+					},
+					"image": {
+						"height": 720,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcTGLTrVXg12ztm4zMg_BnWxDRKeoW2ySpIJCUQBhM581gcsXnImKgHDTZSU5QHBcldNcPSqQHJq",
+						"width": 960
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcQm9Fdwma9mRVQD2qsTErNDNhESXpp_NrNoj90WGZsEVL21s-RpCsfthaZcACTkq6aMIFDNG-w",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/0d6lp",
+				"city_name": "San Francisco",
+				"country": "US",
+				"is_metro": false,
+				"is_train_station": false,
+				"location_code": {
+					"code": "/m/0d6lp",
+					"type": "CITY_MID"
+				}
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1176,
+						"url": "//t2.gstatic.com/images?q=tbn:ANd9GcRvv6lWlW_kP5jdSWt12aKJIKbwJf6mU-kOnJXVkQdVRcgYFMBR",
+						"width": 1762
+					},
+					"image": {
+						"height": 720,
+						"url": "//t2.gstatic.com/images?q=tbn:ANd9GcSodn4fM6zfYAM0Y3QpnJq6WL8IcwVqczAPCQiKnhuCtCTp0hp3oZrlgr2VUw3e7Yl2xtkaKbE",
+						"width": 960
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t2.gstatic.com/images?q=tbn:ANd9GcTYbfw9kz6d1W2EUS1-EAeKRWDTnjYEBx4PcNR2gxQJm-Hti14wBFYGwmJq2p3uXBf9bbdCOs8",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/09949m",
+				"city_name": "İstanbul",
+				"country": "TR",
+				"is_metro": false,
+				"is_train_station": false,
+				"location_code": {
+					"code": "/m/09949m",
+					"type": "CITY_MID"
+				},
+				"metro_code": "IST"
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1164,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcS9eIjPpf89LViVvM4yeWfRYWasVqwdb0wMg2X-37XPu_ikpoVq",
+						"width": 1781
+					},
+					"image": {
+						"height": 705,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcQkmvw_gd6Kus6KjkAjyTEu_D7C6M-JNJM7XaIuJ03d3d-qCEZO9JTekUh1IkfTQvyetsiUTKXz",
+						"width": 940
+					},
+					"thumbnail": {
+						"height": 181,
+						"url": "//t0.gstatic.com/images?q=tbn:ANd9GcTK1jChaqYAlnKoB7s6yRLghZIWWZKICUYG2Zb2pqwFxMdai0bP9NhoMIZJnu61SOOnvJpl08Uc",
+						"width": 241
+					}
+				},
+				"city_mid": "/m/04llb",
+				"city_name": "Lisbon",
+				"country": "PT",
+				"is_metro": false,
+				"is_train_station": false,
+				"location_code": {
+					"code": "/m/04llb",
+					"type": "CITY_MID"
+				}
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1175,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcQJQgHQ-MedgKiCRbmAheAkzY3YSBTrt2lQY6kLRRvpfM4y3jIn",
+						"width": 1763
+					},
+					"image": {
+						"height": 720,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcSlKGoTWuRnyX1U1nD2_PKZK7RMKrAk07n9gzaamFOn5MZf8CTmjAINqfDF8F4sifCMnJaSlj0",
+						"width": 960
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcShKHlEgCd3Z3akdANi-8uG4riC4bWpEIY8hF6j_svl0SZ5GzXZ_wbZvZxJRiC5zmTNBzp0mEaQ",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/06flg",
+				"city_name": "Reykjavík",
+				"country": "IS",
+				"is_metro": true,
+				"is_train_station": false,
+				"location_code": {
+					"code": "/m/06flg",
+					"type": "CITY_MID"
+				}
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1175,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcQ4jjfsxi2VRT9BVNYfR9OjQnpjAsDOKS6QLOwjLUX5YhuGGUHN",
+						"width": 1763
+					},
+					"image": {
+						"height": 719,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcS7iK64Th6bg9yKMjBavSCJA0CtyYGEnqSvxPSu9yOnj_qzg1xVo1kmbkHcpUABCzAeTam1807m",
+						"width": 958
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t1.gstatic.com/images?q=tbn:ANd9GcRMgUvNCi65PivT-c4rQi4aSjdmqFH7CgcreJ4v8SqsVlnasvc_vE44_YKRTrmrfR_kkiapyRo",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/04jpl",
+				"city_name": "London",
+				"country": "GB",
+				"is_metro": true,
+				"is_train_station": false,
+				"location_code": {
+					"code": "/m/04jpl",
+					"type": "CITY_MID"
+				}
+			},
+			{
+				"city_image": {
+					"hd": {
+						"height": 1173,
+						"url": "//t3.gstatic.com/images?q=tbn:ANd9GcTfo6zeQxxgYtTK7wngXXnaSOwfhfvyELXsWWooU-R4mtWY2uGg",
+						"width": 1766
+					},
+					"image": {
+						"height": 717,
+						"url": "//t3.gstatic.com/images?q=tbn:ANd9GcTftRIr0NLE8mSC6NEFBkiQ5zgtTi6PpNOFZg4N0OJ0qxqG2z2ouAgipqQcBEdLe70yVtiImcU",
+						"width": 956
+					},
+					"thumbnail": {
+						"height": 183,
+						"url": "//t3.gstatic.com/images?q=tbn:ANd9GcQOaNvZ2d6iSn1m9mvlYj3J53nLdpnlEkm8eBRNW-h1SpqRw0Ig0QsW8nSDEGceBsx6ImB4y_N_",
+						"width": 244
+					}
+				},
+				"city_mid": "/m/02h6_6p",
+				"city_name": "Munich",
+				"country": "DE",
+				"is_metro": false,
+				"is_train_station": false,
+				"location_code": {
+					"code": "/m/02h6_6p",
+					"type": "CITY_MID"
+				},
+				"metro_code": "MUC"
+			}
+		]
+	},
+	"polling_status": {
+		"polling_token": "AIAC/PEjTBsaj4ANCQK0JFCyJRKUSkqgHAOKsKbOB7rkJOj5skDd+WcKEu2aXj2Knmvl+amZy1BVuqmHJcW5OzCvrgcE8jEaiNrFbPx46nEswsY/xs3DBgG7mVZbLkCSANwSiCohgX/N",
+		"status": "OK"
+	},
+	"results": {
+		"baggage_fee_links": {
+			"link": [{
+					"iata_code": "FI",
+					"url": "http://www.icelandair.us/information/baggage-information/checked-baggage/"
+				},
+				{
+					"iata_code": "TK",
+					"url": "https://www.turkishairlines.com/en-us/any-questions/free-baggage/index.html"
+				},
+				{
+					"iata_code": "TP",
+					"url": "https://www.flytap.com/en-us/baggage"
+				},
+				{
+					"iata_code": "UA",
+					"url": "https://www.united.com/cms/en-US/travel/Pages/CheckedBaggage.aspx"
+				},
+				{
+					"iata_code": "LH",
+					"url": "https://www.lufthansa.com/gb/en/baggage-overview"
+				}
+			]
+		},
+		"carry_on_shopping_supported": true,
+		"checked_bag_shopping_supported": false,
+		"has_results": true,
+		"slice_results": {
+			"cheapest_price": {
+				"currency_code": "USD",
+				"price_formatted": "$1,002",
+				"price_value": 1002
+			},
+			"dominated_count": 26,
+			"dominated_flights_count": 26,
+			"dominated_trains_count": 0,
+			"result_item": [{
+					"includes_carry_on_fees": true,
+					"includes_checked_bag_fees": true,
+					"itinerary": {
+						"cheapest": false,
+						"debug_info": {},
+						"displayed_price": "$1,539",
+						"dominated": false,
+						"duration_minutes": 940,
+						"ei": "71CZXfyxF9fL0PEPqP6NyAo",
+						"fingerprint": "SFOLGW0DI7174~LHRMUC1LH2477",
+						"is_train": false,
+						"leg": [{
+								"amenities": {
+									"all_seats_power_and_usb": true,
+									"on_demand_video": true
+								},
+								"arrival_code": "LGW",
+								"arrival_time": {
+									"iso": "12:40",
+									"offset_days": 1
+								},
+								"departure_code": "SFO",
+								"departure_time": {
+									"iso": "18:30",
+									"offset_days": 0
+								},
+								"duration_minutes": 610,
+								"is_train": false,
+								"operating_flight_number": {
+									"airline": "DI",
+									"number": "7174"
+								},
+								"seat_info": "AVERAGE_LEGROOM",
+								"seat_info_legroom_size": "31 in",
+								"seating_class": "ECONOMY",
+								"warning": {
+									"is_overnight": true
+								}
+							},
+							{
+								"amenities": {},
+								"arrival_code": "MUC",
+								"arrival_time": {
+									"iso": "19:10",
+									"offset_days": 1
+								},
+								"departure_code": "LHR",
+								"departure_time": {
+									"iso": "16:25",
+									"offset_days": 1
+								},
+								"duration_minutes": 105,
+								"is_train": false,
+								"operating_flight_number": {
+									"airline": "LH",
+									"number": "2477"
+								},
+								"seat_info": "AVERAGE_LEGROOM",
+								"seat_info_legroom_size": "30 in",
+								"seating_class": "ECONOMY",
+								"warning": {
+									"is_often_delayed": true
+								}
+							}
+						],
+						"operating_airline_id": [
+							"DI",
+							"LH"
+						],
+						"operating_airline_logo_id": "multi",
+						"price_decimal_places": 2,
+						"price_guarantee": false,
+						"price_value": 153830,
+						"split_ticket": false,
+						"stopover": [{
+							"arrival_code": "LGW",
+							"departure_code": "LHR",
+							"duration_minutes": 225,
+							"warning": [
+								"CHANGE_OF_AIRPORT"
+							]
+						}],
+						"suggested": false,
+						"tracked": false,
+						"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQnkIIBigD",
+						"virtual_interline_info": {
+							"brand_name": "Kiwi.com",
+							"description_url": "https://www.kiwi.com/en/pages/guarantee?utm_source=google_flights",
+							"type": "WITHIN_SLICE"
+						}
+					},
+					"slice_price_restrictions": {
+						"first_carry_on_bag_restricted": false
+					}
+				},
+				{
+					"includes_carry_on_fees": true,
+					"includes_checked_bag_fees": true,
+					"itinerary": {
+						"cheapest": false,
+						"debug_info": {},
+						"displayed_price": "$1,595",
+						"dominated": false,
+						"duration_minutes": 1095,
+						"ei": "71CZXfyxF9fL0PEPqP6NyAo",
+						"fingerprint": "SFOIST0TK80~ISTMUC1TK1637",
+						"is_train": false,
+						"leg": [{
+								"aircraft_code": "77W",
+								"amenities": {
+									"all_seats_power_and_usb": true,
+									"on_demand_video": true,
+									"wifi": true
+								},
+								"arrival_code": "IST",
+								"arrival_time": {
+									"iso": "17:10",
+									"offset_days": 1
+								},
+								"departure_code": "SFO",
+								"departure_time": {
+									"iso": "18:10",
+									"offset_days": 0
+								},
+								"duration_minutes": 780,
+								"is_train": false,
+								"operating_flight_number": {
+									"airline": "TK",
+									"number": "80"
+								},
+								"seat_info": "AVERAGE_LEGROOM",
+								"seat_info_legroom_size": "31 in",
+								"seating_class": "ECONOMY",
+								"warning": {
+									"is_overnight": true
+								}
+							},
+							{
+								"aircraft_code": "321",
+								"amenities": {
+									"all_seats_usb_no_power": true,
+									"on_demand_video": true,
+									"wifi": true
+								},
+								"arrival_code": "MUC",
+								"arrival_time": {
+									"iso": "21:25",
+									"offset_days": 1
+								},
+								"departure_code": "IST",
+								"departure_time": {
+									"iso": "19:35",
+									"offset_days": 1
+								},
+								"duration_minutes": 170,
+								"is_train": false,
+								"operating_flight_number": {
+									"airline": "TK",
+									"number": "1637"
+								},
+								"seat_info": "AVERAGE_LEGROOM",
+								"seat_info_legroom_size": "30 in",
+								"seating_class": "ECONOMY"
+							}
+						],
+						"operating_airline_id": [
+							"TK"
+						],
+						"operating_airline_logo_id": "TK",
+						"price_decimal_places": 2,
+						"price_guarantee": false,
+						"price_value": 159435,
+						"split_ticket": false,
+						"stopover": [{
+							"arrival_code": "IST",
+							"departure_code": "IST",
+							"duration_minutes": 145
+						}],
+						"suggested": false,
+						"tracked": false,
+						"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQnkIIBygE",
+						"virtual_interline_info": {}
+					},
+					"slice_price_restrictions": {
+						"first_carry_on_bag_restricted": false
+					}
+				},
+				{
+					"includes_carry_on_fees": true,
+					"includes_checked_bag_fees": true,
+					"itinerary": {
+						"cheapest": false,
+						"debug_info": {},
+						"displayed_price": "$1,673",
+						"dominated": false,
+						"duration_minutes": 1030,
+						"ei": "71CZXfyxF9fL0PEPqP6NyAo",
+						"fingerprint": "SFOLIS0TP236~LISMUC1LH1791",
+						"is_train": false,
+						"leg": [{
+								"aircraft_code": "339",
+								"amenities": {
+									"all_seats_power_and_usb": true,
+									"on_demand_video": true,
+									"wifi": true
+								},
+								"arrival_code": "LIS",
+								"arrival_time": {
+									"iso": "11:20",
+									"offset_days": 1
+								},
+								"departure_code": "SFO",
+								"departure_time": {
+									"iso": "16:10",
+									"offset_days": 0
+								},
+								"duration_minutes": 670,
+								"is_train": false,
+								"operating_flight_number": {
+									"airline": "TP",
+									"number": "236"
+								},
+								"seat_info": "AVERAGE_LEGROOM",
+								"seat_info_legroom_size": "31 in",
+								"seating_class": "ECONOMY",
+								"warning": {
+									"is_often_delayed": true,
+									"is_overnight": true
+								}
+							},
+							{
+								"aircraft_code": "321",
+								"amenities": {
+									"wifi": true
+								},
+								"arrival_code": "MUC",
+								"arrival_time": {
+									"iso": "18:20",
+									"offset_days": 1
+								},
+								"departure_code": "LIS",
+								"departure_time": {
+									"iso": "14:20",
+									"offset_days": 1
+								},
+								"duration_minutes": 180,
+								"is_train": false,
+								"marketing_flight_number": [{
+									"airline": "TP",
+									"number": "6721"
+								}],
+								"operating_flight_number": {
+									"airline": "LH",
+									"number": "1791"
+								},
+								"seat_info": "AVERAGE_LEGROOM",
+								"seat_info_legroom_size": "30 in",
+								"seating_class": "ECONOMY",
+								"warning": {
+									"is_often_delayed": true
+								}
+							}
+						],
+						"operating_airline_id": [
+							"TP",
+							"LH"
+						],
+						"operating_airline_logo_id": "multi",
+						"price_decimal_places": 2,
+						"price_guarantee": false,
+						"price_value": 167225,
+						"split_ticket": false,
+						"stopover": [{
+							"arrival_code": "LIS",
+							"departure_code": "LIS",
+							"duration_minutes": 180
+						}],
+						"suggested": false,
+						"tracked": false,
+						"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQnkIICCgF",
+						"virtual_interline_info": {
+							"brand_name": "Kiwi.com",
+							"description_url": "https://www.kiwi.com/en/pages/guarantee?utm_source=google_flights",
+							"type": "WITHIN_SLICE"
+						}
+					},
+					"slice_price_restrictions": {
+						"first_carry_on_bag_restricted": false
+					}
+				},
+				{
+					"includes_carry_on_fees": true,
+					"includes_checked_bag_fees": true,
+					"itinerary": {
+						"cheapest": false,
+						"debug_info": {},
+						"displayed_price": "$1,844",
+						"dominated": false,
+						"duration_minutes": 800,
+						"ei": "71CZXfyxF9fL0PEPqP6NyAo",
+						"fingerprint": "SFOKEF0FI862~KEFMUC1FI532",
+						"is_train": false,
+						"leg": [{
+								"aircraft_code": "76W",
+								"amenities": {
+									"all_seats_usb_no_power": true,
+									"on_demand_video": true,
+									"wifi": true
+								},
+								"arrival_code": "KEF",
+								"arrival_time": {
+									"iso": "06:25",
+									"offset_days": 1
+								},
+								"departure_code": "SFO",
+								"departure_time": {
+									"iso": "14:45",
+									"offset_days": 0
+								},
+								"duration_minutes": 520,
+								"is_train": false,
+								"operating_flight_number": {
+									"airline": "FI",
+									"number": "862"
+								},
+								"seat_info": "AVERAGE_LEGROOM",
+								"seat_info_legroom_size": "31 in",
+								"seating_class": "ECONOMY",
+								"warning": {
+									"is_overnight": true
+								}
+							},
+							{
+								"aircraft_code": "75W",
+								"amenities": {
+									"all_seats_usb_no_power": true,
+									"on_demand_video": true,
+									"wifi": true
+								},
+								"arrival_code": "MUC",
+								"arrival_time": {
+									"iso": "13:05",
+									"offset_days": 1
+								},
+								"departure_code": "KEF",
+								"departure_time": {
+									"iso": "07:20",
+									"offset_days": 1
+								},
+								"duration_minutes": 225,
+								"is_train": false,
+								"operating_flight_number": {
+									"airline": "FI",
+									"number": "532"
+								},
+								"seat_info": "ABOVE_AVERAGE_LEGROOM",
+								"seat_info_legroom_size": "32 in",
+								"seating_class": "ECONOMY"
+							}
+						],
+						"operating_airline_id": [
+							"FI"
+						],
+						"operating_airline_logo_id": "FI",
+						"price_decimal_places": 2,
+						"price_guarantee": false,
+						"price_value": 184354,
+						"split_ticket": false,
+						"stopover": [{
+							"arrival_code": "KEF",
+							"departure_code": "KEF",
+							"duration_minutes": 55
+						}],
+						"suggested": false,
+						"tracked": false,
+						"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQnkIICSgG",
+						"virtual_interline_info": {
+							"brand_name": "Kiwi.com",
+							"description_url": "https://www.kiwi.com/en/pages/guarantee?utm_source=google_flights",
+							"type": "ACROSS_SLICES"
+						}
+					},
+					"slice_price_restrictions": {
+						"first_carry_on_bag_restricted": false
+					}
+				},
+				{
+					"includes_carry_on_fees": true,
+					"includes_checked_bag_fees": true,
+					"itinerary": {
+						"cheapest": false,
+						"debug_info": {},
+						"displayed_price": "$3,440",
+						"dominated": false,
+						"duration_minutes": 670,
+						"ei": "71CZXfyxF9fL0PEPqP6NyAo",
+						"fingerprint": "SFOMUC0UA194",
+						"is_train": false,
+						"leg": [{
+							"aircraft_code": "789",
+							"amenities": {
+								"all_seats_power_and_usb": true,
+								"on_demand_video": true,
+								"wifi": true
+							},
+							"arrival_code": "MUC",
+							"arrival_time": {
+								"iso": "10:05",
+								"offset_days": 1
+							},
+							"departure_code": "SFO",
+							"departure_time": {
+								"iso": "13:55",
+								"offset_days": 0
+							},
+							"duration_minutes": 670,
+							"is_train": false,
+							"marketing_flight_number": [{
+								"airline": "LH",
+								"number": "7996"
+							}],
+							"operating_flight_number": {
+								"airline": "UA",
+								"number": "194"
+							},
+							"seat_info": "ABOVE_AVERAGE_LEGROOM",
+							"seat_info_legroom_size": "32 in",
+							"seating_class": "ECONOMY",
+							"warning": {
+								"is_overnight": true
+							}
+						}],
+						"marketing_airline_id": [
+							"LH"
+						],
+						"operating_airline_id": [
+							"UA"
+						],
+						"operating_airline_logo_id": "UA",
+						"price_decimal_places": 2,
+						"price_guarantee": false,
+						"price_value": 343945,
+						"split_ticket": false,
+						"suggested": false,
+						"tracked": false,
+						"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQnkIICigH",
+						"virtual_interline_info": {}
+					},
+					"slice_price_restrictions": {
+						"first_carry_on_bag_restricted": false
+					}
+				},
+				{
+					"includes_carry_on_fees": true,
+					"includes_checked_bag_fees": true,
+					"itinerary": {
+						"cheapest": false,
+						"debug_info": {},
+						"displayed_price": "$3,440",
+						"dominated": false,
+						"duration_minutes": 680,
+						"ei": "71CZXfyxF9fL0PEPqP6NyAo",
+						"fingerprint": "SFOMUC0LH459",
+						"is_train": false,
+						"leg": [{
+							"aircraft_code": "346",
+							"amenities": {
+								"all_seats_power_and_usb": true,
+								"on_demand_video": true,
+								"wifi": true
+							},
+							"arrival_code": "MUC",
+							"arrival_time": {
+								"iso": "17:15",
+								"offset_days": 1
+							},
+							"departure_code": "SFO",
+							"departure_time": {
+								"iso": "20:55",
+								"offset_days": 0
+							},
+							"duration_minutes": 680,
+							"is_train": false,
+							"marketing_flight_number": [{
+								"airline": "UA",
+								"number": "8882"
+							}],
+							"operating_flight_number": {
+								"airline": "LH",
+								"number": "459"
+							},
+							"seat_info": "AVERAGE_LEGROOM",
+							"seat_info_legroom_size": "31 in",
+							"seating_class": "ECONOMY",
+							"warning": {
+								"is_overnight": true
+							}
+						}],
+						"marketing_airline_id": [
+							"UA"
+						],
+						"operating_airline_id": [
+							"LH"
+						],
+						"operating_airline_logo_id": "LH",
+						"price_decimal_places": 2,
+						"price_guarantee": false,
+						"price_value": 343945,
+						"split_ticket": false,
+						"suggested": false,
+						"tracked": false,
+						"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQnkIICygI",
+						"virtual_interline_info": {}
+					},
+					"slice_price_restrictions": {
+						"first_carry_on_bag_restricted": false
+					}
+				}
+			],
+			"suggested_item": [{
+					"includes_carry_on_fees": true,
+					"includes_checked_bag_fees": true,
+					"itinerary": {
+						"cheapest": true,
+						"debug_info": {},
+						"displayed_price": "$1,002",
+						"dominated": false,
+						"duration_minutes": 1075,
+						"ei": "71CZXfyxF9fL0PEPqP6NyAo",
+						"fingerprint": "SFOLGW0DI7174~LGWMUC1U28985",
+						"is_train": false,
+						"leg": [{
+								"aircraft_code": "789",
+								"amenities": {
+									"all_seats_power_and_usb": true,
+									"on_demand_video": true
+								},
+								"arrival_code": "LGW",
+								"arrival_time": {
+									"iso": "12:40",
+									"offset_days": 1
+								},
+								"departure_code": "SFO",
+								"departure_time": {
+									"iso": "18:30",
+									"offset_days": 0
+								},
+								"duration_minutes": 610,
+								"is_train": false,
+								"operating_flight_number": {
+									"airline": "DI",
+									"number": "7174"
+								},
+								"seat_info": "AVERAGE_LEGROOM",
+								"seat_info_legroom_size": "31 in",
+								"seating_class": "ECONOMY",
+								"warning": {
+									"is_overnight": true
+								}
+							},
+							{
+								"amenities": {},
+								"arrival_code": "MUC",
+								"arrival_time": {
+									"iso": "21:25",
+									"offset_days": 1
+								},
+								"departure_code": "LGW",
+								"departure_time": {
+									"iso": "18:30",
+									"offset_days": 1
+								},
+								"duration_minutes": 115,
+								"is_train": false,
+								"operating_flight_number": {
+									"airline": "U2",
+									"number": "8985"
+								},
+								"seat_info": "BELOW_AVERAGE_LEGROOM",
+								"seat_info_legroom_size": "29 in",
+								"seating_class": "ECONOMY",
+								"warning": {
+									"is_often_delayed": true
+								}
+							}
+						],
+						"operating_airline_id": [
+							"DI",
+							"U2"
+						],
+						"operating_airline_logo_id": "multi",
+						"price_decimal_places": 2,
+						"price_guarantee": false,
+						"price_value": 100136,
+						"split_ticket": false,
+						"stopover": [{
+							"arrival_code": "LGW",
+							"departure_code": "LGW",
+							"duration_minutes": 350
+						}],
+						"suggested": true,
+						"tracked": false,
+						"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQnkIIAygA",
+						"virtual_interline_info": {}
+					},
+					"slice_price_restrictions": {
+						"first_carry_on_bag_restricted": false
+					}
+				},
+				{
+					"includes_carry_on_fees": true,
+					"includes_checked_bag_fees": true,
+					"itinerary": {
+						"cheapest": true,
+						"debug_info": {},
+						"displayed_price": "$1,049",
+						"dominated": false,
+						"duration_minutes": 1070,
+						"ei": "71CZXfyxF9fL0PEPqP6NyAo",
+						"fingerprint": "SFOLIS0TP236~LISMUC1TP554",
+						"is_train": false,
+						"leg": [{
+								"aircraft_code": "339",
+								"amenities": {
+									"all_seats_power_and_usb": true,
+									"on_demand_video": true,
+									"wifi": true
+								},
+								"arrival_code": "LIS",
+								"arrival_time": {
+									"iso": "11:20",
+									"offset_days": 1
+								},
+								"departure_code": "SFO",
+								"departure_time": {
+									"iso": "16:10",
+									"offset_days": 0
+								},
+								"duration_minutes": 670,
+								"is_train": false,
+								"operating_flight_number": {
+									"airline": "TP",
+									"number": "236"
+								},
+								"seat_info": "AVERAGE_LEGROOM",
+								"seat_info_legroom_size": "31 in",
+								"seating_class": "ECONOMY",
+								"warning": {
+									"is_often_delayed": true,
+									"is_overnight": true
+								}
+							},
+							{
+								"aircraft_code": "320",
+								"amenities": {},
+								"arrival_code": "MUC",
+								"arrival_time": {
+									"iso": "19:00",
+									"offset_days": 1
+								},
+								"departure_code": "LIS",
+								"departure_time": {
+									"iso": "15:00",
+									"offset_days": 1
+								},
+								"duration_minutes": 180,
+								"is_train": false,
+								"operating_flight_number": {
+									"airline": "TP",
+									"number": "554"
+								},
+								"seat_info": "BELOW_AVERAGE_LEGROOM",
+								"seat_info_legroom_size": "28 in",
+								"seating_class": "ECONOMY",
+								"warning": {
+									"is_often_delayed": true
+								}
+							}
+						],
+						"operating_airline_id": [
+							"TP"
+						],
+						"operating_airline_logo_id": "TP",
+						"price_decimal_places": 2,
+						"price_guarantee": false,
+						"price_value": 104900,
+						"split_ticket": true,
+						"stopover": [{
+							"arrival_code": "LIS",
+							"departure_code": "LIS",
+							"duration_minutes": 220
+						}],
+						"suggested": true,
+						"tracked": false,
+						"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQnkIIBCgB",
+						"virtual_interline_info": {}
+					},
+					"slice_price_restrictions": {
+						"first_carry_on_bag_restricted": false
+					}
+				},
+				{
+					"includes_carry_on_fees": true,
+					"includes_checked_bag_fees": true,
+					"itinerary": {
+						"cheapest": false,
+						"debug_info": {},
+						"displayed_price": "$1,361",
+						"dominated": false,
+						"duration_minutes": 960,
+						"ei": "71CZXfyxF9fL0PEPqP6NyAo",
+						"fingerprint": "SFOORY0BF711~CDGMUC1LH2237",
+						"is_train": false,
+						"leg": [{
+								"amenities": {
+									"all_seats_power_and_usb": true,
+									"on_demand_video": true,
+									"wifi": true
+								},
+								"arrival_code": "ORY",
+								"arrival_time": {
+									"iso": "16:20",
+									"offset_days": 1
+								},
+								"departure_code": "SFO",
+								"departure_time": {
+									"iso": "20:35",
+									"offset_days": 0
+								},
+								"duration_minutes": 645,
+								"is_train": false,
+								"operating_flight_number": {
+									"airline": "BF",
+									"number": "711"
+								},
+								"seat_info": "ABOVE_AVERAGE_LEGROOM",
+								"seat_info_legroom_size": "32 in",
+								"seating_class": "ECONOMY",
+								"warning": {
+									"is_overnight": true
+								}
+							},
+							{
+								"amenities": {},
+								"arrival_code": "MUC",
+								"arrival_time": {
+									"iso": "21:35",
+									"offset_days": 1
+								},
+								"departure_code": "CDG",
+								"departure_time": {
+									"iso": "20:10",
+									"offset_days": 1
+								},
+								"duration_minutes": 85,
+								"is_train": false,
+								"operating_flight_number": {
+									"airline": "LH",
+									"number": "2237"
+								},
+								"seat_info": "AVERAGE_LEGROOM",
+								"seat_info_legroom_size": "30 in",
+								"seating_class": "ECONOMY"
+							}
+						],
+						"operating_airline_id": [
+							"BF",
+							"LH"
+						],
+						"operating_airline_logo_id": "multi",
+						"price_decimal_places": 2,
+						"price_guarantee": false,
+						"price_value": 136042,
+						"split_ticket": false,
+						"stopover": [{
+							"arrival_code": "ORY",
+							"departure_code": "CDG",
+							"duration_minutes": 230,
+							"warning": [
+								"CHANGE_OF_AIRPORT"
+							]
+						}],
+						"suggested": true,
+						"tracked": false,
+						"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQnkIIBSgC",
+						"virtual_interline_info": {
+							"brand_name": "Kiwi.com",
+							"description_url": "https://www.kiwi.com/en/pages/guarantee?utm_source=google_flights",
+							"type": "WITHIN_SLICE"
+						}
+					},
+					"slice_price_restrictions": {
+						"first_carry_on_bag_restricted": false
+					}
+				}
+			],
+			"summary": {
+				"has_other_flights": true,
+				"has_suggested_flights": true,
+				"is_groupable": false
+			}
+		},
+		"sponsored_search_ads": [{
+				"display_name": "CheapOair",
+				"redirect_url": "https://www.google.com/travel/clk/f?su=CVDuyxAN0Um9Eo8CKAY6KggCEgNTRk8aA01VQyIKMjAxOS0xMC0wNyoKMjAxOS0xMC0xMjIECAMQAUASSrEBCgJVUxIFZW4tVVMaEzg4MTY2MTczMzI5NzU1ODk0NjciA1VTRCgAOgUI86OEAjoFCI3BhQI6BQj524UCQFRAZEBqQGtAdEB6QCRAH0AqQB1AHkAoQCNAIkBNQEtAT0BXQFlAXUBhQCxAaEBmQG1Ac0B5QHFAfkgAUAGIAQCiARhNSVNTSU5HX0VYRUNVVElPTl9SRVNVTFSyARZodHRwczovL3d3dy5nb29nbGUuY29tUidHcURTdkJHLS0tLS0tLS0tLXBmcWk5QUFBQUFGMlpVTzhGNnFsQUFYARoJQ0hFQVBPQUlSIglDaGVhcE9haXIqhwFodHRwOi8vd3d3LmNoZWFwb2Fpci5jb20vRGVmYXVsdC5hc3B4P3RhYmlkPTE4MzImRnBBZmZpbGlhdGU9R29vZ2xlLUZTJmFkPTEmY2g9MCZydD0xJnRvZHQ9MTAvMTIvMjAxOSZmcm9tPVNGTyZ0bz1NVUMmZnJvbWR0PTEwLzA3LzIwMTkyJ0dkNWp5QkQtLS0tLS0tLS0tcGZvMTRBQUFBQUYyWlVPOEdCa3dBQTgA",
+				"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQpOECCAwoAQ"
+			},
+			{
+				"display_name": "Priceline",
+				"redirect_url": "https://www.google.com/travel/clk/f?su=CVDuyxAN0Um9Eo8CKAY6KggCEgNTRk8aA01VQyIKMjAxOS0xMC0wNyoKMjAxOS0xMC0xMjIECAMQAUASSrEBCgJVUxIFZW4tVVMaEzg4MTY2MTczMzI5NzU1ODk0NjciA1VTRCgAOgUI86OEAjoFCI3BhQI6BQj524UCQFRAZEBqQGtAdEB6QCRAH0AqQB1AHkAoQCNAIkBNQEtAT0BXQFlAXUBhQCxAaEBmQG1Ac0B5QHFAfkgAUAGIAQCiARhNSVNTSU5HX0VYRUNVVElPTl9SRVNVTFSyARZodHRwczovL3d3dy5nb29nbGUuY29tUidHcURTdkJHLS0tLS0tLS0tLXBmcWk5QUFBQUFGMlpVTzhGNnFsQUFYARoJUFJJQ0VMSU5FIglQcmljZWxpbmUqlwJodHRwczovL3d3dy5wcmljZWxpbmUuY29tL3IvP2NoYW5uZWw9UGFydG5lciZwcm9kdWN0PWFpciZ0aGVtZT1zZWFyY2hyZXN1bHRzcmV0YWlscnQmZGVwY2l0eT1TRk8mYXJyY2l0eT1NVUMmZGVwYXJ0dXJlZGF0ZT0xMC8wNy8yMDE5Jm51bXRpY2tldHM9MSZyZXR1cm5kYXRlPTEwLzEyLzIwMTkmcmVmaWQ9UExHT09HTEVGU1MmcmVmY2xpY2tpZD1BSVJTRUFSQ0hSVCZudW0tYWR1bHRzPTEmbnVtLXlvdXRocz0wJm51bS1jaGlsZHJlbj0wJm51bS1pbmZhbnRzPTAmQ2FiaW5DbGFzcz1FQ08yJ0dkNWp5QkQtLS0tLS0tLS0tcGZvMTRBQUFBQUYyWlVPOEdCa3dBQTgA",
+				"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQpOECCA0oAg"
+			},
+			{
+				"display_name": "eDreams",
+				"redirect_url": "https://www.google.com/travel/clk/f?su=CVDuyxAN0Um9Eo8CKAY6KggCEgNTRk8aA01VQyIKMjAxOS0xMC0wNyoKMjAxOS0xMC0xMjIECAMQAUASSrEBCgJVUxIFZW4tVVMaEzg4MTY2MTczMzI5NzU1ODk0NjciA1VTRCgAOgUI86OEAjoFCI3BhQI6BQj524UCQFRAZEBqQGtAdEB6QCRAH0AqQB1AHkAoQCNAIkBNQEtAT0BXQFlAXUBhQCxAaEBmQG1Ac0B5QHFAfkgAUAGIAQCiARhNSVNTSU5HX0VYRUNVVElPTl9SRVNVTFSyARZodHRwczovL3d3dy5nb29nbGUuY29tUidHcURTdkJHLS0tLS0tLS0tLXBmcWk5QUFBQUFGMlpVTzhGNnFsQUFYARoHRURSRUFNUyIHZURyZWFtcyr_AWh0dHBzOi8vd3d3LmVkcmVhbXMubmV0L3RyYXZlbC8_bWt0cG9ydGFsPWRpc3BsYXlwZXJmJnV0bV9jYW1wYWlnbj1HLUUtVVMtRkwtT1RJLVJNSy1ETS1BJnV0bV9jb250ZW50PVNGTy1NVUMmdXRtX21lZGl1bT1yZXRhcmdldGluZyZ1dG1fc291cmNlPWdvb2dsZWZsaWdodHNlYXJjaCMvcmVzdWx0cy90eXBlPVI7ZnJvbT1TRk87dG89TVVDO2RlcD0yMDE5LTEwLTA3O3JldD0yMDE5LTEwLTEyO2FkdWx0cz0xO2NoaWxkcmVuPTA7aW5mYW50cz0wOzInR2Q1anlCRC0tLS0tLS0tLS1wZm8xNEFBQUFBRjJaVU84R0Jrd0FBOAA",
+				"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQpOECCA4oAw"
+			},
+			{
+				"display_name": "JustFly",
+				"redirect_url": "https://www.google.com/travel/clk/f?su=CVDuyxAN0Um9Eo8CKAY6KggCEgNTRk8aA01VQyIKMjAxOS0xMC0wNyoKMjAxOS0xMC0xMjIECAMQAUASSrEBCgJVUxIFZW4tVVMaEzg4MTY2MTczMzI5NzU1ODk0NjciA1VTRCgAOgUI86OEAjoFCI3BhQI6BQj524UCQFRAZEBqQGtAdEB6QCRAH0AqQB1AHkAoQCNAIkBNQEtAT0BXQFlAXUBhQCxAaEBmQG1Ac0B5QHFAfkgAUAGIAQCiARhNSVNTSU5HX0VYRUNVVElPTl9SRVNVTFSyARZodHRwczovL3d3dy5nb29nbGUuY29tUidHcURTdkJHLS0tLS0tLS0tLXBmcWk5QUFBQUFGMlpVTzhGNnFsQUFYARoHSlVTVEZMWSIHSnVzdEZseSqQAmh0dHBzOi8vd3d3Lmp1c3RmbHkuY29tL2ZsaWdodC9zZWFyY2g_bnVtX2FkdWx0cz0xJm51bV9jaGlsZHJlbj0wJm51bV9pbmZhbnRzPTAmbnVtX2luZmFudHNfbGFwPTAmc2VhdF9jbGFzcz1FY29ub215JnNlZzBfZGF0ZT0yMDE5LTEwLTA3JnNlZzBfZnJvbT1TRk8mc2VnMF90bz1NVUMmc2VnMV9kYXRlPTIwMTktMTAtMTImc2VnMV9mcm9tPU1VQyZzZWcxX3RvPVNGTyZ0eXBlPXJvdW5kdHJpcCZjYW1wYWlnbj0yNDM4MiZ1dG1fY2FtcGFpZ249R29vZ2xlK0ZsaWdodHMrQWRzMidHZDVqeUJELS0tLS0tLS0tLXBmbzE0QUFBQUFGMlpVTzhHQmt3QUE4AA",
+				"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQpOECCA8oBA"
+			},
+			{
+				"display_name": "Orbitz",
+				"redirect_url": "https://www.google.com/travel/clk/f?su=CVDuyxAN0Um9Eo8CKAY6KggCEgNTRk8aA01VQyIKMjAxOS0xMC0wNyoKMjAxOS0xMC0xMjIECAMQAUASSrEBCgJVUxIFZW4tVVMaEzg4MTY2MTczMzI5NzU1ODk0NjciA1VTRCgAOgUI86OEAjoFCI3BhQI6BQj524UCQFRAZEBqQGtAdEB6QCRAH0AqQB1AHkAoQCNAIkBNQEtAT0BXQFlAXUBhQCxAaEBmQG1Ac0B5QHFAfkgAUAGIAQCiARhNSVNTSU5HX0VYRUNVVElPTl9SRVNVTFSyARZodHRwczovL3d3dy5nb29nbGUuY29tUidHcURTdkJHLS0tLS0tLS0tLXBmcWk5QUFBQUFGMlpVTzhGNnFsQUFYARoGT1JCSVRaIgZPcmJpdHoq0AFodHRwczovL3d3dy5vcmJpdHouY29tL2dvL2ZsaWdodC9zZWFyY2gvUm91bmR0cmlwLzIwMTktMTAtMDcvMjAxOS0xMC0xMj9NRFBDSUQ9T1JCSVRaLVVTLk1FVEEuR09PR0xFLkNIRUNLUkFURVMuRkxJR0hUJk1EUERUTD1GTFQ6U0ZPLk1VQyZsb2FkPTEmRnJvbUFpcnBvcnQ9U0ZPJlRvQWlycG9ydD1NVUMmTnVtQWR1bHQ9MSZlYXBpZD02OTk4MyZ0cGlkPTcwMjAxMidHZDVqeUJELS0tLS0tLS0tLXBmbzE0QUFBQUFGMlpVTzhHQmt3QUE4AA",
+				"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQpOECCBAoBQ"
+			},
+			{
+				"display_name": "Travelocity",
+				"redirect_url": "https://www.google.com/travel/clk/f?su=CVDuyxAN0Um9Eo8CKAY6KggCEgNTRk8aA01VQyIKMjAxOS0xMC0wNyoKMjAxOS0xMC0xMjIECAMQAUASSrEBCgJVUxIFZW4tVVMaEzg4MTY2MTczMzI5NzU1ODk0NjciA1VTRCgAOgUI86OEAjoFCI3BhQI6BQj524UCQFRAZEBqQGtAdEB6QCRAH0AqQB1AHkAoQCNAIkBNQEtAT0BXQFlAXUBhQCxAaEBmQG1Ac0B5QHFAfkgAUAGIAQCiARhNSVNTSU5HX0VYRUNVVElPTl9SRVNVTFSyARZodHRwczovL3d3dy5nb29nbGUuY29tUidHcURTdkJHLS0tLS0tLS0tLXBmcWk5QUFBQUFGMlpVTzhGNnFsQUFYARoLVFJBVkVMT0NJVFkiC1RyYXZlbG9jaXR5KuYBaHR0cDovL3d3dy50cmF2ZWxvY2l0eS5jb20vZ28vZmxpZ2h0L3NlYXJjaC9Sb3VuZHRyaXAvMjAxOS0xMC0wNy8yMDE5LTEwLTEyP2xvYWQ9MSZOdW1BZHVsdD0xJk51bUNoaWxkPTAmRnJvbUFpcnBvcnQ9U0ZPJlRvQWlycG9ydD1NVUMmRnJvbVRpbWU9MzYyJlRvVGltZT0zNjImbWRwY2lkPXRyYXZlbG9jaXR5LXVzLk1ldGEuR29vZ2xlLkZsaWdodFJULmZsaWdodCZtZHBkdGw9RkxULlNGTy5NVUMuX18yJ0dkNWp5QkQtLS0tLS0tLS0tcGZvMTRBQUFBQUYyWlVPOEdCa3dBQTgA",
+				"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQpOECCBEoBg"
+			}
+		],
+		"tracked": false
+	},
+	"stable_link_uri": "https://www.google.com/flights?tfs=CBkQAhokEgoyMDE5LTEwLTA3KAFADEgWagcIARIDU0ZPcgcIARIDTVVDGiASCjIwMTktMTAtMTIoAWoHCAESA01VQ3IHCAESA1NGT0ABSAFSA1VTRHAB",
+	"ved": "0ahUKEwi85eLZyoblAhXXJTQIHSh_A6kQymUIAQ"
+}
