@@ -2,19 +2,12 @@ package ec.googleflights.model;
 
 public class TimeRange {
 
-  private final int start;
-  private final int end;
+  private int start;
+  private int end;
+  
+  public TimeRange() {}
   
   public TimeRange(int start, int end) {
-    if (start < 0 || start > 23) {
-      throw new IllegalArgumentException("start cannot be less than 0 or greater than 23");
-    }
-    if (end < 0 || end > 23) {
-      throw new IllegalArgumentException("end cannot be less than 0 or greater than 23");
-    }
-    if (start >= end) {
-      throw new IllegalArgumentException("start must be less than end");
-    }
     this.start = start;
     this.end = end;
   }
@@ -23,8 +16,16 @@ public class TimeRange {
     return start;
   }
 
+  public void setStart(int start) {
+    this.start = start;
+  }
+
   public int getEnd() {
     return end;
+  }
+
+  public void setEnd(int end) {
+    this.end = end;
   }
 
   @Override
