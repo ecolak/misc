@@ -35,7 +35,7 @@ public class DefaultQueryService implements QueryService {
   }
   
   @Override
-  public QueryResponse SendQuery(Query q) {
+  public QueryResponse sendQuery(Query q) {
     try {
       Map<String,String> asyncParams = new LinkedHashMap<>();
       asyncParams.put("data", q.toQueryString());

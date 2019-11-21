@@ -19,26 +19,26 @@ public class App {
     
     Query q = new Query();
     Leg leg1 = new Leg();
-    leg1.setFrom(Arrays.asList("SFO"));
-    leg1.setTo(Arrays.asList("MUC"));
-    leg1.setDate(Leg.DATE_FORMAT.parse("2019-10-13"));
-    leg1.setNumStops(NumStops.ONE_OR_FEWER);
-    leg1.setDepartureFilter(new TimeRange(12,22));
-    leg1.setMaxDurationInMinutes(20*60);
+    leg1.setFrom(Arrays.asList("SFO", "OAK", "SJC"));
+    leg1.setTo(Arrays.asList("IST"));
+    leg1.setDate(Leg.DATE_FORMAT.parse("2019-12-21"));
+    //leg1.setNumStops(NumStops.ONE_OR_FEWER);
+    //leg1.setDepartureFilter(new TimeRange(14,23));
+    //leg1.setMaxDurationInMinutes(20*60);
     
     Leg leg2 = new Leg();
-    leg2.setFrom(Arrays.asList("MUC"));
-    leg2.setTo(Arrays.asList("SFO"));
-    leg2.setDate(Leg.DATE_FORMAT.parse("2019-10-16"));
-    leg2.setNumStops(NumStops.ONE_OR_FEWER);
+    leg2.setFrom(Arrays.asList("IST"));
+    leg2.setTo(Arrays.asList("SFO", "OAK", "SJC"));
+    leg2.setDate(Leg.DATE_FORMAT.parse("2020-01-05"));
+    leg2.setNumStops(NumStops.ZERO);
     leg2.setMaxDurationInMinutes(20*60);
     
-    q.setLegs(Arrays.asList(leg1, leg2));
-    q.setBookingClass(BookingClass.ECONOMY);
+    q.setLegs(Arrays.asList(leg1));
+    //q.setBookingClass(BookingClass.ECONOMY);
     
     QueryService service = new DefaultQueryService();
     System.out.println("Running query " + q);
-    QueryResponse response = service.SendQuery(q);
+    QueryResponse response = service.sendQuery(q);
     if (!response.isSuccessful()) {
       System.out.println(((ErrorResponse)response).error);
     } else {

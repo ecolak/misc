@@ -2,8 +2,6 @@ package ec.googleflights.model.result;
 
 import java.util.List;
 
-import ec.googleflights.model.Leg;
-
 public class Itinerary {
 
   public boolean cheapest;

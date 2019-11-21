@@ -5,5 +5,5 @@ import ec.googleflights.model.result.QueryResponse;
 
 public interface QueryService {
 
-  QueryResponse SendQuery(Query q);
+  QueryResponse sendQuery(Query q);
 }

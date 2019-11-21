@@ -14,7 +14,7 @@ import ec.googleflights.service.QueryService;
 public class MockQueryService implements QueryService {
 
   @Override
-  public QueryResponse SendQuery(Query q) {
+  public QueryResponse sendQuery(Query q) {
     System.out.println("Received query " + q);
     
     try (InputStream is = MockQueryService.class.getResourceAsStream("mock_query_result.json")) {
