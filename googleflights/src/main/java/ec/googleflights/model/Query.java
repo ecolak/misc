@@ -135,7 +135,7 @@ public class Query {
     // max price
     if (maxPrice == null) result.append("null");
     else {
-      result.append("[").append(maxPrice*100).append(",2") // not sure what this `2` is
+      result.append("[").append(maxPrice*100).append(",2,") // not sure what this `2` is
             .append("\"").append(currency.getCurrencyCode()).append("\"").append("]");
     }
     result.append(",");
