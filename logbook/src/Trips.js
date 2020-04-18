@@ -12,13 +12,12 @@ import {
     IonFab,
     IonFabButton,
     IonSearchbar,
-    IonSelect,
-    IonSelectOption,
-    IonRow,
-    IonCol
+    IonSegment,
+    IonSegmentButton,
+    IonButton
 } from '@ionic/react'
 
-import { add, arrowForwardOutline, funnel, boat } from 'ionicons/icons';
+import { add, arrowForwardOutline, boat } from 'ionicons/icons';
 
 import axios from 'axios';
 
@@ -49,6 +48,7 @@ class Trips extends React.Component {
 
         this.search = this.search.bind(this);
         this.sort = this.sort.bind(this);
+        this.exportCSV = this.exportCSV.bind(this);
     }
 
     componentDidMount() {
@@ -89,26 +89,30 @@ class Trips extends React.Component {
     sortInternal(data, sortDir) {
         if (sortDir) {
             let sortFn = null;
-            switch(sortDir) {
-                case 'earliest': 
+            switch (sortDir) {
+                case 'earliest':
                     sortFn = (a, b) => a.startDate < b.startDate ? -1 : (b.startDate < a.startDate ? 1 : 0);
                     break;
                 case 'latest':
                     sortFn = (a, b) => b.startDate < a.startDate ? -1 : (a.startDate < b.startDate ? 1 : 0);
                     break;
                 case 'longest':
-                    sortFn = (a, b) =>  b.distance - a.distance;
+                    sortFn = (a, b) => b.distance - a.distance;
                     break;
-                case 'shortest': 
+                case 'shortest':
                     sortFn = (a, b) => a.distance - b.distance;
                     break;
                 default:
             }
             if (sortFn) {
                 return data.sort(sortFn);
-            }  
+            }
         }
         return data;
+    }
+
+    exportCSV(event) {
+        console.log('Export trips as CSV');
     }
 
     render() {
@@ -120,23 +124,31 @@ class Trips extends React.Component {
                     </IonToolbar>
                 </IonHeader>
                 <IonContent>
-                    <IonRow>
-                        <IonCol size="9">
-                            <IonSearchbar value={this.state.searchText} onIonChange={this.search}></IonSearchbar>
-                        </IonCol>
-                        <IonCol size="3">
-                            <IonItem>   
-                                <IonLabel><IonIcon icon={funnel}></IonIcon></IonLabel>
-                                <IonSelect name="sortOption" interface="popover" value={this.state.sortDir} onIonChange={this.sort}>
-                                    <IonSelectOption value="latest">Latest</IonSelectOption>
-                                    <IonSelectOption value="earliest">Earliest</IonSelectOption>
-                                    <IonSelectOption value="longest">Longest</IonSelectOption>
-                                    <IonSelectOption value="shortest">Shortest</IonSelectOption>
-                                </IonSelect>
-                            </IonItem>
-                        </IonCol>           
-                    </IonRow>       
-                    <IonList>    
+                    <IonSearchbar value={this.state.searchText} onIonChange={this.search}></IonSearchbar>
+                    <IonSegment value={this.state.sortDir} onIonChange={this.sort}>
+                        <IonSegmentButton value="" disabled>
+                            <IonLabel>Sort By</IonLabel>
+                        </IonSegmentButton>
+                        <IonSegmentButton value="latest">
+                            <IonLabel>Latest</IonLabel>
+                        </IonSegmentButton>
+                        <IonSegmentButton value="earliest">
+                            <IonLabel>Earliest</IonLabel>
+                        </IonSegmentButton>
+                        <IonSegmentButton value="longest">
+                            <IonLabel>Longest</IonLabel>
+                        </IonSegmentButton>
+                        <IonSegmentButton value="shortest">
+                            <IonLabel>Shortest</IonLabel>
+                        </IonSegmentButton>
+                    </IonSegment>
+
+                    <IonItem lines="full">
+                        <IonLabel slot="start">{this.state.filteredTrips.length} trips</IonLabel>   
+                        <IonButton slot="end" onClick={this.exportCSV}>Export as CSV</IonButton>
+                    </IonItem>
+
+                    <IonList>
                         {this.state.filteredTrips.map((t) => <Trip details={t} />)}
                     </IonList>
                     <IonFab vertical="bottom" horizontal="end" slot="fixed">
