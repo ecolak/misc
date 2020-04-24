@@ -17,9 +17,11 @@ import {
     IonAlert
 } from '@ionic/react'
 
-import axios from 'axios';
+import ApiClient from './ApiClient';
 
-const TRIPS_API_URL = 'http://localhost:4000/trips';
+//import axios from 'axios';
+
+//const TRIPS_API_URL = 'http://localhost:4000/trips';
 
 class AddTrip extends React.Component {
     constructor(props) {
@@ -54,8 +56,7 @@ class AddTrip extends React.Component {
         const pathParams = this.props.match.params;
 
         if (pathParams.id && pathParams.id !== "new") {
-            const url = `${TRIPS_API_URL}/${pathParams.id}`;
-            axios.get(url).then(response => response.data)
+            ApiClient.get(pathParams.id).then(response => response.data)
                 .then((data) => {
                     this.setState({
                         id: data.id,
@@ -110,25 +111,14 @@ class AddTrip extends React.Component {
             otherDetails: this.state.otherDetails
         }
 
-        if (this.state.id) {
-            axios.put(TRIPS_API_URL + "/" + this.state.id, trip)
-             .then((response) => {
+        ApiClient.post("", trip)
+            .then((response) => {
                 if (response.status === 200) {
                     this.history.push('/trips');
                 } else {
                     alert('Error with status: ' + response.status);
                 }
             });
-        } else {
-            axios.post(TRIPS_API_URL, trip)
-             .then((response) => {
-                if (response.status === 201) {
-                    this.history.push('/trips');
-                } else {
-                    alert('Error with status: ' + response.status);
-                }
-            });
-        }
 
         event.preventDefault();
     }
@@ -148,7 +138,7 @@ class AddTrip extends React.Component {
     deleteTrip() {
         console.log('Delete this trip. ID:' + this.state.id);
 
-        axios.delete(TRIPS_API_URL + "/" + this.state.id)
+        ApiClient.delete("/" + this.state.id)
             .then((response) => {
                 if (response.status === 200) {
                     this.history.push('/trips');

@@ -17,9 +17,11 @@ import {
     IonButton
 } from '@ionic/react'
 
+import ApiClient from './ApiClient';
+
 import { add, arrowForwardOutline, boat } from 'ionicons/icons';
 
-import axios from 'axios';
+//import axios from 'axios';
 
 function Trip(props) {
     const link = '/trip/' + props.details.id;
@@ -34,7 +36,12 @@ function Trip(props) {
     );
 }
 
-const TRIPS_API_URL = 'http://localhost:4000/trips';
+/*const apiClient = axios.create({
+    baseURL: 'http://localhost:4000/trips',
+    headers: {'Authorization': 'S3tWy6Qkqj37LGtD', 'X-USER-ID': 'US-1234'}
+});
+
+const TRIPS_API_URL = 'http://localhost:4000/trips';*/
 
 class Trips extends React.Component {
     constructor(props) {
@@ -52,7 +59,7 @@ class Trips extends React.Component {
     }
 
     componentDidMount() {
-        axios.get(TRIPS_API_URL).then(response => response.data)
+        ApiClient.get('').then(response => response.data)
             .then((data) => {
                 this.setState({
                     trips: data,
