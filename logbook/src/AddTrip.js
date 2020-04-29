@@ -14,14 +14,14 @@ import {
     IonButton,
     IonButtons,
     IonBackButton,
-    IonAlert
+    IonAlert,
+    IonLoading
 } from '@ionic/react'
 
-import ApiClient from './ApiClient';
+import {userTrips, singleTrip} from './Firebase';
 
-//import axios from 'axios';
-
-//const TRIPS_API_URL = 'http://localhost:4000/trips';
+// TODO: Add spinner
+// TODO: Disable submit and delete buttons while in progress
 
 class AddTrip extends React.Component {
     constructor(props) {
@@ -41,7 +41,8 @@ class AddTrip extends React.Component {
             conditions: '',
             otherDetails: '',
 
-            showDeleteAlert: false
+            showDeleteAlert: false,
+            loading: false
         }
 
         this.history = props.history;
@@ -53,13 +54,26 @@ class AddTrip extends React.Component {
     }
 
     componentDidMount() {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            this.history.push('/login');
+            return;
+        }
+        this.userId = userId;
+
         const pathParams = this.props.match.params;
 
         if (pathParams.id && pathParams.id !== "new") {
-            ApiClient.get(pathParams.id).then(response => response.data)
-                .then((data) => {
+            this.setState({ loading: true });
+
+            singleTrip(userId, pathParams.id).on("value", (function(snapshot) {
+                this.setState({ loading: false });
+
+                const data = snapshot.val();
+    
+                if (data) {
                     this.setState({
-                        id: data.id,
+                        id: pathParams.id,
                         origin: data.origin,
                         destination: data.destination,
                         startDate: data.startDate,
@@ -71,8 +85,9 @@ class AddTrip extends React.Component {
                         vesselName: data.vesselName,
                         conditions: data.conditions,
                         otherDetails: data.otherDetails
-                    })
-                })
+                    });
+                } 
+            }).bind(this));
         }
     }
 
@@ -96,29 +111,41 @@ class AddTrip extends React.Component {
         const fet = et && fed ? fed + "T" + et.substring(tlen) : '';
        
         // TODO: Verify ed is after sd
-        const trip = {
-            id: this.state.id,
+        const id = this.state.id;
+
+        const data = {
             origin: this.state.origin,
             destination: this.state.destination,
             startDate: fsd,
             startTime: fst,
             endDate: fed,
             endTime: fet,
-            distance: parseInt(this.state.distance),
+            distance: this.state.distance ? parseInt(this.state.distance) : 0,
             duties: this.state.duties,
             vesselName: this.state.vesselName,
             conditions: this.state.conditions,
             otherDetails: this.state.otherDetails
         }
 
-        ApiClient.post("", trip)
-            .then((response) => {
-                if (response.status === 200) {
-                    this.history.push('/trips');
+        if (id) {
+            singleTrip(this.userId, id).set(data, (function(error) {
+                if (error) {
+                    console.log(error);
                 } else {
-                    alert('Error with status: ' + response.status);
+                    console.log("Successfully saved trip");
+                    this.history.push('/trips');
                 }
-            });
+            }).bind(this));
+        } else {
+            userTrips(this.userId).push().set(data, (function(error) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log("Successfully saved trip");
+                    this.history.push('/trips');
+                }
+            }).bind(this));
+        }
 
         event.preventDefault();
     }
@@ -136,16 +163,14 @@ class AddTrip extends React.Component {
     }
 
     deleteTrip() {
-        console.log('Delete this trip. ID:' + this.state.id);
-
-        ApiClient.delete("/" + this.state.id)
-            .then((response) => {
-                if (response.status === 200) {
-                    this.history.push('/trips');
-                } else {
-                    alert('Error deleting trip. Status: ' + response.status);
-                }
-            });
+        singleTrip(this.userId, this.state.id).remove((function(error) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("Successfully removed trip");
+                this.history.push('/trips');
+            }
+        }).bind(this));
     }
 
     render() {
@@ -160,6 +185,7 @@ class AddTrip extends React.Component {
                     </IonToolbar>
                 </IonHeader>
                 <IonContent>
+                    <IonLoading isOpen={this.state.loading} message={'Please wait...'} />
                     <form onSubmit={this.handleSubmit}>
                         <IonList lines="full">
                             <IonItem>
@@ -205,7 +231,7 @@ class AddTrip extends React.Component {
                             </IonItem>
                             <IonItem>
                                 <IonLabel position="floating">Other Details</IonLabel>
-                                <IonTextarea name="otherDetails" value={this.state.otherDetails} onIonChange={this.handleChange}></IonTextarea>
+                                <IonTextarea name="otherDetails" rows="6" value={this.state.otherDetails} onIonChange={this.handleChange}></IonTextarea>
                             </IonItem>
                             <IonButton type="submit" expand="block">Submit</IonButton>
                         </IonList>
@@ -220,10 +246,7 @@ class AddTrip extends React.Component {
                     buttons={[
                         {
                             text: 'Cancel',
-                            role: 'cancel',
-                            handler: blah => {
-                                console.log('Confirm Cancel: blah');
-                            }
+                            role: 'cancel'
                         },
                         {
                             text: 'Delete',

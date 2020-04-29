@@ -14,18 +14,21 @@ import {
     IonSearchbar,
     IonSegment,
     IonSegmentButton,
-    IonButton
+    IonButton,
+    IonCol,
+    IonRow,
+    IonLoading
 } from '@ionic/react'
 
-import ApiClient from './ApiClient';
+import { userTrips } from './Firebase';
 
 import { add, arrowForwardOutline, boat } from 'ionicons/icons';
 
-//import axios from 'axios';
+// TODO: Add spinner
+// TODO: Display placeholder when 0 trips
 
 function Trip(props) {
     const link = '/trip/' + props.details.id;
-
     return (
         <IonItem href={link}>
             <IonLabel>
@@ -36,36 +39,60 @@ function Trip(props) {
     );
 }
 
-/*const apiClient = axios.create({
-    baseURL: 'http://localhost:4000/trips',
-    headers: {'Authorization': 'S3tWy6Qkqj37LGtD', 'X-USER-ID': 'US-1234'}
-});
-
-const TRIPS_API_URL = 'http://localhost:4000/trips';*/
-
 class Trips extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             trips: [],
             filteredTrips: [],
             searchText: '',
-            sortDir: 'latest'
+            sortDir: 'latest',
+            loading: false
         };
 
+        this.history = props.history;
         this.search = this.search.bind(this);
         this.sort = this.sort.bind(this);
         this.exportCSV = this.exportCSV.bind(this);
     }
 
     componentDidMount() {
-        ApiClient.get('').then(response => response.data)
-            .then((data) => {
-                this.setState({
-                    trips: data,
-                    filteredTrips: this.sortInternal(data, this.state.sortDir)
+        this.loadTrips();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (localStorage.getItem('userId') !== this.userId) {
+            this.loadTrips();
+        }
+    }
+
+    loadTrips() {
+        const userId = localStorage.getItem('userId');
+        this.userId = userId;
+        if (!userId) {
+            this.history.push('/login');
+            return;
+        }
+
+        this.setState({ loading: true });
+        userTrips(userId).on("value", (function(snapshot) {       
+            this.setState({ loading: false });
+
+            const data = snapshot.val();
+
+            if (data) {
+                // Firebase returns a map. Need to turn into array for sorting
+                const values = Object.entries(data).map(e => {
+                    e[1]["id"] = e[0];
+                    return e[1];
                 });
-            })
+                this.setState({
+                    trips: values,
+                    filteredTrips: this.sortInternal(values, this.state.sortDir)
+                });
+            } 
+        }).bind(this));
     }
 
     search(event) {
@@ -131,32 +158,36 @@ class Trips extends React.Component {
                     </IonToolbar>
                 </IonHeader>
                 <IonContent>
+                    <IonLoading isOpen={this.state.loading} message={'Please wait...'} />
                     <IonSearchbar value={this.state.searchText} onIonChange={this.search}></IonSearchbar>
-                    <IonSegment value={this.state.sortDir} onIonChange={this.sort}>
-                        <IonSegmentButton value="" disabled>
-                            <IonLabel>Sort By</IonLabel>
-                        </IonSegmentButton>
-                        <IonSegmentButton value="latest">
-                            <IonLabel>Latest</IonLabel>
-                        </IonSegmentButton>
-                        <IonSegmentButton value="earliest">
-                            <IonLabel>Earliest</IonLabel>
-                        </IonSegmentButton>
-                        <IonSegmentButton value="longest">
-                            <IonLabel>Longest</IonLabel>
-                        </IonSegmentButton>
-                        <IonSegmentButton value="shortest">
-                            <IonLabel>Shortest</IonLabel>
-                        </IonSegmentButton>
-                    </IonSegment>
-
+                    <IonRow>
+                        <IonCol>
+                            <IonSegment value={this.state.sortDir} onIonChange={this.sort}>
+                                <IonSegmentButton value="latest">
+                                    <IonLabel>Latest</IonLabel>
+                                </IonSegmentButton>
+                                <IonSegmentButton value="earliest">
+                                    <IonLabel>Earliest</IonLabel>
+                                </IonSegmentButton>
+                                <IonSegmentButton value="longest">
+                                    <IonLabel>Longest</IonLabel>
+                                </IonSegmentButton>
+                                <IonSegmentButton value="shortest">
+                                    <IonLabel>Shortest</IonLabel>
+                                </IonSegmentButton>
+                            </IonSegment>
+                        </IonCol>
+                    
+                    </IonRow>
+                    
+                    
                     <IonItem lines="full">
                         <IonLabel slot="start">{this.state.filteredTrips.length} trips</IonLabel>   
                         <IonButton slot="end" onClick={this.exportCSV}>Export as CSV</IonButton>
                     </IonItem>
 
                     <IonList>
-                        {this.state.filteredTrips.map((t) => <Trip details={t} />)}
+                        {this.state.filteredTrips.map(t => <Trip details={t} />) }
                     </IonList>
                     <IonFab vertical="bottom" horizontal="end" slot="fixed">
                         <IonFabButton href="/trip/new">

@@ -11,12 +11,14 @@ import { Route, Redirect } from 'react-router-dom';
 
 import AddTrip from './AddTrip';
 import Trips from './Trips';
+import Login from './Login';
 
 function App() {
   return (
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet>
+        <Route path="/login" component={Login} exact />
           <Route path="/trips" component={Trips} exact />
           <Route path="/trip/:id" component={AddTrip}/>
           <Redirect exact from="/" to="/trips" />
